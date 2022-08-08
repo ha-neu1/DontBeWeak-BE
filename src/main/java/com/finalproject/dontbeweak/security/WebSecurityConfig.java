@@ -26,7 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity// 시큐리티 활성화 -> 기본 스프링 필터체인에 등록
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     private final UserRepository userRepository;
 
@@ -57,12 +57,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // api 요청 접근허용
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/").permitAll()
+                .antMatchers("/**").permitAll()
 //                .antMatchers("product/basketList").authenticated()
 //                .antMatchers(HttpMethod.POST,"product/comment").authenticated()
 //                .antMatchers(HttpMethod.DELETE,"product/comment").authenticated()
 
                 // 그 외 모든 요청허용
-                //슬기님이 밑에 permitAll()말고 이거쓰라하심
                 .anyRequest().permitAll()
                 .and()
 
@@ -82,8 +83,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
-//        configuration.setAllowedMethods(Arrays.asList("*"));
-//        configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.addExposedHeader("Authorization");
         configuration.setAllowCredentials(true);
         // configuration.addAllowedOriginPattern("");

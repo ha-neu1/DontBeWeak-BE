@@ -29,7 +29,7 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
     //login 요청하면 로그인 시도를 위해 실행되는 함수
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        System.out.println("JwtAuthenticationFilter: 로그인 시도중");
+        System.out.println("JwtAuthenticationFilter: 로그인 시도 중");
 
         try {
 

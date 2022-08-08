@@ -21,7 +21,7 @@ public class UserDetailsImpl implements UserDetails {
         return  user.getPassword();
     }
 
-    //Email
+    //아이디
     @Override
     public String getUsername() {
         return user.getUsername();
