@@ -61,5 +61,4 @@ public class UserService {
         User userInfo = new User(id, username, nickname);
         return userInfo;
     }
-
 }
