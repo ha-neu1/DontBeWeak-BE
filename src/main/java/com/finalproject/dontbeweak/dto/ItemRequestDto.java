@@ -6,7 +6,6 @@ import lombok.*;
 @AllArgsConstructor
 @Setter
 @Getter
-@Builder
 public class ItemRequestDto {
     private Long id;
     private String itemName;

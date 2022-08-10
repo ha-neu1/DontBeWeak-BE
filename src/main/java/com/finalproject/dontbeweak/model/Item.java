@@ -1,6 +1,5 @@
 package com.finalproject.dontbeweak.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.finalproject.dontbeweak.dto.ItemRequestDto;
 import lombok.*;
 
@@ -8,10 +7,10 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
 @Setter
 @Entity
+@Builder
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,7 +32,7 @@ public class Item {
 
     @Column(nullable = false)
     private int point;
-    public Item(ItemRequestDto itemRequestDto, User user, Cat cat){
+    public Item(ItemRequestDto itemRequestDto){
         this.user = user;
         this.cat = cat;
         this.itemName = itemRequestDto.getItemName();

@@ -8,7 +8,6 @@ import java.util.List;
 @AllArgsConstructor
 @Setter
 @Getter
-@Builder
 public class ItemResponseDto {
     private List<ItemRequestDto> itemList;
 }
