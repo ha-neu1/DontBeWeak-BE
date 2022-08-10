@@ -1,12 +1,14 @@
 package com.finalproject.dontbeweak.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
+@Builder
 public class ItemResponseDto {
     private List<ItemRequestDto> itemList;
 }

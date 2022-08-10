@@ -1,6 +1,7 @@
 package com.finalproject.dontbeweak.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.finalproject.dontbeweak.dto.ItemRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,9 +29,16 @@ public class Item {
     private String itemName;
 
     @Column(nullable = false)
-    private int point;
+    private String itemImg;
 
     @Column(nullable = false)
-    private String itemImg;
+    private int point;
+    public Item(ItemRequestDto itemRequestDto, User user, Cat cat){
+        this.user = user;
+        this.cat = cat;
+        this.itemName = itemRequestDto.getItemName();
+        this.itemImg = itemRequestDto.getItemImg();
+        this.point = itemRequestDto.getPoint();
+    }
 }
 
