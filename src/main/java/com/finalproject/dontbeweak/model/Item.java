@@ -17,11 +17,11 @@ public class Item {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "catId")
+    @JoinColumn(name = "cat_id")
     private Cat cat;
 
     @Column(nullable = false)
