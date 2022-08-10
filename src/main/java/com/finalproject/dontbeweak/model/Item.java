@@ -1,5 +1,6 @@
 package com.finalproject.dontbeweak.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,22 +11,26 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class DonePill {
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "userId")
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "pill_id")
-    private Pill pill;
+    @ManyToOne
+    @JoinColumn(name = "catId")
+    private Cat cat;
 
     @Column(nullable = false)
-    private Boolean done;
+    private String itemName;
 
     @Column(nullable = false)
-    private String datetime;
+    private int point;
+
+    @Column(nullable = false)
+    private String itemImg;
 }
+
