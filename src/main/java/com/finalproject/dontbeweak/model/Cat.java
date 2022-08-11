@@ -16,7 +16,7 @@ public class Cat {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @Column(nullable = false)

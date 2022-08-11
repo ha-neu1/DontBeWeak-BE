@@ -13,15 +13,15 @@ import javax.persistence.*;
 @Builder
 public class Item {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "cat_id")
+    @JoinColumn(name = "CAT_ID")
     private Cat cat;
 
     @Column(nullable = false)
@@ -32,6 +32,7 @@ public class Item {
 
     @Column(nullable = false)
     private int point;
+
     public Item(ItemRequestDto itemRequestDto){
         this.user = user;
         this.cat = cat;
