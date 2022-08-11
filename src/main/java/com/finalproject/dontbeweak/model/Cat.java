@@ -29,10 +29,12 @@ public class Cat {
     @Column(nullable = false)
     private String catImage;
 
+
     // 최대 레벨
     public static final Integer MAX_LEVEL = 30;
     // 최소 레벨
     public static final Integer MIN_LEVEL = 1;
+
 
     // 최초 고양이 생성
     public Cat(User user) {
@@ -43,9 +45,11 @@ public class Cat {
         this.catImage = new CatLevelUpImage().getCatImgVer01();
     }
 
+
     public void setExp(int exp) {
         this.exp = exp;
     }
+
 
     // 레벨 설정
     public void setLevel(int level) {
@@ -53,6 +57,7 @@ public class Cat {
             this.level = level;
         }
     }
+
 
     // 경험치 상승 및 레벨 업
     public void plusExpAndLevel() {
@@ -71,5 +76,4 @@ public class Cat {
             }
         }
     }
-
 }
