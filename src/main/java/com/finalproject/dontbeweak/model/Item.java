@@ -40,5 +40,7 @@ public class Item {
         this.itemImg = itemRequestDto.getItemImg();
         this.point = itemRequestDto.getPoint();
     }
+
+
 }
 

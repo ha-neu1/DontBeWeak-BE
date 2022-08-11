@@ -9,13 +9,13 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class ItemResponseDto {
-    private Long id;
+    private Long itemId;
     private String itemName;
     private String itemImg;
     private int point;
 
     public ItemResponseDto(Item item){
-        this.id = item.getId();
+        this.itemId = item.getId();
         this.itemName = item.getItemName();
         this.itemImg = item.getItemImg();
         this.point = item.getPoint();
