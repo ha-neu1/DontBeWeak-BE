@@ -40,4 +40,14 @@ public class CatService {
 
         return new CatResponseDto(friendCat);
     }
+
+    // 고양이 경험치 상승 및 레벨 업
+    @Transactional
+    public void catAddExpAndLevelUp(UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        Cat cat = catRepository.findByUser_Username(username)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 고양이입니다."));
+
+        cat.addExpAndLevel();
+    }
 }

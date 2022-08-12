@@ -56,11 +56,24 @@ public class Cat {
         if (level <= MAX_LEVEL) {
             this.level = level;
         }
+         setCatImage();
     }
 
+    // 10 레벨마다 고양이 이미지 바뀜
+    public void setCatImage() {
+//        int level = getLevel();
+
+        if (level == 10) {
+            this.catImage = new CatLevelUpImage().getCatImgVer02();
+        } else if (level == 20) {
+            this.catImage = new CatLevelUpImage().getCatImgVer03();
+        } else if (level == 30) {
+            this.catImage = new CatLevelUpImage().getCatImgVer04();
+        }
+    }
 
     // 경험치 상승 및 레벨 업
-    public void plusExpAndLevel() {
+    public void addExpAndLevel() {
         int level = getLevel();
         int exp = getExp();
         int maxExp = getMaxExp();
@@ -68,7 +81,7 @@ public class Cat {
 
         // 현재 레벨이 최대 레벨보다 낮을 때
         if (level < MAX_LEVEL) {
-            if ((exp + addExp) < maxExp) {  // 원래 경험치 + 추가된 경험치가 최대 경험치 달성보다 적을 때,
+            if ((exp + addExp) < maxExp) {  // 원래 경험치 + 추가된 경험치가 최대 경험치보다 적을 때,
                 setExp(exp + addExp);       // 경험치 상승.
             } else {                        // 원래 경험치 + 추가된 경험치가 최대 경험치 이상일 때,
                 setLevel(level + 1);        // 레벨 1 상승 후,
@@ -76,10 +89,10 @@ public class Cat {
             }
         // 현재 레벨이 최대 레벨일 때
         } else {
-            if ((exp + addExp) < maxExp) {  // 원래 경험치 + 추가된 경험치가 최대 경험치 달성보다 적을 때,
+            if ((exp + addExp) < maxExp) {  // 원래 경험치 + 추가된 경험치가 최대 경험치보다 적을 때,
                 setExp(exp + addExp);       // 경험치 상승.
-            } else {
-                setExp(maxExp);
+            } else {                        // 원래 경험치 + 추가된 경험치가 최대 경험치 이상일 때,
+                setExp(maxExp);             // 최대 경험치로 설정.
             }
         }
     }
