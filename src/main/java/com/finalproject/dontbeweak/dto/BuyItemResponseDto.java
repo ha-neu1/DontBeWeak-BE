@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BuyItemResponseDto {
 
-    private String userName;
+    private String username;
     private String itemName;
     private String itemImg;
     private int point;
 
     public BuyItemResponseDto(Item item, UserDetailsImpl userDetails) {
-        this.userName = userDetails.getUsername();
+        this.username = userDetails.getUsername();
         this.itemName = item.getItemName();
         this.itemImg = item.getItemImg();
         this.point = userDetails.getUser().getPoint();
