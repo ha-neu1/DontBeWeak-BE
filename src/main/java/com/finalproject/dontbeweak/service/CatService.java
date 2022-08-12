@@ -27,7 +27,7 @@ public class CatService {
     public CatResponseDto getMyCatStatus(UserDetails userDetails) {
         String username = userDetails.getUsername();
         Cat cat = catRepository.findByUser_Username(username)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("내 고양이가 존재하지 않습니다."));
 
         return new CatResponseDto(cat);
     }
@@ -36,7 +36,7 @@ public class CatService {
     @Transactional
     public CatResponseDto getFriendCatStatus(String username) {
         Cat friendCat = catRepository.findByUser_Username(username)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 고양이입니다."));
 
         return new CatResponseDto(friendCat);
     }
