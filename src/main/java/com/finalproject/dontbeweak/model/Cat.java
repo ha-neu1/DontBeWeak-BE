@@ -1,5 +1,6 @@
 package com.finalproject.dontbeweak.model;
 
+import com.finalproject.dontbeweak.dto.CatRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,7 +30,6 @@ public class Cat {
     @Column(nullable = false)
     private String catImage;
 
-
     // 최대 레벨
     public static final Integer MAX_LEVEL = 30;
     // 최소 레벨
@@ -45,6 +45,16 @@ public class Cat {
         this.catImage = new CatLevelUpImage().getCatImgVer01();
     }
 
+//    @Builder
+//    public Cat(long id, User user, int level, int exp, int maxExp, String catImage) {
+//        this.id = id;
+//        this.user = user;
+//        this.level = level;
+//        this.exp = exp;
+//        this.maxExp = maxExp;
+//        this.catImage = catImage;
+//    }
+
 
     public void setExp(int exp) {
         this.exp = exp;
@@ -56,11 +66,11 @@ public class Cat {
         if (level <= MAX_LEVEL) {
             this.level = level;
         }
-         setCatImage();
+         setCatImage(level);
     }
 
     // 10 레벨마다 고양이 이미지 바뀜
-    public void setCatImage() {
+    public void setCatImage(int level) {
 //        int level = getLevel();
 
         if (level == 10) {
@@ -95,5 +105,10 @@ public class Cat {
                 setExp(maxExp);             // 최대 경험치로 설정.
             }
         }
+    }
+
+    public void changeExpLevel(CatRequestDto requestDto) {
+        this.exp = requestDto.getExp();
+        this.level = requestDto.getLevel();
     }
 }

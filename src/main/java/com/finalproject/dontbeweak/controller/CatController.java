@@ -1,5 +1,6 @@
 package com.finalproject.dontbeweak.controller;
 
+import com.finalproject.dontbeweak.dto.CatRequestDto;
 import com.finalproject.dontbeweak.dto.CatResponseDto;
 import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.service.CatService;
@@ -42,4 +43,11 @@ public class CatController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(friendCatResponseDto);
     }
+
+/*    // 고양이 레벨 조정 (테스트 용)
+    @PatchMapping("/cat/{username}")
+    public ResponseEntity<void> setCatLevelTest
+    (@PathVariable("username") String username, @RequestBody CatRequestDto requestDto) {
+        catService.setCatLevelTest(username, requestDto);
+    }*/
 }
