@@ -66,13 +66,20 @@ public class Cat {
         int maxExp = getMaxExp();
         int addExp = 5;
 
-        // 현재 레벨이 최대 레벨 이하일 때
+        // 현재 레벨이 최대 레벨보다 낮을 때
         if (level < MAX_LEVEL) {
             if ((exp + addExp) < maxExp) {  // 원래 경험치 + 추가된 경험치가 최대 경험치 달성보다 적을 때,
                 setExp(exp + addExp);       // 경험치 상승.
             } else {                        // 원래 경험치 + 추가된 경험치가 최대 경험치 이상일 때,
                 setLevel(level + 1);        // 레벨 1 상승 후,
                 setExp((exp + addExp) - maxExp);    // 레벨업 후 남은 경험치를 설정.
+            }
+        // 현재 레벨이 최대 레벨일 때
+        } else {
+            if ((exp + addExp) < maxExp) {  // 원래 경험치 + 추가된 경험치가 최대 경험치 달성보다 적을 때,
+                setExp(exp + addExp);       // 경험치 상승.
+            } else {
+                setExp(maxExp);
             }
         }
     }
