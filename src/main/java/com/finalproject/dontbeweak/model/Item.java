@@ -28,17 +28,18 @@ public class Item {
     private String itemName;
 
     @Column(nullable = false)
-    private String itemImg;
+    private int itemPoint;
 
     @Column(nullable = false)
-    private int point;
+    private String itemImg;
+
 
     public Item(ItemRequestDto itemRequestDto){
         this.user = user;
         this.cat = cat;
         this.itemName = itemRequestDto.getItemName();
         this.itemImg = itemRequestDto.getItemImg();
-        this.point = itemRequestDto.getPoint();
+        this.itemPoint = itemRequestDto.getItemPoint();
     }
 
 

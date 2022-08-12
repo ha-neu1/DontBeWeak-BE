@@ -1,5 +1,6 @@
 package com.finalproject.dontbeweak.controller;
 
+import com.finalproject.dontbeweak.dto.BuyItemResponseDto;
 import com.finalproject.dontbeweak.dto.ItemRequestDto;
 import com.finalproject.dontbeweak.dto.ItemResponseDto;
 import com.finalproject.dontbeweak.exception.CustomException;
@@ -52,4 +53,10 @@ public class ItemController {
             return ResponseEntity.status(HttpStatus.CREATED).body("아이템을 구매하였습니다.");
         }
     }
+
+    //아이템 적용
+//    @PatchMapping("/items/{itemId}")
+//    public BuyItemResponseDto patchItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+//
+//    }
 }

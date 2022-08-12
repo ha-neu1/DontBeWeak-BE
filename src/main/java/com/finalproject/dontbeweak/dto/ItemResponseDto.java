@@ -12,12 +12,13 @@ public class ItemResponseDto {
     private Long itemId;
     private String itemName;
     private String itemImg;
-    private int point;
+    private int itemPoint;
 
-    public ItemResponseDto(Item item){
+
+    public ItemResponseDto(Item item) {
         this.itemId = item.getId();
         this.itemName = item.getItemName();
         this.itemImg = item.getItemImg();
-        this.point = item.getPoint();
+        this.itemPoint = item.getItemPoint();
     }
 }
