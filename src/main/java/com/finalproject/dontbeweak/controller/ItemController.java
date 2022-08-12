@@ -43,20 +43,40 @@ public class ItemController {
     }
 
     //아이템 구입
-    @PostMapping("/items/{itemId}")
-    public ResponseEntity<String> buyItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+//    @PostMapping("/items/{itemId}")
+//    public ResponseEntity<String> buyItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+//        if (userDetails == null) {
+//            // 유저가 없다는 의미이므로 비정상 페이지 리턴
+//            throw new CustomException(ErrorCode.LOGIN_CHECK_CODE);
+//        } else {
+//            itemService.buyItem(itemId, userDetails);
+//            return ResponseEntity.status(HttpStatus.CREATED).body("아이템을 구매하였습니다.");
+//        }
+//    }
+
+   // 아이템 구입 및 적용
+    @PatchMapping("/items/{itemId}")
+    public BuyItemResponseDto patchItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         if (userDetails == null) {
             // 유저가 없다는 의미이므로 비정상 페이지 리턴
             throw new CustomException(ErrorCode.LOGIN_CHECK_CODE);
         } else {
-            itemService.buyItem(itemId, userDetails);
-            return ResponseEntity.status(HttpStatus.CREATED).body("아이템을 구매하였습니다.");
+            return itemService.patchItem(itemId, userDetails);
         }
     }
 
-    //아이템 적용
-//    @PatchMapping("/items/{itemId}")
-//    public BuyItemResponseDto patchItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-//
+
+//    //아이템적용2
+//    //구매한 사람 토큰 값과 적용누른 사람 토큰 값이 같아야 적용이 되게 해야함
+//    @GetMapping("/items/{itemId}")
+//    public ResponseEntity<BuyItemResponseDto> patchItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+//        if (userDetails == null) {
+//            // 유저가 없다는 의미이므로 비정상 페이지 리턴
+//            throw new CustomException(ErrorCode.LOGIN_CHECK_CODE);
+//        } else {
+//            BuyItemResponseDto buyItemResponseDto = itemService.patchItem(userDetails.getUser());
+//            return ResponseEntity.ok().body(buyItemResponseDto);
+//        }
+
 //    }
 }

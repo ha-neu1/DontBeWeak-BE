@@ -14,7 +14,11 @@ public enum ErrorCode {
     PASSWORD_LENGTH_CODE(400, "C004", "패스워드는 4글자 이상 입력해주세요"),
     LOGIN_CHECK_CODE(400,"C005", "로그인을 해주세요."),
 
-    NOT_ENOUGH_MONEY(400,"C007", "금액이 부족합니다.");;
+    NOT_FOUND_USER(404, "C008", "유저를 찾을 수 없습니다. 로그인을 다시 해주세요."),
+
+    NOT_ENOUGH_MONEY(400,"C007", "금액이 부족합니다."),
+
+    NO_ITEM(404,"C008", "아이템이 존재하지 않습니다.");
 //    COMMENT_LOGIN_CHECK_CODE(400,"C006","댓글 삭제할 권한이 없습니다");
 
     private final int status;
