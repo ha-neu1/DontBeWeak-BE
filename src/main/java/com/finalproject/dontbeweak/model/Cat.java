@@ -45,33 +45,20 @@ public class Cat {
         this.catImage = new CatLevelUpImage().getCatImgVer01();
     }
 
-//    @Builder
-//    public Cat(long id, User user, int level, int exp, int maxExp, String catImage) {
-//        this.id = id;
-//        this.user = user;
-//        this.level = level;
-//        this.exp = exp;
-//        this.maxExp = maxExp;
-//        this.catImage = catImage;
-//    }
-
-
     public void setExp(int exp) {
         this.exp = exp;
     }
-
 
     // 레벨 설정
     public void setLevel(int level) {
         if (level <= MAX_LEVEL) {
             this.level = level;
         }
-         setCatImage(level);
+        setCatImage(level);
     }
 
     // 10 레벨마다 고양이 이미지 바뀜
     public void setCatImage(int level) {
-//        int level = getLevel();
 
         if (level == 10) {
             this.catImage = new CatLevelUpImage().getCatImgVer02();
@@ -107,8 +94,8 @@ public class Cat {
         }
     }
 
-    public void changeExpLevel(CatRequestDto requestDto) {
-        this.exp = requestDto.getExp();
-        this.level = requestDto.getLevel();
-    }
+//    public void changeExpLevel(CatRequestDto requestDto) {
+//        this.exp = requestDto.getExp();
+//        this.level = requestDto.getLevel();
+//    }
 }
