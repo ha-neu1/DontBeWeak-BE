@@ -2,10 +2,13 @@ package com.finalproject.dontbeweak.security;
 
 import com.finalproject.dontbeweak.model.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
 
@@ -26,6 +29,7 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return user.getUsername();
     }
+
 
     //계정 만료 여부
     @Override
@@ -55,6 +59,9 @@ public class UserDetailsImpl implements UserDetails {
     //해당 유저의 권한 목록
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        List<GrantedAuthority> list = new ArrayList<>();
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(user.getRole());
+        list.add(grantedAuthority);
+        return list;
     }
 }

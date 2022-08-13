@@ -24,11 +24,14 @@ public class ItemController {
 
 
     //아이템 등록
-    @PostMapping("/items")
-    public ResponseEntity<Item> inputItem(@ModelAttribute ItemRequestDto itemRequestDto) throws IOException {
-        itemService.inputItem(itemRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
-    }
+    //남들이 등록할 수 없게 권한처리 해야함..(어떻게하지,,?)
+//    @PostMapping("/items")
+//    public ResponseEntity<Item> inputItem(@RequestBody ItemRequestDto itemRequestDto) throws IOException {
+//        itemService.inputItem(itemRequestDto);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+//    }
+//
+
 
     //아이템 목록 조회
     @GetMapping("/items")
@@ -37,8 +40,8 @@ public class ItemController {
             // 유저가 없다는 의미이므로 비정상 페이지 리턴
             throw new CustomException(ErrorCode.LOGIN_CHECK_CODE);
         } else {
-            List<ItemResponseDto> itemResponseDtoList = itemService.getItem(userDetails);
-            return ResponseEntity.status(HttpStatus.CREATED).body(itemResponseDtoList);
+            List<ItemResponseDto> itemResponseDtoList = itemService.getItem();
+            return ResponseEntity.ok().body(itemResponseDtoList);
         }
     }
 
@@ -56,12 +59,13 @@ public class ItemController {
 
    // 아이템 구입 및 적용
     @PatchMapping("/items/{itemId}")
-    public BuyItemResponseDto patchItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<BuyItemResponseDto> patchItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         if (userDetails == null) {
             // 유저가 없다는 의미이므로 비정상 페이지 리턴
             throw new CustomException(ErrorCode.LOGIN_CHECK_CODE);
         } else {
-            return itemService.patchItem(itemId, userDetails);
+            BuyItemResponseDto buyItemResponseDto = itemService.patchItem(itemId, userDetails);
+            return ResponseEntity.status(HttpStatus.CREATED).body(buyItemResponseDto);
         }
     }
 
@@ -79,4 +83,11 @@ public class ItemController {
 //        }
 
 //    }
+
+    //아이템 등록
+    @PostMapping("/items")
+    public ResponseEntity<Item> inputItem(@RequestBody ItemRequestDto itemRequestDto) throws IOException {
+        itemService.inputItem(itemRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
 }

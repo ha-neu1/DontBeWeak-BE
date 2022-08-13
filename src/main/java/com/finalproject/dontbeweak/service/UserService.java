@@ -25,6 +25,7 @@ public class UserService {
         String password = requestDto.getPassword();
         String passwordCheck = requestDto.getPasswordCheck();
         String nickname = requestDto.getNickname();
+
 //        String pattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
 
         //회원 username 중복 확인
@@ -47,10 +48,15 @@ public class UserService {
         password = passwordEncoder.encode(password);
         requestDto.setPassword(password);
 
+
+
+
         //유저 정보 저장
         User user = new User(username, password, nickname);
+        user.setRole("ROLE_USER");
         userRepository.save(user);
         return error;
+
 
     }
 
