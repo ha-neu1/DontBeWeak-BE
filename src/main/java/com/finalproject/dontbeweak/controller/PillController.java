@@ -23,15 +23,15 @@ public class PillController {
 
     //영양제 등록
     @PostMapping("/schedule")
-    public ResponseEntity<Pill> createPill(@RequestBody List<PillDto> pillDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> registerPill(@RequestBody PillDto pillDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         pillService.registerPill(pillDto, userDetails);
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body("내 영양제가 등록되었습니다.");
     }
 
     //영양제 조회
     @GetMapping("/schedule")
-    public ResponseEntity<List<PillDto>> getPill(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<PillDto> pillList = pillService.showPill(userDetails);
+    public ResponseEntity<List<Pill>> getPill() {
+        List<Pill> pillList = pillRepository.findAll();
         return ResponseEntity.ok().body(pillList);
     }
 }

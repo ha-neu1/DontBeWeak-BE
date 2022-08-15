@@ -10,44 +10,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class PillService {
-    private final UserRepository userRepository;
     private final PillRepository pillRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public void registerPill(List<PillDto> pillDto, UserDetailsImpl userDetails){
+    public void registerPill(PillDto pillDto, UserDetailsImpl userDetails){
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다")
+                () -> new IllegalArgumentException("회원이 존재하지 않습니다.")
         );
 
-        HashSet<String> hashSet = new HashSet<>();
-        for(PillDto pillDtoList : pillDto){
-            hashSet.add(pillDtoList.getProductName());
-            hashSet.add(pillDtoList.getCustomColor());
-        }
-
-        if(hashSet.size() != pillDto.size())
-            throw new IllegalArgumentException("이미 등록되었습니다.");
+//        Pill pill = pillRepository.findByUser_Id(user.getId());
+        Pill pill = new Pill(user, pillDto);
+        pillRepository.save(pill);
+        new PillDto(pill);
     }
 
-    public List<PillDto> showPill(UserDetailsImpl userDetails) {
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다")
-        );
 
-        List<PillDto> list = new ArrayList<>();
-        List<Pill> pillList = pillRepository.findAllByPill(user);
-
-        for (Pill pill : pillList) {
-            PillDto pillDto = new PillDto(pill.getProductName(), pill.getCustomColor());
-            list.add(pillDto);
-        }
-        return list;
-    }
 }
