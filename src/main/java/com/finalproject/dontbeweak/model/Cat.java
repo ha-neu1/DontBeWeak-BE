@@ -1,6 +1,5 @@
 package com.finalproject.dontbeweak.model;
 
-import com.finalproject.dontbeweak.dto.CatRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -93,9 +92,4 @@ public class Cat {
             }
         }
     }
-
-//    public void changeExpLevel(CatRequestDto requestDto) {
-//        this.exp = requestDto.getExp();
-//        this.level = requestDto.getLevel();
-//    }
 }
