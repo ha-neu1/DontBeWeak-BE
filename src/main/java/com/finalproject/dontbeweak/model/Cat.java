@@ -26,8 +26,12 @@ public class Cat {
     @Column(nullable = false)
     private int maxExp;
 
-    @Column(nullable = false)
-    private String catImage;
+    @ManyToOne
+    @JoinColumn(name = "levelImage_id")
+    private LevelImage levelImage;
+
+//    @Column(nullable = false)
+//    private String catImage;
 
     // 최대 레벨
     public static final Integer MAX_LEVEL = 30;
@@ -36,12 +40,12 @@ public class Cat {
 
 
     // 최초 고양이 생성
-    public Cat(User user) {
+    public Cat(User user, LevelImage levelImage) {
         this.user = user;
         this.level = MIN_LEVEL;
         this.exp = 0;
         this.maxExp = 20;
-        this.catImage = new CatLevelUpImage().getCatImgVer01();
+        this.levelImage = levelImage;
     }
 
     public void setExp(int exp) {
