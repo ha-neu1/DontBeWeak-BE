@@ -20,6 +20,7 @@ public class PillService {
     private final PillRepository pillRepository;
     private final UserRepository userRepository;
 
+    //영양제 등록
     @Transactional
     public void registerPill(PillRequestDto pillRequestDto, UserDetailsImpl userDetails){
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
@@ -32,7 +33,7 @@ public class PillService {
         new PillRequestDto(pill);
     }
 
-
+    //영양제 조회
     public List<PillResponseDto> showPill(UserDetailsImpl userDetails) {
         List<PillResponseDto> pillResponseDtoList = new ArrayList<>();
         List<Pill> pillList = pillRepository.findAllByUser_Id(userDetails.getUser().getId());
