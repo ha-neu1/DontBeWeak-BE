@@ -16,8 +16,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.finalproject.dontbeweak.exception.ErrorCode.FRIEND_CHECKCHECK_CODE;
-import static com.finalproject.dontbeweak.exception.ErrorCode.FRIEND_CHECK_CODE;
+import static com.finalproject.dontbeweak.exception.ErrorCode.*;
 
 
 @Service
@@ -37,7 +36,7 @@ public class FriendService {
 
         //등록 이름과 로그인 이름이 같으면. return
         if (userTemp.getUsername().equals(friendRequestDto.getFriendname()))
-        throw new CustomException(FRIEND_CHECKCHECK_CODE);
+        throw new CustomException(FRIEND_ADD_CODE);
 
         List<Friend> friend = userTemp.getFriends();
         for(Friend overlapUser : friend) {
