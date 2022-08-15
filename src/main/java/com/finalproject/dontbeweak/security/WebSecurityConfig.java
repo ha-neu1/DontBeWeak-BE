@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -16,6 +18,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -47,6 +51,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        String password = encodePassword().encode("1234");
+//        auth.inMemoryAuthentication().withUser("admin").password(password).roles("ADMIN");
+//    }
+
+//    @Bean
+//    public PasswordEncoder passwordEncoder(){
+//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -57,8 +71,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         http.authorizeRequests()
                 // api 요청 접근허용
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/items").access("hasRole('ADMIN')")
                 .antMatchers("/").permitAll()
                 .antMatchers("/**").permitAll()
+
 //                .antMatchers("product/basketList").authenticated()
 //                .antMatchers(HttpMethod.POST,"product/comment").authenticated()
 //                .antMatchers(HttpMethod.DELETE,"product/comment").authenticated()

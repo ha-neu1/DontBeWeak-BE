@@ -36,27 +36,28 @@ public class ItemService {
 
     //아이템 등록
     @Transactional
-    public void inputItem(ItemRequestDto itemRequestDto) throws IOException {
-        String itemName = itemRequestDto.getItemName();
-        String itemImg = itemRequestDto.getItemImg();
-        int itemPoint = itemRequestDto.getItemPoint();
+    public void inputItem(ItemRequestDto requestDto) throws IOException {
+        String itemName = requestDto.getItemName();
+        String itemImg = requestDto.getItemImg();
+        int itemPoint = requestDto.getItemPoint();
 
-        Item item = Item.builder()
+        ItemRequestDto itemRequestDto = ItemRequestDto.builder()
                 .itemName(itemName)
                 .itemImg(itemImg)
                 .itemPoint(itemPoint)
                 .build();
 
+        Item item = new Item(itemRequestDto);
         itemRepository.save(item);
 
     }
 
 
     //아이템 목록 조회
-    public List<ItemResponseDto> getItem(UserDetailsImpl userDetails){
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
-                () -> new NullPointerException("회원이 존재하지 않습니다.")
-        );
+    public List<ItemResponseDto> getItem(){
+//        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
+//                () -> new NullPointerException("회원이 존재하지 않습니다.")
+//        );
 
         List<Item> items = itemRepository.findAll();
         List<ItemResponseDto> itemResponseDtoList = new ArrayList<>();
@@ -67,23 +68,23 @@ public class ItemService {
         return itemResponseDtoList;
     }
 
-/*    //아이템 구입
-    //유저포인트 - 아이템포인트 = 남은 포인트  => 포인트 깎여야함
-    @Transactional
-    public void buyItem(Long itemId, UserDetailsImpl userDetails){
-
-        Item item = itemRepository.findItemById(itemId);
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
-                ()->new IllegalArgumentException("회원이 존재하지 않습니다.")
-        );
-        if(user.getPoint() >= item.getItemPoint()){
-            int newPoint = user.getPoint() - item.getItemPoint();
-            user.setPoint(newPoint);
-        } else {
-           throw new CustomException(ErrorCode.NOT_ENOUGH_MONEY);
-        }
-
-    }*/
+//    //아이템 구입
+//    //유저포인트 - 아이템포인트 = 남은 포인트  => 포인트 깎여야함
+//    @Transactional
+//    public void buyItem(Long itemId, UserDetailsImpl userDetails){
+//
+//        Item item = itemRepository.findItemById(itemId);
+//        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
+//                ()->new IllegalArgumentException("회원이 존재하지 않습니다.")
+//        );
+//        if(user.getPoint() >= item.getItemPoint()){
+//            int newPoint = user.getPoint() - item.getItemPoint();
+//            user.setPoint(newPoint);
+//        } else {
+//           throw new CustomException(ErrorCode.NOT_ENOUGH_MONEY);
+//        }
+//
+//    }
 
     //아이템 구입 및 적용
     @Transactional
@@ -109,6 +110,7 @@ public class ItemService {
                     .itemImg(item.getItemImg())
                     .point(user.getPoint())
                     .build();
+
         } else {
             throw new CustomException(ErrorCode.NOT_ENOUGH_MONEY);
         }
@@ -161,4 +163,22 @@ public class ItemService {
 //                .build();
 //
 //    }
+
+    //아이템 등록
+//    @Transactional
+//    public void inputItem(ItemRequestDto itemRequestDto) throws IOException {
+//        String itemName = itemRequestDto.getItemName();
+//        String itemImg = itemRequestDto.getItemImg();
+//        int itemPoint = itemRequestDto.getItemPoint();
+//
+//        Item item = Item.builder()
+//                .itemName(itemName)
+//                .itemImg(itemImg)
+//                .itemPoint(itemPoint)
+//                .build();
+//
+//        itemRepository.save(item);
+//
+//    }
+
 }

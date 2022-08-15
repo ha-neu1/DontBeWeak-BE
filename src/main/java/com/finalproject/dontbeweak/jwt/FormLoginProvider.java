@@ -12,6 +12,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Component
 public class FormLoginProvider implements AuthenticationProvider {
@@ -28,7 +30,7 @@ public class FormLoginProvider implements AuthenticationProvider {
         UserDetailsImpl userDetails = userDetailsServiceImpl.loadUserByUsername(username); //화면에서 입력한 이메일로 DB에 있는 사용자의 정보를 UserDetailsImpl 형으로 가져와 userDetails에 담는다.
 
         if(passwordEncoder.matches(password, userDetails.getPassword())) { //화면에서 입력한 비밀번호와 DB에서 가져온 비밀번호를 비교하는 로직이다. 비밀번호가 맞지 않다면 예외를 던진다.
-            return new UsernamePasswordAuthenticationToken(userDetails, null); //계정이 인증됐다면 UsernamePasswordAuthenticationToken 객체에 화면에서 입력한 정보와 DB에서 가져온 권한을 담아서 리턴한다.
+            return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()); //계정이 인증됐다면 UsernamePasswordAuthenticationToken 객체에 화면에서 입력한 정보와 DB에서 가져온 권한을 담아서 리턴한다.
         }else {
             throw new BadCredentialsException("잘못된 로그인 정보입니다.");
         }

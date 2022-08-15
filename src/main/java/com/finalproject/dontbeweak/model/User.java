@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -29,6 +31,19 @@ public class User {
 
     @Column(nullable = false)
     private int point;
+
+    private String role;
+
+//    @Column(nullable = false)
+//    private String role;
+//
+//    // ENUM으로 안하고 ,로 해서 구분해서 ROLE을 입력 -> 그걸 파싱!!
+//    public List<String> getRoleList(){
+//        if(this.role.length() > 0){
+//            return Arrays.asList(this.role.split(","));
+//        }
+//        return new ArrayList<>();
+//    }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Cat> cat;

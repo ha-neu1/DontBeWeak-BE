@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @Setter
 @Getter
+@Builder
 public class ItemRequestDto {
     private String itemName;
     private String itemImg;

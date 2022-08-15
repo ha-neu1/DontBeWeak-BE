@@ -52,12 +52,14 @@ public class UserService {
 
         //유저 정보 저장
         User user = new User(username, password, nickname);
+        user.setRole("ROLE_USER");
         userRepository.save(user);
 
         // 회원가입 후 사용자의 새 고양이 자동 생성
         catService.createNewCat(user);
 
         return error;
+
     }
 
     public User userInfo(UserDetailsImpl userDetails) {
