@@ -9,6 +9,7 @@ import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.model.Item;
 import com.finalproject.dontbeweak.model.User;
+import com.finalproject.dontbeweak.repository.CatRepository;
 import com.finalproject.dontbeweak.repository.ItemRepository;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
@@ -30,6 +31,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
 
     private final UserRepository userRepository;
+    private final CatRepository catRepository;
 
 
     //아이템 등록
@@ -94,12 +96,16 @@ public class ItemService {
         Long userId = userDetails.getUser().getId();
         User user = getUser(userId);
         Item item = findItem(itemId);
+        String username = userDetails.getUsername();
 
         if(user.getPoint() >= item.getItemPoint()){
             int newPoint = user.getPoint() - item.getItemPoint();
             user.setPoint(newPoint);
+            Cat cat = catRepository.findByUser_Username(username).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 고양이입니다."));
+            cat.addExpAndLevel();
+
             return BuyItemResponseDto.builder()
-                    .userName(user.getUsername())
+                    .username(user.getUsername())
                     .itemName(item.getItemName())
                     .itemImg(item.getItemImg())
                     .point(user.getPoint())

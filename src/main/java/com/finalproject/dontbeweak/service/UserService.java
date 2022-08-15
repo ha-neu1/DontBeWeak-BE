@@ -3,6 +3,7 @@ package com.finalproject.dontbeweak.service;
 import com.finalproject.dontbeweak.dto.SignupRequestDto;
 import com.finalproject.dontbeweak.exception.CustomException;
 import com.finalproject.dontbeweak.exception.ErrorCode;
+import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
@@ -19,13 +20,14 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
+    private final CatService catService;
+
     public String registerUser(SignupRequestDto requestDto){
         String error = "";
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
         String passwordCheck = requestDto.getPasswordCheck();
         String nickname = requestDto.getNickname();
-
 //        String pattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
 
         //회원 username 중복 확인
@@ -48,15 +50,15 @@ public class UserService {
         password = passwordEncoder.encode(password);
         requestDto.setPassword(password);
 
-
-
-
         //유저 정보 저장
         User user = new User(username, password, nickname);
         user.setRole("ROLE_USER");
         userRepository.save(user);
-        return error;
 
+        // 회원가입 후 사용자의 새 고양이 자동 생성
+        catService.createNewCat(user);
+
+        return error;
 
     }
 
