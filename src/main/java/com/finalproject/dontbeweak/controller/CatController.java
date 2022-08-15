@@ -15,7 +15,6 @@ public class CatController {
 
     private final CatService catService;
 
-
     // 내 고양이 조회
     @GetMapping("/cat")
     public ResponseEntity<CatResponseDto> getMyCatStatus
