@@ -1,13 +1,11 @@
 package com.finalproject.dontbeweak.service;
 
-import com.finalproject.dontbeweak.dto.CatRequestDto;
 import com.finalproject.dontbeweak.dto.CatResponseDto;
 import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.CatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,25 +40,4 @@ public class CatService {
 
         return new CatResponseDto(friendCat);
     }
-
-/*    // 고양이 경험치 상승 및 레벨 업
-    @Transactional
-    public void catAddExpAndLevelUp(UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        Cat cat = catRepository.findByUser_Username(username)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 고양이입니다."));
-
-        cat.addExpAndLevel();
-    }*/
-
-/*    @Transactional
-    public void setCatLevelTest(String username, CatRequestDto requestDto) {
-        Cat cat = catRepository.findByUser_Username(username)
-                .orElseThrow(() -> new UsernameNotFoundException("아이디를 찾을 수 없습니다."));
-
-        if (cat.getUser().getUsername().equals(username)) {
-            cat.changeExpLevel(requestDto);
-        }
-
-    }*/
 }
