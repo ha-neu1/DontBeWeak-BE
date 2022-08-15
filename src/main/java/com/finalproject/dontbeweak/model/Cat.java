@@ -1,9 +1,11 @@
 package com.finalproject.dontbeweak.model;
 
 import com.finalproject.dontbeweak.dto.CatRequestDto;
+import com.finalproject.dontbeweak.repository.CatLevelImageRepository;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -30,10 +32,16 @@ public class Cat {
     @Column(nullable = false)
     private String catImage;
 
+    @Column(nullable = true)
+    @ManyToOne
+    private CatLevelImage catLevelImage;
+
+
     // 최대 레벨
     public static final Integer MAX_LEVEL = 30;
     // 최소 레벨
     public static final Integer MIN_LEVEL = 1;
+
 
 
     // 최초 고양이 생성
@@ -42,7 +50,8 @@ public class Cat {
         this.level = MIN_LEVEL;
         this.exp = 0;
         this.maxExp = 20;
-        this.catImage = new CatLevelUpImage().getCatImgVer01();
+//        this.catImage = LevelUpImage.CATIMGVER01.;
+        this.catImage = new CatLevelImage().getChangeLevelImage();
     }
 
     public void setExp(int exp) {
@@ -59,14 +68,21 @@ public class Cat {
 
     // 10 레벨마다 고양이 이미지 바뀜
     public void setCatImage(int level) {
-
-        if (level == 10) {
-            this.catImage = new CatLevelUpImage().getCatImgVer02();
-        } else if (level == 20) {
-            this.catImage = new CatLevelUpImage().getCatImgVer03();
-        } else if (level == 30) {
-            this.catImage = new CatLevelUpImage().getCatImgVer04();
-        }
+//        boolean changeLevel = catLevelImage.getLevel(level);
+//        String changeLevelImage = catLevelImage.getChangeLevelImage();
+//        if (level >= 10) {
+//            if (level == changeLevel) {
+//                this.catImage = changeLevelImage;
+//            }
+//        }
+//
+//        if (level == 10) {
+//            this.catImage = new CatLevelUpImage().getCatImgVer02();
+//        } else if (level == 20) {
+//            this.catImage = new CatLevelUpImage().getCatImgVer03();
+//        } else if (level == 30) {
+//            this.catImage = new CatLevelUpImage().getCatImgVer04();
+//        }
     }
 
     // 경험치 상승 및 레벨 업
