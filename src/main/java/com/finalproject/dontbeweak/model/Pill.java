@@ -1,6 +1,6 @@
 package com.finalproject.dontbeweak.model;
 
-import com.finalproject.dontbeweak.dto.PillDto;
+import com.finalproject.dontbeweak.dto.PillRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,10 +29,10 @@ public class Pill {
     @Column(nullable = false)
     private Boolean done = false;
 
-    public Pill(User user, PillDto pillDto) {
+    public Pill(User user, PillRequestDto pillRequestDto) {
         this.user = user;
-        this.productName = pillDto.getProductName();
-        this.customColor = pillDto.getCustomColor();
-        this.done = pillDto.isDone();
+        this.productName = pillRequestDto.getProductName();
+        this.customColor = pillRequestDto.getCustomColor();
+        this.done = pillRequestDto.isDone();
     }
 }
