@@ -19,12 +19,10 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 public class FriendController {
-
-
     private FriendService friendService;
 
 
-    //친구추가
+    //친구 추가
     @PostMapping("/friend")
     public ResponseEntity<Friend> addfriend(@RequestBody FriendRequestDto friendRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails){
         friendService.addfriend(friendRequestDto,userDetails);
@@ -32,7 +30,7 @@ public class FriendController {
                 .body(null);
     }
 
-    //친구목록 조회
+    //친구 목록 조회
     @GetMapping("/friend")
     public  ResponseEntity<List<FriendResponseDto>> listfriend(){
         List<FriendResponseDto> friendResponseDtoList = friendService.listfriend();

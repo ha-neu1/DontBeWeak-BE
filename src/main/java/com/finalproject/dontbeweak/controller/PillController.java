@@ -2,7 +2,6 @@ package com.finalproject.dontbeweak.controller;
 
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import com.finalproject.dontbeweak.dto.PillResponseDto;
-import com.finalproject.dontbeweak.repository.PillRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.PillService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PillController {
     private final PillService pillService;
-    private final PillRepository pillRepository;
 
     //영양제 등록
     @PostMapping("/schedule")

@@ -26,7 +26,7 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
-    //친구추가
+    //친구 추가
     @Transactional
     public Friend addfriend(FriendRequestDto friendRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
@@ -52,6 +52,7 @@ public class FriendService {
         return newfriend;
     }
 
+    //친구 목록 조회
     public List<FriendResponseDto> listfriend() {
         List<Friend> friends = friendRepository.findAll();
         List<FriendResponseDto> responseDtos = new ArrayList<>();

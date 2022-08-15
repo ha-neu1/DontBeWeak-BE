@@ -3,7 +3,6 @@ package com.finalproject.dontbeweak.service;
 import com.finalproject.dontbeweak.dto.SignupRequestDto;
 import com.finalproject.dontbeweak.exception.CustomException;
 import com.finalproject.dontbeweak.exception.ErrorCode;
-import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
@@ -12,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class UserService {
         String password = requestDto.getPassword();
         String passwordCheck = requestDto.getPasswordCheck();
         String nickname = requestDto.getNickname();
-//        String pattern = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+        String pattern = "^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}$\n";
 
         //회원 username 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
@@ -37,9 +37,9 @@ public class UserService {
         }
 
         //회원가입 조건
-//        if(!Pattern.matches(pattern, username)){
-//            throw new CustomException(ErrorCode.USERNAME_FORM_CODE);
-//        }
+        if(!Pattern.matches(pattern, username)){
+            throw new CustomException(ErrorCode.USERNAME_FORM_CODE);
+        }
         if (!password.equals(passwordCheck)){
             throw new CustomException(ErrorCode.PASSWORD_CHECK_CODE);
         } else if (password.length() < 4) {
