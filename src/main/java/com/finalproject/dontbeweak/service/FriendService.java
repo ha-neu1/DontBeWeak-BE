@@ -43,7 +43,7 @@ public class FriendService {
             throw new CustomException(FRIEND_ADD_CODE);
 
         //이미 등록된 친구를 친구추가 할 수 없도록 함
-        List<Friend> friends =friendRepository.findAll();
+        List<Friend> friends =userTemp.getFriends();
         for(Friend overlapUser : friends) {
             if (overlapUser.getFriendname().equals(friendRequestDto.getFriendname()))
                 throw new CustomException(FRIEND_CHECK_CODE);
