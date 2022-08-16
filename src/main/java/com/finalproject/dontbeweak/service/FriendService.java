@@ -35,7 +35,7 @@ public class FriendService {
 //        User user1 = userRepository.findByUsername(friendRequestDto.getFriendname())
 //                .orElseThrow(() -> new IllegalArgumentException(""));
 
-        User userTemp = userRepository.findByUser(friendRequestDto.getUsername())
+        User friend = userRepository.findByUsername(friendRequestDto.getFriendname())
                 .orElseThrow(() -> new IllegalArgumentException("아이디를 찾을수 없습니다"));
 
 
@@ -47,21 +47,22 @@ public class FriendService {
 
 
 
-        List<Friend> friends = userTemp.getFriends();
+
+        List<Friend> friends = friend.getFriends();
         for(Friend overlapUser : friends) {
             if (overlapUser.getFriendname().equals(friendRequestDto.getFriendname()))
                 throw new CustomException(FRIEND_CHECK_CODE);
         }
 
 
-        Friend newfriend = Friend.builder()
+        Friend newFriend = Friend.builder()
                     .user(userDetails.getUser())
                     .friendname(friendRequestDto.getFriendname())
-                    .nickname(userDetails.getUser().getNickname())
-                    .username(userDetails.getUsername())
+//                    .nickname(friend.getNickname())
+//                    .username(friend.getUsername())
                     .build();
-        friendRepository.save(newfriend);
-        return newfriend;
+        friendRepository.save(newFriend);
+        return newFriend;
     }
 
     //친구 목록 조회
