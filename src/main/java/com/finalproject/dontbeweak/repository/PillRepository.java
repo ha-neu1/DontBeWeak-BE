@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PillRepository extends JpaRepository<Pill, Long> {
-    List<Pill> findAllByUser_Id(Long userId);
+    List<Pill> findByUser_Username(String username);
 }

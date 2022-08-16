@@ -1,5 +1,6 @@
 package com.finalproject.dontbeweak.service;
 
+import com.finalproject.dontbeweak.dto.DonePillRequestDto;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import com.finalproject.dontbeweak.dto.PillResponseDto;
 import com.finalproject.dontbeweak.model.Pill;
@@ -10,6 +11,7 @@ import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +35,9 @@ public class PillService {
     }
 
     //영양제 조회
-    public List<PillResponseDto> showPill(UserDetailsImpl userDetails) {
+    public List<PillResponseDto> showPill(@PathVariable String username) {
         List<PillResponseDto> pillResponseDtoList = new ArrayList<>();
-        List<Pill> pillList = pillRepository.findAllByUser_Id(userDetails.getUser().getId());
+        List<Pill> pillList = pillRepository.findByUser_Username(username);
 
         for (Pill pill : pillList) {
             PillResponseDto pillResponseDto = new PillResponseDto(pill.getProductName(),pill.getCustomColor(), pill.getDone());
@@ -43,5 +45,12 @@ public class PillService {
         }
         return pillResponseDtoList;
     }
+
+    //영양제 복용 완료
+    public void donePill(DonePillRequestDto donePillRequestDto, UserDetailsImpl userDetails) {
+
+    }
+
+    //주간 영양제 복용 여부 조회
 }
 
