@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 public class CatController {
-
     private final CatService catService;
 
     // 내 고양이 조회
@@ -25,7 +24,6 @@ public class CatController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(catResponseDto);
     }
-
 
     // 친구 고양이 조회
     @GetMapping("/cat/{username}")
