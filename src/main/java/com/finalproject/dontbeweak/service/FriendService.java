@@ -30,23 +30,10 @@ public class FriendService {
     @Transactional
     public Friend addfriend(FriendRequestDto friendRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-
-
-//        User user1 = userRepository.findByUsername(friendRequestDto.getFriendname())
-//                .orElseThrow(() -> new IllegalArgumentException(""));
-
         User friend = userRepository.findByUsername(friendRequestDto.getFriendname())
                 .orElseThrow(() -> new IllegalArgumentException("아이디를 찾을수 없습니다"));
 
-
-
-//        //등록 이름과 로그인 이름이 같으면. return
-//        if (userTemp.getUsername().equals(friendRequestDto.getUsername()))
-//        throw new CustomException(FRIEND_ADD_CODE);
-
-
-
-
+        String nickname = friend.getNickname();
 
         List<Friend> friends = friend.getFriends();
         for(Friend overlapUser : friends) {
@@ -54,12 +41,10 @@ public class FriendService {
                 throw new CustomException(FRIEND_CHECK_CODE);
         }
 
-
         Friend newFriend = Friend.builder()
                     .user(userDetails.getUser())
                     .friendname(friendRequestDto.getFriendname())
-//                    .nickname(friend.getNickname())
-//                    .username(friend.getUsername())
+                    .nickname(nickname)
                     .build();
         friendRepository.save(newFriend);
         return newFriend;
