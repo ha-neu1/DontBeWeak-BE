@@ -16,7 +16,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.finalproject.dontbeweak.exception.ErrorCode.*;
+import static com.finalproject.dontbeweak.exception.ErrorCode.FRIEND_CHECK_CODE;
 
 
 @Service
@@ -30,26 +30,39 @@ public class FriendService {
     @Transactional
     public Friend addfriend(FriendRequestDto friendRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        //로그인 유저 정보.
-        User userTemp = userRepository.findById(userDetails.getUser().getId())
-                .orElseThrow();
 
-        //등록 이름과 로그인 이름이 같으면. return
-        if (userTemp.getUsername().equals(friendRequestDto.getFriendname()))
-        throw new CustomException(FRIEND_ADD_CODE);
 
-        List<Friend> friend = userTemp.getFriends();
-        for(Friend overlapUser : friend) {
+//        User user1 = userRepository.findByUsername(friendRequestDto.getFriendname())
+//                .orElseThrow(() -> new IllegalArgumentException(""));
+
+        User friend = userRepository.findByUsername(friendRequestDto.getFriendname())
+                .orElseThrow(() -> new IllegalArgumentException("아이디를 찾을수 없습니다"));
+
+
+
+//        //등록 이름과 로그인 이름이 같으면. return
+//        if (userTemp.getUsername().equals(friendRequestDto.getUsername()))
+//        throw new CustomException(FRIEND_ADD_CODE);
+
+
+
+
+
+        List<Friend> friends = friend.getFriends();
+        for(Friend overlapUser : friends) {
             if (overlapUser.getFriendname().equals(friendRequestDto.getFriendname()))
                 throw new CustomException(FRIEND_CHECK_CODE);
         }
 
-        Friend newfriend = Friend.builder()
+
+        Friend newFriend = Friend.builder()
                     .user(userDetails.getUser())
                     .friendname(friendRequestDto.getFriendname())
+//                    .nickname(friend.getNickname())
+//                    .username(friend.getUsername())
                     .build();
-        friendRepository.save(newfriend);
-        return newfriend;
+        friendRepository.save(newFriend);
+        return newFriend;
     }
 
     //친구 목록 조회
@@ -57,7 +70,7 @@ public class FriendService {
         List<Friend> friends = friendRepository.findAll();
         List<FriendResponseDto> responseDtos = new ArrayList<>();
         for(Friend friend: friends){
-            FriendResponseDto friendResponseDto = new FriendResponseDto(friend.getFriendname());
+            FriendResponseDto friendResponseDto = new FriendResponseDto(friend.getFriendname(), friend.getUsername(), friend.getUsername());
             responseDtos.add(friendResponseDto);
         }
         return responseDtos;

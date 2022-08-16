@@ -9,4 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class FriendRequestDto {
     private String friendname;
+//    private String username;
+//    private String nickname;
 }
