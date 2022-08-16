@@ -13,11 +13,12 @@ public enum ErrorCode {
     PASSWORD_CHECK_CODE(400, "C003", "패스워드와 패스워드 확인이 일치하지 않습니다"),
     PASSWORD_LENGTH_CODE(400, "C004", "패스워드는 4글자 이상 입력해 주세요"),
     LOGIN_CHECK_CODE(400,"C005", "로그인을 해 주세요."),
-    NOT_FOUND_USER(404, "C008", "유저를 찾을 수 없습니다. 로그인을 다시 해주세요."),
     NOT_ENOUGH_MONEY(400,"C007", "금액이 부족합니다."),
-    NO_ITEM(404,"C008", "아이템이 존재하지 않습니다."),
     FRIEND_ADD_CODE(400, "C006", "자기 자신과 친구할 수 없습니다"),
-    FRIEND_CHECK_CODE(400, "C007", "중복된 친구입니다");
+    FRIEND_CHECK_CODE(400, "C007", "중복된 친구입니다"),
+    NO_ITEM(404,"C008", "아이템이 존재하지 않습니다."),
+    NOT_FOUND_USER(404, "C009", "유저를 찾을 수 없습니다. 로그인을 다시 해주세요."),
+    NOT_FOUND_CAT(404,"C010","고양이를 찾을 수 없습니다.");
 
 
 
