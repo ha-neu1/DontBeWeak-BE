@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @Getter
 public class FriendRequestDto {
     private String friendname;
+
 }

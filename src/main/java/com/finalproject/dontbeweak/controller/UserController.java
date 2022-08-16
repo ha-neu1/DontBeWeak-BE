@@ -30,7 +30,6 @@ public class UserController {
         }else{
             return res;
         }
-
     }
 
     //로그인 유저 정보

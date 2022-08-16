@@ -16,7 +16,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.finalproject.dontbeweak.exception.ErrorCode.*;
+import static com.finalproject.dontbeweak.exception.ErrorCode.FRIEND_CHECK_CODE;
 
 
 @Service
@@ -30,33 +30,52 @@ public class FriendService {
     @Transactional
     public Friend addfriend(FriendRequestDto friendRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        //로그인 유저 정보.
-        User userTemp = userRepository.findById(userDetails.getUser().getId())
-                .orElseThrow();
+//        //로그인 유저 정보.
+//        User userTemp = userRepository.findUserByUsername(friendRequestDto.getFriendname())
+//                .orElseThrow(
+//                        () -> new IllegalArgumentException("아이디를 찾을수 없습니다"));
+//
+//        List<Friend> friends = userTemp.getFriends();
+//        for(Friend overlapUser : friends) {
+//            if (overlapUser.getFriendname().equals(friendRequestDto.getFriendname()))
+//                throw new CustomException(FRIEND_CHECK_CODE);
+//        }
+//
+//        Friend newfriend = Friend.builder()
+//                .user(userDetails.getUser())
+//                .friendname(friendRequestDto.getFriendname())
+//                .nickname(friendRequestDto.getFriendname())
+//                .build();
+//
+//        friendRepository.save(newfriend);
+//        return newfriend;
 
-        //등록 이름과 로그인 이름이 같으면. return
-        if (userTemp.getUsername().equals(friendRequestDto.getFriendname()))
-        throw new CustomException(FRIEND_ADD_CODE);
+        User friend = userRepository.findByUsername(friendRequestDto.getFriendname())
+                .orElseThrow(() -> new IllegalArgumentException("아이디를 찾을수 없습니다"));
 
-        List<Friend> friend = userTemp.getFriends();
-        for(Friend overlapUser : friend) {
+        String nickname = friend.getNickname();
+
+        List<Friend> friends = friend.getFriends();
+        for(Friend overlapUser : friends) {
             if (overlapUser.getFriendname().equals(friendRequestDto.getFriendname()))
                 throw new CustomException(FRIEND_CHECK_CODE);
         }
 
-        Friend newfriend = Friend.builder()
-                    .user(userDetails.getUser())
-                    .friendname(friendRequestDto.getFriendname())
-                    .build();
-        friendRepository.save(newfriend);
-        return newfriend;
+        Friend newFriend = Friend.builder()
+                .user(userDetails.getUser())
+                .friendname(friendRequestDto.getFriendname())
+                .nickname(nickname)
+                .build();
+        friendRepository.save(newFriend);
+        return newFriend;
+
     }
 
     public List<FriendResponseDto> listfriend() {
         List<Friend> friends = friendRepository.findAll();
         List<FriendResponseDto> responseDtos = new ArrayList<>();
         for(Friend friend: friends){
-            FriendResponseDto friendResponseDto = new FriendResponseDto(friend.getFriendname());
+            FriendResponseDto friendResponseDto = new FriendResponseDto(friend.getNickname());
             responseDtos.add(friendResponseDto);
         }
         return responseDtos;

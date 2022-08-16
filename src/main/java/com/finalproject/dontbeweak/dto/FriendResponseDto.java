@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class FriendResponseDto {
-    private String friendname;
+   private String nickname;
 }
