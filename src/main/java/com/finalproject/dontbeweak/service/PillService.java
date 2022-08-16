@@ -27,7 +27,6 @@ public class PillService {
                 () -> new IllegalArgumentException("회원이 존재하지 않습니다.")
         );
 
-//        Pill pill = pillRepository.findByUser_Id(user.getId());
         Pill pill = new Pill(user, pillRequestDto);
         pillRepository.save(pill);
         new PillRequestDto(pill);
