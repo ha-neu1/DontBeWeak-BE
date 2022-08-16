@@ -4,6 +4,7 @@ import com.finalproject.dontbeweak.dto.SignupRequestDto;
 import com.finalproject.dontbeweak.exception.CustomException;
 import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.model.Cat;
+import com.finalproject.dontbeweak.model.CatImage;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
@@ -22,7 +23,7 @@ public class UserService {
 
     private final CatService catService;
 
-    public String registerUser(SignupRequestDto requestDto){
+    public String registerUser(SignupRequestDto requestDto, CatImage catImage){
         String error = "";
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
@@ -55,7 +56,7 @@ public class UserService {
         userRepository.save(user);
 
         // 회원가입 후 사용자의 새 고양이 자동 생성
-        catService.createNewCat(user);
+        catService.createNewCat(user, catImage);
 
         return error;
     }

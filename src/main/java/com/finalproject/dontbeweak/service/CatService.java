@@ -2,6 +2,7 @@ package com.finalproject.dontbeweak.service;
 
 import com.finalproject.dontbeweak.dto.CatResponseDto;
 import com.finalproject.dontbeweak.model.Cat;
+import com.finalproject.dontbeweak.model.CatImage;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.CatRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,8 @@ public class CatService {
 
     // 새 고양이 생성
     @Transactional
-    public void createNewCat(User user) {
-        Cat cat = new Cat(user);
+    public void createNewCat(User user, CatImage catImage) {
+        Cat cat = new Cat(user, catImage);
         catRepository.save(cat);
     }
 
