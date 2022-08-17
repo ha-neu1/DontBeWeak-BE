@@ -2,6 +2,7 @@ package com.finalproject.dontbeweak.controller;
 
 
 import com.finalproject.dontbeweak.dto.SignupRequestDto;
+import com.finalproject.dontbeweak.model.CatImage;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.UserService;
@@ -23,8 +24,8 @@ public class UserController {
 
     //회원가입 요청 처리
     @PostMapping("/user/signup")
-    public String registerUser(@Valid @RequestBody SignupRequestDto requestDto){
-        String res = userService.registerUser(requestDto);
+    public String registerUser(@Valid @RequestBody SignupRequestDto requestDto, CatImage catImage){
+        String res = userService.registerUser(requestDto, catImage);
         if(res.equals("")){
             return "회원가입 성공";
         }else{
