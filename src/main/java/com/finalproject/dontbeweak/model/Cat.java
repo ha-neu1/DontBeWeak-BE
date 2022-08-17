@@ -29,10 +29,6 @@ public class Cat {
     @Column(nullable = false)
     private String catImage;
 
-//    @ManyToOne
-//    @JoinColumn(name = "catImage_id")
-//    private CatImage catImage;
-//
 
     // 최대 레벨
     public static final Integer MAX_LEVEL = 30;
@@ -41,12 +37,12 @@ public class Cat {
 
 
     // 최초 고양이 생성
-//    public Cat(User user, String catImage) {
-//        this.user = user;
-//        this.level = MIN_LEVEL;
-//        this.exp = 0;
-//        this.maxExp = 20;
-//        this.catImage = catImage;
+    public Cat(User user, String firstCatImage) {
+        this.user = user;
+        this.level = MIN_LEVEL;
+        this.exp = 0;
+        this.maxExp = 20;
+        this.catImage = firstCatImage;
     }
 
     public void setExp(int exp) {
@@ -58,20 +54,11 @@ public class Cat {
         if (level <= MAX_LEVEL) {
             this.level = level;
         }
-//        setCatImage(level);
     }
 
     // 10 레벨마다 고양이 이미지 바뀜
     public void setCatImage(String changeImage) {
         this.catImage = changeImage;
-
-//        if (level == 10) {
-//            this.catImage = new CatLevelUpImage().getCatImgVer02();
-//        } else if (level == 20) {
-//            this.catImage = new CatLevelUpImage().getCatImgVer03();
-//        } else if (level == 30) {
-//            this.catImage = new CatLevelUpImage().getCatImgVer04();
-//        }
     }
 
     // 경험치 상승 및 레벨 업

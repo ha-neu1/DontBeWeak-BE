@@ -18,6 +18,6 @@ public class CatResponseDto {
         this.level = cat.getLevel();
         this.exp = cat.getExp();
         this.maxExp = cat.getMaxExp();
-//        this.catImg = cat.getCatImage();
+        this.catImg = cat.getCatImage();
     }
 }

@@ -81,6 +81,7 @@ public class ItemService {
             int newPoint = user.getPoint() - item.getItemPoint();
             user.setPoint(newPoint);
             Cat cat = catRepository.findByUser_Username(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CAT));
+
             catService.addExp(cat);
 
 

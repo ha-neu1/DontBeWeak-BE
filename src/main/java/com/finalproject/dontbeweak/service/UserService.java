@@ -57,7 +57,7 @@ public class UserService {
         userRepository.save(user);
 
         // 회원가입 후 사용자의 새 고양이 자동 생성
-        catService.createNewCat(user, catImage);
+        catService.createNewCat(user);
 
         return error;
     }

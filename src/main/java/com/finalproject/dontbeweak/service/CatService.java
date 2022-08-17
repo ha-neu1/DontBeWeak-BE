@@ -17,16 +17,18 @@ public class CatService {
     private final CatRepository catRepository;
     private final CatImageRepository catImageRepository;
 
-    // 최대 레벨
-    public static final Integer MAX_LEVEL = 30;
     // 최소 레벨
     public static final Integer MIN_LEVEL = 1;
 
 
     // 새 고양이 생성
     @Transactional
-    public void createNewCat(User user, CatImage catImage) {
-        Cat cat = new Cat(user, catImage);
+    public void createNewCat(User user) {
+        CatImage catImage = catImageRepository.findCatImageByChangeLevel(MIN_LEVEL);
+        String firstCatImage = catImage.getCatImage();
+
+        Cat cat = new Cat(user, firstCatImage);
+
         catRepository.save(cat);
     }
 
@@ -53,7 +55,6 @@ public class CatService {
     // 고양이 경험치 상승
     public void addExp(Cat cat) {
         cat.addExpAndLevel();
-
         int resultLevel = cat.getLevel();
         if (resultLevel >= 10 && resultLevel % 10 == 0) {
             changeCatImage(cat, resultLevel);
@@ -70,5 +71,4 @@ public class CatService {
             cat.setCatImage(changeImage);
         }
     }
-
 }
