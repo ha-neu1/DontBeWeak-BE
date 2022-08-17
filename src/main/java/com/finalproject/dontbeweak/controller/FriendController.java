@@ -34,8 +34,8 @@ public class FriendController {
 
     //친구목록 조회
     @GetMapping("/friend")
-    public  ResponseEntity<List<FriendResponseDto>> listfriend(){
-        List<FriendResponseDto> friendResponseDtoList = friendService.listfriend();
+    public  ResponseEntity<List<FriendResponseDto>> listfriend(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<FriendResponseDto> friendResponseDtoList = friendService.listfriend(userDetails);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(friendResponseDtoList);
     }
