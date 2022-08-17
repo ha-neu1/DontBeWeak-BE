@@ -3,6 +3,7 @@ package com.finalproject.dontbeweak.service;
 import com.finalproject.dontbeweak.dto.FriendRequestDto;
 import com.finalproject.dontbeweak.dto.FriendResponseDto;
 import com.finalproject.dontbeweak.exception.CustomException;
+import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.model.Friend;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.FriendRepository;
@@ -59,9 +60,13 @@ public class FriendService {
 
     }
 
-    //친구 목록 조회
-    public List<FriendResponseDto> listfriend() {
-        List<Friend> friends = friendRepository.findAll();
+    public List<FriendResponseDto> listfriend(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        User userTemp = userRepository.findById(userDetails.getUser().getId())
+                .orElseThrow(()->new CustomException(ErrorCode.FRIEND_ADD_CODE));
+
+
+        List<Friend> friends = userTemp.getFriends();
         List<FriendResponseDto> responseDtos = new ArrayList<>();
         for(Friend friend: friends){
             FriendResponseDto friendResponseDto = new FriendResponseDto(friend.getNickname());
