@@ -32,6 +32,5 @@ public class Item {
         this.itemPoint = itemRequestDto.getItemPoint();
     }
 
-
 }
 
