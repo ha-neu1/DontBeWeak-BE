@@ -49,7 +49,6 @@ public class ItemService {
 
         Item item = new Item(itemRequestDto);
         itemRepository.save(item);
-
     }
 
 
@@ -77,7 +76,7 @@ public class ItemService {
         if(user.getPoint() >= item.getItemPoint()){
             int newPoint = user.getPoint() - item.getItemPoint();
             user.setPoint(newPoint);
-            Cat cat = catRepository.findByUser_Username(username).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 고양이입니다."));
+            Cat cat = catRepository.findByUser_Username(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CAT));
             cat.addExpAndLevel();
 
             return BuyItemResponseDto.builder()

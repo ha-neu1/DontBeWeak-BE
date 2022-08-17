@@ -5,17 +5,22 @@ import lombok.*;
 
 import javax.persistence.*;
 @Getter
+@Setter
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 public class Friend {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private String nickname;
+
     @Column
     private String friendname;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
@@ -27,4 +32,15 @@ public class Friend {
         this.friendname = friendname;
         this.user = user;
     }
+
+
+
+
+
+
+
+
+
+
+
 }
