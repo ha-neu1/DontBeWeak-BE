@@ -24,7 +24,7 @@ public class FriendController {
 
     //친구 추가
     @PostMapping("/friend")
-    public ResponseEntity<Friend> addfriend(@RequestBody FriendRequestDto friendRequestDto,@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<Friend> addfriend(@RequestBody FriendRequestDto friendRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         friendService.addfriend(friendRequestDto,userDetails);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(null);
@@ -32,8 +32,8 @@ public class FriendController {
 
     //친구 목록 조회
     @GetMapping("/friend")
-    public  ResponseEntity<List<FriendResponseDto>> listfriend(){
-        List<FriendResponseDto> friendResponseDtoList = friendService.listfriend();
+    public  ResponseEntity<List<FriendResponseDto>> listfriend(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        List<FriendResponseDto> friendResponseDtoList = friendService.listfriend(userDetails);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(friendResponseDtoList);
     }
