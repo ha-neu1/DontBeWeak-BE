@@ -13,14 +13,9 @@ public class CatImage {
     private Long id;
 
     @Column
-    private String catImage01;
+    private int changeLevel;
 
     @Column
-    private String catImage10;
+    private String catImage;
 
-    @Column
-    private String catImage20;
-
-    @Column
-    private String catImage30;
 }

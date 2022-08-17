@@ -4,13 +4,16 @@ package com.finalproject.dontbeweak.service;
 import com.finalproject.dontbeweak.dto.BuyItemResponseDto;
 import com.finalproject.dontbeweak.dto.ItemRequestDto;
 import com.finalproject.dontbeweak.dto.ItemResponseDto;
+import com.finalproject.dontbeweak.dto.PillRequestDto;
 import com.finalproject.dontbeweak.exception.CustomException;
 import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.model.Item;
+import com.finalproject.dontbeweak.model.Pill;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.CatRepository;
 import com.finalproject.dontbeweak.repository.ItemRepository;
+import com.finalproject.dontbeweak.repository.PillRepository;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Setter
@@ -32,6 +36,9 @@ public class ItemService {
 
     private final UserRepository userRepository;
     private final CatRepository catRepository;
+    private final CatService catService;
+
+
 
 
     //아이템 등록
@@ -100,8 +107,13 @@ public class ItemService {
         if(user.getPoint() >= item.getItemPoint()){
             int newPoint = user.getPoint() - item.getItemPoint();
             user.setPoint(newPoint);
-            Cat cat = catRepository.findByUser_Username(username).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 고양이입니다."));
-            cat.addExpAndLevel();
+            Cat cat = catRepository.findByUser_Username(username)
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 고양이입니다."));
+//            cat.addExpAndLevel();
+
+//            int level = cat.getLevel();
+
+            catService.addExp(cat);
 
             return BuyItemResponseDto.builder()
                     .username(user.getUsername())

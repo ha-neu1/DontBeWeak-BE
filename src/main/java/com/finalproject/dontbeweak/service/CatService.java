@@ -4,6 +4,7 @@ import com.finalproject.dontbeweak.dto.CatResponseDto;
 import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.model.CatImage;
 import com.finalproject.dontbeweak.model.User;
+import com.finalproject.dontbeweak.repository.CatImageRepository;
 import com.finalproject.dontbeweak.repository.CatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CatService {
     private final CatRepository catRepository;
+    private final CatImageRepository catImageRepository;
+
+    // 최대 레벨
+    public static final Integer MAX_LEVEL = 30;
+    // 최소 레벨
+    public static final Integer MIN_LEVEL = 1;
+
 
     // 새 고양이 생성
     @Transactional
@@ -41,4 +49,26 @@ public class CatService {
 
         return new CatResponseDto(friendCat);
     }
+
+    // 고양이 경험치 상승
+    public void addExp(Cat cat) {
+        cat.addExpAndLevel();
+
+        int resultLevel = cat.getLevel();
+        if (resultLevel >= 10 && resultLevel % 10 == 0) {
+            changeCatImage(cat, resultLevel);
+        }
+    }
+
+    // 고양이 이미지 변경
+    public void changeCatImage(Cat cat, int level) {
+        CatImage catImage = catImageRepository.findCatImageByChangeLevel(level);
+        int changelevel = catImage.getChangeLevel();
+        String changeImage = catImage.getCatImage();
+
+        if (level == changelevel) {
+            cat.setCatImage(changeImage);
+        }
+    }
+
 }
