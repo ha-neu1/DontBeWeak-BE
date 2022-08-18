@@ -32,6 +32,9 @@ public class ItemService {
 
     private final UserRepository userRepository;
     private final CatRepository catRepository;
+    private final CatService catService;
+
+
 
 
     //아이템 등록
@@ -49,6 +52,7 @@ public class ItemService {
 
         Item item = new Item(itemRequestDto);
         itemRepository.save(item);
+
     }
 
 
@@ -77,7 +81,9 @@ public class ItemService {
             int newPoint = user.getPoint() - item.getItemPoint();
             user.setPoint(newPoint);
             Cat cat = catRepository.findByUser_Username(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CAT));
-            cat.addExpAndLevel();
+
+            catService.addExp(cat);
+
 
             return BuyItemResponseDto.builder()
                     .username(user.getUsername())
@@ -85,12 +91,17 @@ public class ItemService {
                     .itemImg(item.getItemImg())
                     .point(user.getPoint())
                     .build();
-
         } else {
             throw new CustomException(ErrorCode.NOT_ENOUGH_MONEY);
         }
 
     }
+
+
+
+
+
+
 
     //member 찾기
     private User getUser(Long userId) {

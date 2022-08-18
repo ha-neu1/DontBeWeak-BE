@@ -51,6 +51,6 @@ public class User {
         this.id = id;
         this.username = username;
         this.nickname = nickname;
-        this.friends=getFriends();
+        this.friends = getFriends();
     }
 }

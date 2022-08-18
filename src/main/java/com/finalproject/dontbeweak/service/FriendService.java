@@ -60,6 +60,7 @@ public class FriendService {
 
     }
 
+    //친구 목록 조회
     public List<FriendResponseDto> listfriend(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         User userTemp = userRepository.findById(userDetails.getUser().getId())

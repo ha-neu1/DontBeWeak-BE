@@ -2,6 +2,7 @@ package com.finalproject.dontbeweak.controller;
 
 
 import com.finalproject.dontbeweak.dto.SignupRequestDto;
+import com.finalproject.dontbeweak.model.CatImage;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.UserService;

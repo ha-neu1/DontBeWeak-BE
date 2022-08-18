@@ -3,6 +3,7 @@ package com.finalproject.dontbeweak.service;
 import com.finalproject.dontbeweak.dto.SignupRequestDto;
 import com.finalproject.dontbeweak.exception.CustomException;
 import com.finalproject.dontbeweak.exception.ErrorCode;
+import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
@@ -59,7 +60,6 @@ public class UserService {
         catService.createNewCat(user);
 
         return error;
-
     }
 
     public User userInfo(UserDetailsImpl userDetails) {
