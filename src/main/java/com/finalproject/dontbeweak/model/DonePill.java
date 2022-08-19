@@ -1,6 +1,7 @@
 package com.finalproject.dontbeweak.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class DonePill {
@@ -26,4 +28,6 @@ public class DonePill {
 
     @Column(nullable = false)
     private LocalDateTime dateTime;
+
+
 }

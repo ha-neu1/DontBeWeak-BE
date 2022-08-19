@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DonePillRequestDto {
+    private String productName;
     private LocalDateTime dateTime;
     private boolean done;
 }
