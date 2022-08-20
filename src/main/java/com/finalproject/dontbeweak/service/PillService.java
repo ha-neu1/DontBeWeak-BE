@@ -1,9 +1,8 @@
 package com.finalproject.dontbeweak.service;
 
-import com.finalproject.dontbeweak.dto.DonePillRequestDto;
+import com.finalproject.dontbeweak.dto.PillHistoryRequestDto;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import com.finalproject.dontbeweak.dto.PillResponseDto;
-import com.finalproject.dontbeweak.model.DonePill;
 import com.finalproject.dontbeweak.model.Pill;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.PillRepository;
@@ -48,16 +47,12 @@ public class PillService {
     }
 
     //영양제 복용 완료
-    public void donePill(DonePillRequestDto donePillRequestDto, UserDetailsImpl userDetails) {
-        DonePill donePill =
-        Boolean done = donePillRequestDto.isDone();
-        if(!done){
-            donePill = donePill.builder()
+    public void donePill(PillHistoryRequestDto pillHistoryRequestDto, UserDetailsImpl userDetails) {
+        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
+                () -> new IllegalArgumentException("회원이 존재하지 않습니다.")
+        );
 
-                    .done(true)
-                    .build();
-
-        }
+        Pill pill =
     }
 
     //주간 영양제 복용 조회
