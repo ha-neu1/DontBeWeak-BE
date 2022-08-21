@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,6 +26,8 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
         super(authenticationManager);
     }
 
+    @Value("${secret.key}")
+    private String secretKey;
 
     //login 요청하면 로그인 시도를 위해 실행되는 함수
     @Override
@@ -32,7 +35,6 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("JwtAuthenticationFilter: 로그인 시도 중");
 
         try {
-
             ObjectMapper om = new ObjectMapper();
             User user = om.readValue(request.getInputStream(), User.class);
             System.out.println(user);
@@ -51,7 +53,8 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
         return null;
     }
 
-
+    //attemptAuthentication실행 후 인증이 정상적으로 되었으면 successfulAuthentication 함수가 실행됨.
+    //JWT 토큰을 만들어서 request요청한 사용자에게 JWT토큰을 response해주면 됨.
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         System.out.println("successfulAuthentication 실행됨: 인증이 완료되었다는 뜻.");
@@ -62,9 +65,9 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .withSubject("cos토큰")
                 .withExpiresAt(new Date(System.currentTimeMillis()+(60000*60)))
                 .withClaim("username",userDetails.getUser().getUsername())
-                .sign(Algorithm.HMAC512("cos"));
+                .sign(Algorithm.HMAC512("thwjd2"));
 
-        response.addHeader("Authorization", jwtToken);
+        response.addHeader("Authorization", "Bearer "+jwtToken);
     }
 
 
