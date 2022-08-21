@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         this.userRepository = userRepository;
 
     }
+    @Value("${secret.key}")
+    private String secretKey;
 
     //인증이나 권한이 필요한 주소요청이 있을 때 해당 필터를 타게 됨
     @Override
@@ -33,20 +36,26 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         System.out.println("인증이나 권한이 필요한 주소 요청이 됨");
 
-        String jwtHeader = request.getHeader("Authorization");
-        System.out.println("jwtHeader : " + jwtHeader);
+//        String jwtHeader = request.getHeader("Authorization");
+//        System.out.println("jwtHeader : " + jwtHeader);
 
-        //header가 있는지 확인
-        if(jwtHeader == null){
+        //헤더 확인
+        String header = request.getHeader("Authorization");
+        if(header == null || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response);
             return;
         }
 
+        //JWT 토큰을 검증을 해서 정상적인 사용자인지 확인
+        String jwtToken = request.getHeader("Authorization")
+                .replace("Bearer ", "");
+
+        System.out.println("header : "+header);
+
 
         //JWT토큰을 검증을 해서 정상적인 사용자인지 확인
-        //String jwtToken = request.getHeader("Authorization").replace("Bearer","");
         String username =
-                JWT.require(Algorithm.HMAC512("cos")).build().verify(jwtHeader).getClaim("username").asString();
+                JWT.require(Algorithm.HMAC512("thwjd2")).build().verify(jwtToken).getClaim("username").asString();
 
 
         //서명이 정상적으로 됨
