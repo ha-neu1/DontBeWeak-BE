@@ -1,15 +1,13 @@
 package com.finalproject.dontbeweak.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Builder
 @Entity
 @Getter
 @Setter
@@ -27,13 +25,17 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column
     private String nickname;
+
+    @Column
+    private String oauth;
 
     @Column(nullable = false)
     private int point;
 
     private String role;
+
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Cat> cat;
@@ -52,5 +54,12 @@ public class User {
         this.username = username;
         this.nickname = nickname;
         this.friends = getFriends();
+    }
+
+    public User(String username, String password, String oauth, String nickname) {
+        this.username = username;
+        this.password = password;
+        this.oauth = oauth;
+        this.nickname = nickname;
     }
 }
