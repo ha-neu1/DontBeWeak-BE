@@ -1,28 +1,14 @@
 package com.finalproject.dontbeweak.controller;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalproject.dontbeweak.dto.LoginIdCheckDto;
 import com.finalproject.dontbeweak.dto.SignupRequestDto;
-import com.finalproject.dontbeweak.dto.SocialSignupRequestDto;
-import com.finalproject.dontbeweak.model.CatImage;
-import com.finalproject.dontbeweak.model.OAuthToken;
-import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.KakaoService;
 import com.finalproject.dontbeweak.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
