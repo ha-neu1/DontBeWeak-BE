@@ -1,9 +1,11 @@
 package com.finalproject.dontbeweak.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.finalproject.dontbeweak.dto.LoginIdCheckDto;
 import com.finalproject.dontbeweak.dto.SignupRequestDto;
 import com.finalproject.dontbeweak.exception.CustomException;
 import com.finalproject.dontbeweak.exception.ErrorCode;
-import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -23,13 +26,15 @@ public class UserService {
 
     private final CatService catService;
 
+
+    //일반 회원가입
     public String registerUser(SignupRequestDto requestDto){
         String error = "";
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
         String passwordCheck = requestDto.getPasswordCheck();
         String nickname = requestDto.getNickname();
-        String pattern = "^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}$";
+        String pattern = "^[a-zA-Z0-9]*$";
 
         //회원 username 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
@@ -62,11 +67,21 @@ public class UserService {
         return error;
     }
 
-    public User userInfo(UserDetailsImpl userDetails) {
-        Long id = userDetails.getUser().getId();
+    //로그인 유저 정보 반환
+    public LoginIdCheckDto userInfo(UserDetailsImpl userDetails) {
         String username = userDetails.getUser().getUsername();
         String nickname = userDetails.getUser().getNickname();
-        User userInfo = new User(id, username, nickname);
+        LoginIdCheckDto userInfo = new LoginIdCheckDto(username, nickname);
         return userInfo;
+    }
+
+    //카카오 로그인 토큰 발급
+    public String JwtTokenCreate(String username){
+        String jwtToken = JWT.create()
+                .withSubject("cos토큰")
+                .withExpiresAt(new Date(System.currentTimeMillis()+(60000*10)))
+                .withClaim("username", username)
+                .sign(Algorithm.HMAC512("thwjd2"));
+        return jwtToken;
     }
 }
