@@ -2,6 +2,7 @@ package com.finalproject.dontbeweak.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finalproject.dontbeweak.dto.SocialLoginInfoDto;
 import com.finalproject.dontbeweak.model.KakaoProfile;
 import com.finalproject.dontbeweak.model.OAuthToken;
 import com.finalproject.dontbeweak.model.User;
@@ -41,7 +42,7 @@ public class KakaoService {
     @Value("${secret.key}")
     private String secretKey;
 
-    public String requestKakao(String code, HttpServletResponse response) { //Data를 리턴해주는 컨트롤러 함수
+    public SocialLoginInfoDto requestKakao(String code, HttpServletResponse response) { //Data를 리턴해주는 컨트롤러 함수
         //POST방식으로 key=value 데이터를 요청(카카오쪽으로)
         RestTemplate rt = new RestTemplate();
 
@@ -130,7 +131,7 @@ public class KakaoService {
         if (originUser.getUsername() == null) {
             System.out.println("신규 회원입니다.");
             SignupKakaoUser(kakaoUser); // <-- 이 로직이 자동 로그인 입니다. 지우시면 회원가입 따로 하시면 됩니다.
-            return "회원가입 축하합니다. 유저네임: "+ kakaoUser.getUsername()+", 닉네임: "+kakaoUser.getNickname();
+//            return "회원가입 축하합니다. 유저네임: "+ kakaoUser.getUsername()+", 닉네임: "+kakaoUser.getNickname();
         }
 
         // kakao 로그인 처리
@@ -152,8 +153,12 @@ public class KakaoService {
             System.out.println("JWT토큰 : " + "Bearer "+jwtToken);
         }
 
-        return "로그인 한 회원의 유저네임: "+kakaoUser.getUsername()+", 닉네임: "+kakaoUser.getNickname();
+        String username = kakaoUser.getUsername();
+        String nickname = kakaoUser.getNickname();
 
+        SocialLoginInfoDto socialLoginInfoDto = new SocialLoginInfoDto(username, nickname);
+        return socialLoginInfoDto;
+//        return "로그인 한 회원의 유저네임: "+kakaoUser.getUsername()+", 닉네임: "+kakaoUser.getNickname();
     }
 
     //신규 카카오 회원 강제 가입

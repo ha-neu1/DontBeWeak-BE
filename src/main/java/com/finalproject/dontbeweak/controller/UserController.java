@@ -3,6 +3,7 @@ package com.finalproject.dontbeweak.controller;
 
 import com.finalproject.dontbeweak.dto.LoginIdCheckDto;
 import com.finalproject.dontbeweak.dto.SignupRequestDto;
+import com.finalproject.dontbeweak.dto.SocialLoginInfoDto;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.KakaoService;
 import com.finalproject.dontbeweak.service.UserService;
@@ -34,7 +35,7 @@ public class UserController {
 
     //카카오 소셜 로그인
     @GetMapping("/auth/kakao/callback")
-    public @ResponseBody String kakaoCallback(String code, HttpServletResponse response) {      //ResponseBody -> Data를 리턴해주는 컨트롤러 함수
+    public @ResponseBody SocialLoginInfoDto kakaoCallback(String code, HttpServletResponse response) {      //ResponseBody -> Data를 리턴해주는 컨트롤러 함수
         return kakaoService.requestKakao(code, response);
     }
 
