@@ -74,8 +74,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.POST,"/items").access("hasRole('ADMIN')")
                 .antMatchers("/").permitAll()
                 .antMatchers("/**").permitAll()
-
-
 //                .antMatchers("product/basketList").authenticated()
 //                .antMatchers(HttpMethod.POST,"product/comment").authenticated()
 //                .antMatchers(HttpMethod.DELETE,"product/comment").authenticated()

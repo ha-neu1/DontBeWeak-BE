@@ -25,7 +25,6 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-
     private final CatRepository catRepository;
     private final CatService catService;
 
