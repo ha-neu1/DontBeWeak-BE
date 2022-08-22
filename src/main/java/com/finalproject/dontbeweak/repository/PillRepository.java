@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PillRepository extends JpaRepository<Pill, Long> {
     List<Pill> findByUser_Username(String username);
+    Pill findByUser_Id(Long userId);
 }

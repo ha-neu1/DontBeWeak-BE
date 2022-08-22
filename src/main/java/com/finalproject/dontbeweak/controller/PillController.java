@@ -33,7 +33,7 @@ public class PillController {
 
     //영양제 복용 완료
     @PatchMapping("/schedule/week")
-    public ResponseEntity<String> donePill(@RequestBody PillHistoryRequestDto pillHistoryRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<String> donePill(PillHistoryRequestDto pillHistoryRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         pillService.donePill(pillHistoryRequestDto, userDetails);
         return ResponseEntity.ok().body("영양제를 잘 챙기셨군요!");
     }

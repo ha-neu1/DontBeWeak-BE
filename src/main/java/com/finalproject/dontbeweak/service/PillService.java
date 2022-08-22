@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,9 +53,23 @@ public class PillService {
                 () -> new IllegalArgumentException("회원이 존재하지 않습니다.")
         );
 
-        Pill pill =
+        Pill pill = pillRepository.findByUser_Id(user.getId());
+        LocalDateTime usedAt = pillHistoryRequestDto.getUsedAt();
+        if(usedAt != null){
+            pill.done();
+            pill.usedAt();
+
+            Pill.builder()
+                    .productName(pill.getProductName())
+                    .usedAt(pill.getUsedAt())
+                    .done(pill.getDone())
+                    .build();
+
+          new PillHistoryRequestDto(pill);
+        }
     }
 
     //주간 영양제 복용 조회
+
 }
 
