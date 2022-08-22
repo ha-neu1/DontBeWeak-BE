@@ -3,6 +3,7 @@ package com.finalproject.dontbeweak.controller;
 
 import com.finalproject.dontbeweak.dto.LoginIdCheckDto;
 import com.finalproject.dontbeweak.dto.SignupRequestDto;
+import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.KakaoService;
 import com.finalproject.dontbeweak.service.UserService;
@@ -40,7 +41,7 @@ public class UserController {
 
 
     //로그인 유저 정보
-    @GetMapping("/login/auth")
+    @GetMapping("/user")
     public LoginIdCheckDto userDetails(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.userInfo(userDetails);
     }
