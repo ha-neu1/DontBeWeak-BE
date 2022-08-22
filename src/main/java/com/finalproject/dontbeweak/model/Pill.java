@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -23,16 +24,23 @@ public class Pill {
     @Column(nullable = false)
     private String productName;
 
+    //영양제 색상
     @Column(nullable = false)
     private String customColor;
 
+    //영양제 복용 완료 여부
     @Column(nullable = false)
     private Boolean done = false;
+
+    //복용한 시간
+    @Column(nullable = true)
+    private LocalDateTime usedAt;
 
     public Pill(User user, PillRequestDto pillRequestDto) {
         this.user = user;
         this.productName = pillRequestDto.getProductName();
         this.customColor = pillRequestDto.getCustomColor();
         this.done = pillRequestDto.isDone();
+        this.usedAt = pillRequestDto.getUsedAt();
     }
 }

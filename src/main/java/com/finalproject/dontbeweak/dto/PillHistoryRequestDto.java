@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DonePillResponseDto {
-    private LocalDate date;
+public class PillHistoryRequestDto {
     private String productName;
-    private String customColor;
+    private LocalDateTime usedAt;
     private boolean done;
 }

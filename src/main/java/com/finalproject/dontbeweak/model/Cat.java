@@ -8,7 +8,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table
-public class Cat {
+public class Cat implements Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -45,23 +45,25 @@ public class Cat {
         this.catImage = firstCatImage;
     }
 
+    @Override
+    public void setImage(String changeImage) {
+        this.catImage = changeImage;
+    }
+
+    @Override
     public void setExp(int exp) {
         this.exp = exp;
     }
 
-    // 레벨 설정
+    @Override
     public void setLevel(int level) {
         if (level <= MAX_LEVEL) {
             this.level = level;
         }
     }
 
-    // 10 레벨마다 고양이 이미지 바뀜
-    public void setCatImage(String changeImage) {
-        this.catImage = changeImage;
-    }
-
     // 경험치 상승 및 레벨 업
+    @Override
     public void addExpAndLevel() {
         int level = getLevel();
         int exp = getExp();

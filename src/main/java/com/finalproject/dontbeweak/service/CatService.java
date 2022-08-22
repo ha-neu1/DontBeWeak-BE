@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.finalproject.dontbeweak.exception.CustomException;
+import com.finalproject.dontbeweak.exception.ErrorCode;
+
 @Service
 @RequiredArgsConstructor
 public class CatService {
@@ -24,7 +27,8 @@ public class CatService {
     // 새 고양이 생성
     @Transactional
     public void createNewCat(User user) {
-        CatImage catImage = catImageRepository.findCatImageByChangeLevel(MIN_LEVEL);
+        CatImage catImage = catImageRepository.findCatImageByChangeLevel(MIN_LEVEL)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATIMAGE));
         String firstCatImage = catImage.getCatImage();
 
         Cat cat = new Cat(user, firstCatImage);
@@ -38,7 +42,7 @@ public class CatService {
     public CatResponseDto getMyCatStatus(UserDetails userDetails) {
         String username = userDetails.getUsername();
         Cat cat = catRepository.findByUser_Username(username)
-                .orElseThrow(() -> new IllegalArgumentException("내 고양이가 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CAT));
 
         return new CatResponseDto(cat);
     }
@@ -47,7 +51,7 @@ public class CatService {
     @Transactional
     public CatResponseDto getFriendCatStatus(String username) {
         Cat friendCat = catRepository.findByUser_Username(username)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 고양이입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CAT));
 
         return new CatResponseDto(friendCat);
     }
@@ -63,12 +67,13 @@ public class CatService {
 
     // 고양이 이미지 변경
     public void changeCatImage(Cat cat, int level) {
-        CatImage catImage = catImageRepository.findCatImageByChangeLevel(level);
+        CatImage catImage = catImageRepository.findCatImageByChangeLevel(level)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATIMAGE));
         int changelevel = catImage.getChangeLevel();
         String changeImage = catImage.getCatImage();
 
         if (level == changelevel) {
-            cat.setCatImage(changeImage);
+            cat.setImage(changeImage);
         }
     }
 }

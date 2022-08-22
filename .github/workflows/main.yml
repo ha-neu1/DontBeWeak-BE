@@ -1,0 +1,39 @@
+# logging-deploy.yml
+
+name: logging-system
+
+# 이 workflow 가 언제 실행될건지 트리거를 지정.
+# 특정 브랜치가 push 되는 경우, 
+# Pull Request 가 생성될 경우, 또는 crontab 문법으로 스케줄링을 걸 수도 있습니다.
+# workflow_dispatch는 수동으로 해당 workflow를 실행시키겠다는 의미.
+on:
+  workflow_dispatch:
+
+# workflow 는 하나 혹은 그 이상의 job 을 가질 수 있고
+# 각 job 은 여러 step 에 따라 단계를 나눌 수 있습니다.
+# runs-on 해당 workflow를 어떤 os 환경에서 실행할 것인지 지정.
+# checkout 은 GITHUB이 제공하는 워크스페이스 (이 workflow 를 실행하는 공간) 에서
+# 내 저장소가 위치한 곳으로 이동한다고 생각하면 된다.
+# 이후는 JAVA를 셋업하고 gradlew에 실행 권한을 준 뒤 build하는 과정.
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        shell: bash
+
+      - name: Build with Gradle
+        run: ./gradlew build
+        shell: bash
+
+# 다음 단계에서 스크립트 추가 예정

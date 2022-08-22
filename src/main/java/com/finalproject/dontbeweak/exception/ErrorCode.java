@@ -18,7 +18,8 @@ public enum ErrorCode {
     FRIEND_CHECK_CODE(400, "C007", "중복된 친구입니다"),
     NO_ITEM(404,"C008", "아이템이 존재하지 않습니다."),
     NOT_FOUND_USER(404, "C009", "유저를 찾을 수 없습니다. 로그인을 다시 해주세요."),
-    NOT_FOUND_CAT(404,"C010","고양이를 찾을 수 없습니다.");
+    NOT_FOUND_CAT(404,"C010","고양이를 찾을 수 없습니다."),
+    NOT_FOUND_CATIMAGE(500,"C011","고양이의 모습을 찾을 수 없습니다.");
 
 
 
