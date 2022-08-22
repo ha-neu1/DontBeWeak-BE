@@ -97,12 +97,6 @@ public class ItemService {
 
     }
 
-
-
-
-
-
-
     //member 찾기
     private User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(

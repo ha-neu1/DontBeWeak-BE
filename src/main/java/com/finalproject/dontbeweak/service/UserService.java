@@ -34,7 +34,8 @@ public class UserService {
         String password = requestDto.getPassword();
         String passwordCheck = requestDto.getPasswordCheck();
         String nickname = requestDto.getNickname();
-        String pattern = "^[a-zA-Z0-9]*$";
+//        String pattern = "^[a-zA-Z0-9]*$";
+        String pattern = "^[a-zA-Z]{1}[a-zA-Z0-9_]{4,11}$";
 
         //회원 username 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
