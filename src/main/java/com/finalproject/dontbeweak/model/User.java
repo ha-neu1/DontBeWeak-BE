@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -42,6 +42,9 @@ public class User {
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)//mappedBy 연관관계의 주인이 아니다(나는 FK가 아니에요) DB에 컬럼 만들지 마세요.
     private List<Friend> friends = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<ItemHistory> itemHistory;
 
     public User(String username, String password, String nickname) {
         this.username = username;

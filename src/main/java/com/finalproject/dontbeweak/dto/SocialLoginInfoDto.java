@@ -4,10 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
-public class FriendResponseDto {
-   private String nickname;
-   private String friendname;
+//@NoArgsConstructor
+@AllArgsConstructor
+public class SocialLoginInfoDto {
+
+    private String username;
+    private String nickname;
 }

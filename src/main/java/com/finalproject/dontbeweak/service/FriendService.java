@@ -70,7 +70,7 @@ public class FriendService {
         List<Friend> friends = userTemp.getFriends();
         List<FriendResponseDto> responseDtos = new ArrayList<>();
         for(Friend friend: friends){
-            FriendResponseDto friendResponseDto = new FriendResponseDto(friend.getNickname());
+            FriendResponseDto friendResponseDto = new FriendResponseDto(friend.getNickname(), friend.getFriendname());
             responseDtos.add(friendResponseDto);
         }
         return responseDtos;
