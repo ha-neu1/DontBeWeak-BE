@@ -8,8 +8,10 @@ import com.finalproject.dontbeweak.exception.CustomException;
 import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.model.Item;
+import com.finalproject.dontbeweak.model.ItemHistory;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.CatRepository;
+import com.finalproject.dontbeweak.repository.ItemHistoryRepository;
 import com.finalproject.dontbeweak.repository.ItemRepository;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
@@ -33,7 +35,7 @@ public class ItemService {
     private final UserRepository userRepository;
     private final CatRepository catRepository;
     private final CatService catService;
-
+    private final ItemHistoryRepository itemHistoryRepository;
 
 
 
@@ -77,12 +79,18 @@ public class ItemService {
         Item item = findItem(itemId);
         String username = userDetails.getUsername();
 
+        // 아이템 구입 기록 저장
+        ItemHistory itemHistory = new ItemHistory(user, item);
+        itemHistoryRepository.save(itemHistory);
+
+
         if(user.getPoint() >= item.getItemPoint()){
             int newPoint = user.getPoint() - item.getItemPoint();
             user.setPoint(newPoint);
             Cat cat = catRepository.findByUser_Username(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CAT));
 
             catService.addExp(cat);
+
 
 
             return BuyItemResponseDto.builder()
@@ -94,8 +102,8 @@ public class ItemService {
         } else {
             throw new CustomException(ErrorCode.NOT_ENOUGH_MONEY);
         }
-
     }
+
 
     //member 찾기
     private User getUser(Long userId) {
