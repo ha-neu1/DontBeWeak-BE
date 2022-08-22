@@ -130,7 +130,7 @@ public class KakaoService {
         if (originUser.getUsername() == null) {
             System.out.println("신규 회원입니다.");
             SignupKakaoUser(kakaoUser); // <-- 이 로직이 자동 로그인 입니다. 지우시면 회원가입 따로 하시면 됩니다.
-            return "회원가입 축하합니다. 유저네임: "+ kakaoUser.getUsername();
+            return "회원가입 축하합니다. 유저네임: "+ kakaoUser.getUsername()+", 닉네임: "+kakaoUser.getNickname();
         }
 
         // kakao 로그인 처리
@@ -152,7 +152,7 @@ public class KakaoService {
             System.out.println("JWT토큰 : " + "Bearer "+jwtToken);
         }
 
-        return "로그인 한 유저 닉네임: "+kakaoUser.getNickname();
+        return "로그인 한 회원의 유저네임: "+kakaoUser.getUsername()+", 닉네임: "+kakaoUser.getNickname();
 
     }
 
