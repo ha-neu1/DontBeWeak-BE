@@ -79,15 +79,17 @@ public class ItemService {
         Item item = findItem(itemId);
         String username = userDetails.getUsername();
 
-        // 아이템 구입 기록 저장
-        ItemHistory itemHistory = new ItemHistory(user, item);
-        itemHistoryRepository.save(itemHistory);
+
 
 
         //포인트 감소, 고양이 경험치 상승
         if(user.getPoint() >= item.getItemPoint()){
             int newPoint = user.getPoint() - item.getItemPoint();
             user.setPoint(newPoint);
+
+            // 아이템 구입 기록 저장
+            ItemHistory itemHistory = new ItemHistory(user, item);
+            itemHistoryRepository.save(itemHistory);
 
             Cat cat = catRepository.findByUser_Username(username).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CAT));
             catService.addExp(cat);

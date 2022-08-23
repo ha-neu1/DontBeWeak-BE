@@ -1,7 +1,9 @@
 package com.finalproject.dontbeweak.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pill {
@@ -33,7 +36,8 @@ public class Pill {
     private Boolean done = false;
 
     //복용한 시간
-    @Column(nullable = true)
+    @JsonFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
+    @Column(nullable = false)
     private LocalDateTime usedAt;
 
     public Pill(User user, PillRequestDto pillRequestDto) {
@@ -42,5 +46,13 @@ public class Pill {
         this.customColor = pillRequestDto.getCustomColor();
         this.done = pillRequestDto.isDone();
         this.usedAt = pillRequestDto.getUsedAt();
+    }
+
+    public void done() {
+        this.done = true;
+    }
+
+    public void usedAt() {
+        this.usedAt = getUsedAt();
     }
 }
