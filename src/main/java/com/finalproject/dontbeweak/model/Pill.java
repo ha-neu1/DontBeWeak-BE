@@ -1,5 +1,6 @@
 package com.finalproject.dontbeweak.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,7 @@ public class Pill {
     private Boolean done = false;
 
     //복용한 시간
+    @JsonFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
     @Column(nullable = false)
     private LocalDateTime usedAt;
 
