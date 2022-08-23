@@ -1,6 +1,7 @@
 package com.finalproject.dontbeweak.service;
 
 import com.finalproject.dontbeweak.dto.PillHistoryRequestDto;
+import com.finalproject.dontbeweak.dto.PillHistoryResponseDto;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import com.finalproject.dontbeweak.dto.PillResponseDto;
 import com.finalproject.dontbeweak.model.Pill;
@@ -23,17 +24,22 @@ public class PillService {
     private final PillRepository pillRepository;
     private final UserRepository userRepository;
 
+
     //영양제 등록
     @Transactional
-    public void registerPill(PillRequestDto pillRequestDto, UserDetailsImpl userDetails){
+    public PillResponseDto registerPill(PillRequestDto pillRequestDto, UserDetailsImpl userDetails){
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException("회원이 존재하지 않습니다.")
         );
 
+        System.out.println("영양제 생성");
         Pill pill = new Pill(user, pillRequestDto);
+        System.out.println("영양제 등록");
         pillRepository.save(pill);
-        new PillRequestDto(pill);
+
+        return new PillResponseDto(pill);
     }
+
 
     //영양제 조회
     public List<PillResponseDto> showPill(@PathVariable String username) {
@@ -47,26 +53,26 @@ public class PillService {
         return pillResponseDtoList;
     }
 
+
     //영양제 복용 완료
-    public void donePill(PillHistoryRequestDto pillHistoryRequestDto, UserDetailsImpl userDetails) {
+    public PillHistoryResponseDto donePill(PillHistoryRequestDto pillHistoryRequestDto, UserDetailsImpl userDetails) {
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException("회원이 존재하지 않습니다.")
         );
+        String productName = pillHistoryRequestDto.getProductName();;
 
-        Pill pill = pillRepository.findByUser_Id(user.getId());
-        LocalDateTime usedAt = pillHistoryRequestDto.getUsedAt();
-        if(usedAt != null){
-            pill.done();
-            pill.usedAt();
+        Pill pill = pillRepository.findByUser_IdAndProductName(user.getId(), productName);
+        System.out.println("영양제 찾기 완료");
 
-            Pill.builder()
-                    .productName(pill.getProductName())
-                    .usedAt(pill.getUsedAt())
-                    .done(pill.getDone())
-                    .build();
 
-          new PillHistoryRequestDto(pill);
-        }
+        pill.donePill(pillHistoryRequestDto);
+        System.out.println("영양제 체크, 시간 입력");
+
+
+        System.out.println("변경 저장하기");
+        pillRepository.save(pill);
+
+        return new PillHistoryResponseDto(pill);
     }
 
     //주간 영양제 복용 조회

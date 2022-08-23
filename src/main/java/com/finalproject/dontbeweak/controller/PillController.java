@@ -1,11 +1,14 @@
 package com.finalproject.dontbeweak.controller;
 
 import com.finalproject.dontbeweak.dto.PillHistoryRequestDto;
+import com.finalproject.dontbeweak.dto.PillHistoryResponseDto;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import com.finalproject.dontbeweak.dto.PillResponseDto;
+import com.finalproject.dontbeweak.model.Pill;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.PillService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +22,10 @@ public class PillController {
 
     //영양제 등록
     @PostMapping("/schedule")
-    public ResponseEntity<String> registerPill(@RequestBody PillRequestDto pillRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        pillService.registerPill(pillRequestDto, userDetails);
-        return ResponseEntity.ok().body("내 영양제가 등록되었습니다.");
+    public ResponseEntity<PillResponseDto> registerPill(@RequestBody PillRequestDto pillRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        PillResponseDto pill = pillService.registerPill(pillRequestDto, userDetails);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(pill);
     }
 
     //영양제 조회
@@ -32,10 +36,10 @@ public class PillController {
     }
 
     //영양제 복용 완료
-    @PatchMapping("/schedule/week")
-    public ResponseEntity<String> donePill(PillHistoryRequestDto pillHistoryRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        pillService.donePill(pillHistoryRequestDto, userDetails);
-        return ResponseEntity.ok().body("영양제를 잘 챙기셨군요!");
+    @PatchMapping("/schedule/{username}")
+    public ResponseEntity<PillHistoryResponseDto> donePill(@RequestBody PillHistoryRequestDto pillHistoryRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        PillHistoryResponseDto pillHistoryResponseDto = pillService.donePill(pillHistoryRequestDto, userDetails);
+        return ResponseEntity.ok().body(pillHistoryResponseDto);
     }
 
     //주간 영양제 복용 여부 조회

@@ -1,18 +1,19 @@
 package com.finalproject.dontbeweak.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.finalproject.dontbeweak.dto.PillHistoryRequestDto;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pill {
@@ -33,26 +34,24 @@ public class Pill {
 
     //영양제 복용 완료 여부
     @Column(nullable = false)
-    private Boolean done = false;
+    private Boolean done;
 
     //복용한 시간
-    @JsonFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss")
-    @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(nullable = true)
     private LocalDateTime usedAt;
 
     public Pill(User user, PillRequestDto pillRequestDto) {
         this.user = user;
         this.productName = pillRequestDto.getProductName();
         this.customColor = pillRequestDto.getCustomColor();
-        this.done = pillRequestDto.isDone();
+        this.done = false;
         this.usedAt = pillRequestDto.getUsedAt();
     }
 
-    public void done() {
+    @Builder
+    public void donePill(PillHistoryRequestDto pillHistoryRequestDto) {
         this.done = true;
-    }
-
-    public void usedAt() {
-        this.usedAt = getUsedAt();
+        this.usedAt = pillHistoryRequestDto.getUsedAt();
     }
 }
