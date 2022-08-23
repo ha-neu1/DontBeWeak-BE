@@ -4,6 +4,8 @@ import com.finalproject.dontbeweak.dto.PillHistoryRequestDto;
 import com.finalproject.dontbeweak.dto.PillHistoryResponseDto;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import com.finalproject.dontbeweak.dto.PillResponseDto;
+import com.finalproject.dontbeweak.exception.CustomException;
+import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.PillService;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +39,12 @@ public class PillController {
     //영양제 복용 완료
     @PatchMapping("/schedule/week")
     public ResponseEntity<PillHistoryResponseDto> donePill(@RequestBody PillHistoryRequestDto pillHistoryRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        PillHistoryResponseDto pillHistoryResponseDto = pillService.donePill(pillHistoryRequestDto, userDetails);
-        return ResponseEntity.ok().body(pillHistoryResponseDto);
+        if (userDetails == null) {
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+        } else {
+            PillHistoryResponseDto pillHistoryResponseDto = pillService.donePill(pillHistoryRequestDto, userDetails);
+            return ResponseEntity.ok().body(pillHistoryResponseDto);
+        }
     }
 
     //주간 영양제 복용 여부 조회
