@@ -26,8 +26,8 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
         super(authenticationManager);
     }
 
-    @Value("${secret.key}")
-    private String secretKey;
+//    @Value("${secret.key}")
+//    private String secretKey;
 
     //login 요청하면 로그인 시도를 위해 실행되는 함수
     @Override

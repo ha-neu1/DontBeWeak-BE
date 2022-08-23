@@ -39,8 +39,8 @@ public class KakaoService {
 
     private final CatService catService;
 
-    @Value("${secret.key}")
-    private String secretKey;
+//    @Value("${secret.key}")
+//    private String secretKey;
 
     public SocialLoginInfoDto requestKakao(String code, HttpServletResponse response) { //Data를 리턴해주는 컨트롤러 함수
         //POST방식으로 key=value 데이터를 요청(카카오쪽으로)

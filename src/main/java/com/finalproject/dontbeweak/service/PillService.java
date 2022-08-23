@@ -47,13 +47,13 @@ public class PillService {
     }
 
     //영양제 복용 완료
-    public void donePill(PillHistoryRequestDto pillHistoryRequestDto, UserDetailsImpl userDetails) {
-        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
-                () -> new IllegalArgumentException("회원이 존재하지 않습니다.")
-        );
-
-        Pill pill =
-    }
+//    public void donePill(PillHistoryRequestDto pillHistoryRequestDto, UserDetailsImpl userDetails) {
+//        User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
+//                () -> new IllegalArgumentException("회원이 존재하지 않습니다.")
+//        );
+//
+//        Pill pill =
+//    }
 
     //주간 영양제 복용 조회
 }

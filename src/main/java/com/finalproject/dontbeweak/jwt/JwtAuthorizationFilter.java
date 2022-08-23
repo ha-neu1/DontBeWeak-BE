@@ -27,8 +27,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         this.userRepository = userRepository;
 
     }
-    @Value("${secret.key}")
-    private String secretKey;
+//    @Value("${secret.key}")
+//    private String secretKey;
 
     //인증이나 권한이 필요한 주소요청이 있을 때 해당 필터를 타게 됨
     @Override
