@@ -80,8 +80,6 @@ public class ItemService {
         String username = userDetails.getUsername();
 
 
-
-
         //포인트 감소, 고양이 경험치 상승
         if(user.getPoint() >= item.getItemPoint()){
             int newPoint = user.getPoint() - item.getItemPoint();
