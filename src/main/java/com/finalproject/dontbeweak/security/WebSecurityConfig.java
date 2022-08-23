@@ -72,11 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 // api 요청 접근허용
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/items").access("hasRole('ADMIN')")
-                .antMatchers(HttpMethod.GET,"/login/auth").access("hasRole('ADMIN')")
                 .antMatchers("/").permitAll()
                 .antMatchers("/**").permitAll()
-
-
 //                .antMatchers("product/basketList").authenticated()
 //                .antMatchers(HttpMethod.POST,"product/comment").authenticated()
 //                .antMatchers(HttpMethod.DELETE,"product/comment").authenticated()

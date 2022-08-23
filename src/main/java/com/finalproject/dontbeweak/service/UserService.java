@@ -6,7 +6,9 @@ import com.finalproject.dontbeweak.dto.LoginIdCheckDto;
 import com.finalproject.dontbeweak.dto.SignupRequestDto;
 import com.finalproject.dontbeweak.exception.CustomException;
 import com.finalproject.dontbeweak.exception.ErrorCode;
+import com.finalproject.dontbeweak.model.Cat;
 import com.finalproject.dontbeweak.model.User;
+import com.finalproject.dontbeweak.repository.CatRepository;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-
+    private final CatRepository catRepository;
     private final CatService catService;
 
 
@@ -72,7 +74,13 @@ public class UserService {
     public LoginIdCheckDto userInfo(UserDetailsImpl userDetails) {
         String username = userDetails.getUser().getUsername();
         String nickname = userDetails.getUser().getNickname();
-        LoginIdCheckDto userInfo = new LoginIdCheckDto(username, nickname);
+        int point = userDetails.getUser().getPoint();
+
+        Optional<Cat> catTemp = catRepository.findByUser_Username(username);
+        int level = catTemp.get().getLevel();
+        int exp = catTemp.get().getExp();
+
+        LoginIdCheckDto userInfo = new LoginIdCheckDto(username, nickname, point, level, exp);
         return userInfo;
     }
 

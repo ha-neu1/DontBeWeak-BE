@@ -39,11 +39,9 @@ public class UserController {
         return kakaoService.requestKakao(code, response);
     }
 
-
     //로그인 유저 정보
-    @GetMapping("/login/auth")
+    @GetMapping("/user")
     public LoginIdCheckDto userDetails(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.userInfo(userDetails);
     }
-
 }
