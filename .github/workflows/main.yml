@@ -30,9 +30,12 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-
+          
+      - name: gradle wrapper
+        run: gradle wrapper
+          
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: gradle clean build
         
 
 # 다음 단계에서 스크립트 추가 예정
