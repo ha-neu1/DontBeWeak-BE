@@ -1,13 +1,16 @@
 # logging-deploy.yml
 
-name: logging-system
+name: Spring Boot & Gradle CI/CD 
 
 # 이 workflow 가 언제 실행될건지 트리거를 지정.
 # 특정 브랜치가 push 되는 경우, 
 # Pull Request 가 생성될 경우, 또는 crontab 문법으로 스케줄링을 걸 수도 있습니다.
 # workflow_dispatch는 수동으로 해당 workflow를 실행시키겠다는 의미.
 on:
-  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 # workflow 는 하나 혹은 그 이상의 job 을 가질 수 있고
 # 각 job 은 여러 step 에 따라 단계를 나눌 수 있습니다.
@@ -30,10 +33,9 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-        shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew build
-        shell: bash
+        run: ./gradlew clean build
+        
 
 # 다음 단계에서 스크립트 추가 예정
