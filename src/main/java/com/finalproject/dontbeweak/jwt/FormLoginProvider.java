@@ -1,6 +1,8 @@
 package com.finalproject.dontbeweak.jwt;
 
 
+import com.finalproject.dontbeweak.exception.CustomException;
+import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,7 @@ public class FormLoginProvider implements AuthenticationProvider {
         if(passwordEncoder.matches(password, userDetails.getPassword())) { //화면에서 입력한 비밀번호와 DB에서 가져온 비밀번호를 비교하는 로직이다. 비밀번호가 맞지 않다면 예외를 던진다.
             return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()); //계정이 인증됐다면 UsernamePasswordAuthenticationToken 객체에 화면에서 입력한 정보와 DB에서 가져온 권한을 담아서 리턴한다.
         }else {
-            throw new BadCredentialsException("잘못된 로그인 정보입니다.");
+            throw new CustomException(ErrorCode.LOGIN_ERROR_CODE);
         }
     }
 
