@@ -71,4 +71,4 @@ jobs:
           --recursive \
           --region ap-northeast-2 \
           --acl private \
-          /home/runner/work/DontBeWeak-BE/DontBeWeak-BE s3://hyerim-bucket/
+          /home/runner/work/DontBeWeak-BE s3://hyerim-bucket/
