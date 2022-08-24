@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Entity
@@ -36,22 +37,15 @@ public class Pill {
     @Column(nullable = false)
     private Boolean done;
 
-    //복용한 시간
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    @Column(nullable = true)
-    private LocalDateTime usedAt;
 
     public Pill(User user, PillRequestDto pillRequestDto) {
         this.user = user;
         this.productName = pillRequestDto.getProductName();
         this.customColor = pillRequestDto.getCustomColor();
         this.done = false;
-        this.usedAt = pillRequestDto.getUsedAt();
     }
 
-    @Builder
-    public void donePill(PillHistoryRequestDto pillHistoryRequestDto) {
+    public void donePill() {
         this.done = true;
-        this.usedAt = pillHistoryRequestDto.getUsedAt();
     }
 }
