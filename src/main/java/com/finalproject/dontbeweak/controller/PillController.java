@@ -4,7 +4,6 @@ import com.finalproject.dontbeweak.dto.PillHistoryRequestDto;
 import com.finalproject.dontbeweak.dto.PillHistoryResponseDto;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import com.finalproject.dontbeweak.dto.PillResponseDto;
-import com.finalproject.dontbeweak.model.Pill;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.PillService;
 import lombok.RequiredArgsConstructor;

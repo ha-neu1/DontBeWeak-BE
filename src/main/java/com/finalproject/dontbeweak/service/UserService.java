@@ -84,7 +84,7 @@ public class UserService {
         return userInfo;
     }
 
-    //카카오 로그인 토큰 발급
+    //소셜로그인 토큰 발급
     public String JwtTokenCreate(String username){
         String jwtToken = JWT.create()
                 .withSubject("cos토큰")
