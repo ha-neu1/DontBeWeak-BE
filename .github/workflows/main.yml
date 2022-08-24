@@ -54,12 +54,12 @@ jobs:
       # S3로 전달하는 과정에서 .zip 파일 못 찾는 오류. 파일 찾기
       # The user-provided path  ./springboot-intro-build.zip does not exist.
       # Error: Process completed with exit code 255.
-      - name: Find /build
-        run: ls -la         # ls 디렉토리 목록보기, -l 지정한 디렉토리 내용을 자세히 출력 -a .을 포함한 경로안의 모든 파일과 디렉토리 표시
+      # - name: Find /build
+      #   run: ls -la         # ls 디렉토리 목록보기, -l 지정한 디렉토리 내용을 자세히 출력 -a .을 포함한 경로안의 모든 파일과 디렉토리 표시
         
       # pwd: Print Working Directory. 현재 디렉토리 경로를 절대 경로로 표시
-      - name: Print Working Directory
-        run: pwd
+      # - name: Print Working Directory
+      #   run: pwd
 
       # S3 Bucket으로 copy
       - name: Deliver to AWS S3
@@ -69,4 +69,4 @@ jobs:
         run: |
           aws s3 cp \
           --region ap-northeast-2 \
-          --acl private \ ./springboot-intro-build.zip s3://springboot-intro-build/
+          --acl private \ /home/runner/work/DontBeWeak-BE/DontBeWeak-BE/springboot-intro-build.zip s3://springboot-intro-build/
