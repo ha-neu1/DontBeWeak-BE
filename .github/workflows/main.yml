@@ -68,6 +68,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws s3 cp \
+          --recursive \
           --region ap-northeast-2 \
           --acl private \
           /home/runner/work/DontBeWeak-BE/DontBeWeak-BE s3://springboot-intro-build/
