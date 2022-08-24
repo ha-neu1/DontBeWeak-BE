@@ -116,11 +116,11 @@ public class KakaoService {
         //User 오브젝트: username, password, nickname
         System.out.println("카카오 아이디(번호): " + kakaoProfile.getId());
         System.out.println("카카오 닉네임: " + kakaoProfile.getKakao_account().getProfile().getNickname());
-        System.out.println("클라이언트 서버 유저네임 : " + "Kakaoname" + kakaoProfile.getId());
+        System.out.println("클라이언트 서버 유저네임 : " + "Kakao_" + kakaoProfile.getId());
 
         User kakaoUser = User.builder()
                 .nickname(kakaoProfile.getKakao_account().getProfile().getNickname())
-                .username("Kakaoname" + kakaoProfile.getId())
+                .username("Kakao_" + kakaoProfile.getId())
                 .password(kakaoProfile.getId().toString()) //임시 비밀번호
                 .oauth("kakao")
                 .build();
