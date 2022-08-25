@@ -38,8 +38,7 @@ jobs:
         with:
           mysql database: 'springboot-db'
           mysql user: 'hyerim'
-        env:
-          mysql password: ${{ secrets.MYSQL_PASSWORD }}
+          mysql password: '${{ secrets.MYSQL_PASSWORD }}'
           
       # 임의 추가. gradle wrapper없이 바로 빌드하면 경로 문제 때문인지 오류 남.
       - name: gradle wrapper
