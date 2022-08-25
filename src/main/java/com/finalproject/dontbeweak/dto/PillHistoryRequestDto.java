@@ -8,17 +8,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
-//@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class PillHistoryRequestDto {
 
     private String productName;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @NotNull(message = "시간 값은 필수입니다.")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime usedAt;
 
     private boolean done;
