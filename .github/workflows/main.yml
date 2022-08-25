@@ -36,7 +36,7 @@ jobs:
         uses: samin/mysql-action@v1
         with:
           character set server: utf8
-          mysql database: finalproject_dontbeweak
+          mysql database: springboot-db
           mysql user: ${{ secrets.AWS_RDS_USERNAME }}
           mysql password: ${{ secrets.AWS_RDS_PASSWORD }}
           
