@@ -31,13 +31,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
-
     private final UserRepository userRepository;
     private final CatRepository catRepository;
     private final CatService catService;
     private final ItemHistoryRepository itemHistoryRepository;
-
-
 
     //아이템 등록
     @Transactional
@@ -56,7 +53,6 @@ public class ItemService {
         itemRepository.save(item);
 
     }
-
 
     //아이템 목록 조회
     public List<ItemResponseDto> getItem(){
@@ -103,7 +99,6 @@ public class ItemService {
             throw new CustomException(ErrorCode.NOT_ENOUGH_MONEY);
         }
     }
-
 
     //member 찾기
     private User getUser(Long userId) {

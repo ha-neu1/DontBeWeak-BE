@@ -18,7 +18,6 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
     private final KakaoService kakaoService;
 

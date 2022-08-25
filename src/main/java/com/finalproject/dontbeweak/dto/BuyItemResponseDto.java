@@ -1,7 +1,6 @@
 package com.finalproject.dontbeweak.dto;
 
 import com.finalproject.dontbeweak.model.Item;
-import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class BuyItemResponseDto {
-
     private String username;
     private String itemName;
     private String itemImg;
