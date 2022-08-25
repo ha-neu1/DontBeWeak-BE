@@ -35,10 +35,10 @@ jobs:
       - name: Setup MySQL
         uses: samin/mysql-action@v1
         with:
-          character set server: 'utf8'
-          mysql database: 'springboot-db'
-          mysql user: ${{ secrets.AWS_RDS_USERNAME }}
-          mysql password: ${{ secrets.AWS_RDS_PASSWORD }}
+          character set server: utf8
+          mysql database: springboot-db
+          mysql user: hyerim
+          mysql password: hyerim12
           
           
       # 임의 추가. gradle wrapper없이 바로 빌드하면 경로 문제 때문인지 오류 남.
