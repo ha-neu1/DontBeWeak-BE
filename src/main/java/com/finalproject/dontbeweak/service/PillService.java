@@ -37,6 +37,11 @@ public class PillService {
                 () -> new IllegalArgumentException("회원이 존재하지 않습니다.")
         );
 
+        Optional<Pill> found = pillRepository.findPillByProductName(pillRequestDto.getProductName());
+
+        if (found.isPresent()) {
+            throw new IllegalArgumentException("이미 같은 이름의 영양제가 존재합니다.");
+        }
 
         Pill pill = new Pill(user, pillRequestDto);
         pillRepository.save(pill);
