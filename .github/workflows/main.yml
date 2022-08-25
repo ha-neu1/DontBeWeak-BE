@@ -35,8 +35,8 @@ jobs:
       - name: Setup MySQL
         uses: samin/mysql-action@v1
         with:
-          character set server: utf8
-          mysql database: springboot-db
+          character set server: 'utf8'
+          mysql database: 'springboot-db'
           mysql user: ${{ secrets.AWS_RDS_USERNAME }}
           mysql password: ${{ secrets.AWS_RDS_PASSWORD }}
           
