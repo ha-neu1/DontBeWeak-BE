@@ -85,6 +85,17 @@ public class PillService {
         return new PillHistoryResponseDto(pill, pillHistory);
     }
 
+    //영양제 복용 여부 초기화
+    @Transactional
+    public Long update(Long id, boolean done){
+        Pill pill = pillRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("영양제가 존재하지 않습니다.")
+        );
+
+        pill.reset(done);
+        return id;
+    }
+
     //주간 영양제 복용 조회
 
 }

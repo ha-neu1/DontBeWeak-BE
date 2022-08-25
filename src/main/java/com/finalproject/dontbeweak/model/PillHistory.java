@@ -4,7 +4,6 @@ import com.finalproject.dontbeweak.dto.PillHistoryRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,7 +11,6 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 public class PillHistory {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
