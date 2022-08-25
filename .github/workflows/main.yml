@@ -31,6 +31,16 @@ jobs:
         with:
           java-version: 11
       
+      # DB Setting
+      - name: Setup MySQL
+        uses: samin/mysql-action@v1
+        with:
+          character set server: utf8
+          mysql database: finalproject_dontbeweak
+          mysql user: ${{ secrets.AWS_RDS_USERNAME }}
+          mysql password: ${{ secrets.AWS_RDS_PASSWORD }}
+          
+          
       # 임의 추가. gradle wrapper없이 바로 빌드하면 경로 문제 때문인지 오류 남.
       - name: gradle wrapper
         run: gradle wrapper
