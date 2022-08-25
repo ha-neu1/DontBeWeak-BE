@@ -6,14 +6,18 @@ import com.finalproject.dontbeweak.dto.PillRequestDto;
 import com.finalproject.dontbeweak.dto.PillResponseDto;
 import com.finalproject.dontbeweak.exception.CustomException;
 import com.finalproject.dontbeweak.exception.ErrorCode;
+import com.finalproject.dontbeweak.model.PillHistory;
 import com.finalproject.dontbeweak.security.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.PillService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -48,5 +52,14 @@ public class PillController {
     }
 
     //주간 영양제 복용 여부 조회
-//
+    @GetMapping("/schedule/{username}/week")
+    public ResponseEntity<List<PillHistoryResponseDto>> getPillHistory
+    (@PathVariable String username,
+     @RequestParam(value = "startDate", required = false) String startDate,
+     @RequestParam(value = "endDate", required = false) String endDate){
+
+        List<PillHistoryResponseDto> pillHistoryResponseDtoList = pillService.getPillList(username, startDate, endDate);
+
+        return ResponseEntity.ok().body(pillHistoryResponseDtoList);
+    }
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -23,5 +24,12 @@ public class PillHistoryResponseDto {
         this.productName = pill.getProductName();
         this.customColor = pill.getCustomColor();
         this.done = pill.getDone();
+    }
+
+    public PillHistoryResponseDto(PillHistory pillHistory) {
+        this.usedAt = pillHistory.getUsedAt();
+        this.productName = pillHistory.getPill().getProductName();
+        this.customColor = pillHistory.getPill().getCustomColor();
+        this.done = pillHistory.getPill().getDone();
     }
 }

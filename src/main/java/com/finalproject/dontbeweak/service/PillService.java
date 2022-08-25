@@ -16,8 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -97,6 +101,37 @@ public class PillService {
     }
 
     //주간 영양제 복용 조회
+
+    @Transactional
+    public List<PillHistoryResponseDto> getPillList(String username, String startDate, String endDate) {
+        Optional<User> user = userRepository.findByUsername(username);
+        Long userId = user.get().getId();
+        System.out.println(userId);
+
+        System.out.println(startDate);
+        System.out.println(endDate);
+
+        LocalDateTime startDateTime = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyyMMdd")).atTime(0, 0, 0);
+        LocalDateTime endDateTime = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyyMMdd")).atTime(23, 59, 59);
+
+        System.out.println(startDateTime);
+        System.out.println(endDateTime);
+
+        List<PillHistory> pillHistoryList = pillHistoryRepository.findAllByUser_IdAndUsedAtBetween(userId, startDateTime, endDateTime);
+
+        System.out.println(pillHistoryList);
+
+        List<PillHistoryResponseDto> pillHistoryResponseDtoList = new ArrayList<>();
+
+        for (PillHistory pillHistory : pillHistoryList) {
+            PillHistoryResponseDto pillHistoryResponseDto = new PillHistoryResponseDto(pillHistory);
+
+            pillHistoryResponseDtoList.add(pillHistoryResponseDto);
+        }
+
+
+        return pillHistoryResponseDtoList;
+    }
 
 }
 
