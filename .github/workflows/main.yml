@@ -36,7 +36,7 @@ jobs:
       - name: Setup MySQL
         uses: samin/mysql-action@v1
         with:
-          mysql database: finalproject_dontbeweak
+          mysql database: finalproject_dontbeweak_db
           mysql user: hyerim
           mysql password: hyerim12
           
