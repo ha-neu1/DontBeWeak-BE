@@ -4,8 +4,6 @@ import com.finalproject.dontbeweak.dto.PillHistoryRequestDto;
 import com.finalproject.dontbeweak.dto.PillHistoryResponseDto;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import com.finalproject.dontbeweak.dto.PillResponseDto;
-import com.finalproject.dontbeweak.exception.CustomException;
-import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.model.Pill;
 import com.finalproject.dontbeweak.model.PillHistory;
 import com.finalproject.dontbeweak.model.User;
@@ -28,7 +26,6 @@ public class PillService {
     private final UserRepository userRepository;
     private final PillHistoryRepository pillHistoryRepository;
 
-
     //영양제 등록
     @Transactional
     public PillResponseDto registerPill(PillRequestDto pillRequestDto, UserDetailsImpl userDetails){
@@ -47,7 +44,6 @@ public class PillService {
         return new PillResponseDto(pill);
     }
 
-
     //영양제 조회
     public List<PillResponseDto> showPill(@PathVariable String username) {
         List<PillResponseDto> pillResponseDtoList = new ArrayList<>();
@@ -59,7 +55,6 @@ public class PillService {
         }
         return pillResponseDtoList;
     }
-
 
     //영양제 복용 완료
     public PillHistoryResponseDto donePill(PillHistoryRequestDto pillHistoryRequestDto, UserDetailsImpl userDetails) {
@@ -90,6 +85,16 @@ public class PillService {
         return new PillHistoryResponseDto(pill, pillHistory);
     }
 
+    //영양제 복용 여부 초기화
+    @Transactional
+    public Long update(Long id, boolean done){
+        Pill pill = pillRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("영양제가 존재하지 않습니다.")
+        );
+
+        pill.reset(done);
+        return id;
+    }
 
     //주간 영양제 복용 조회
 

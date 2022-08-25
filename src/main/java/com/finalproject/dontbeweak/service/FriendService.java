@@ -24,7 +24,6 @@ import static com.finalproject.dontbeweak.exception.ErrorCode.FRIEND_CHECK_CODE;
 @Service
 @RequiredArgsConstructor
 public class FriendService {
-
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 

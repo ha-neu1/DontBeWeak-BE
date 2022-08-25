@@ -48,8 +48,5 @@ public class PillController {
     }
 
     //주간 영양제 복용 여부 조회
-//    @GetMapping("/schedule/{username}/week")
-//    public ResponseEntity<List<DonePillResponseDto>> getDone(){
-//        List<>
-//    }
+//
 }

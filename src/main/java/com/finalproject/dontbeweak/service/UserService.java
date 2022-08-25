@@ -22,12 +22,10 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final CatRepository catRepository;
     private final CatService catService;
-
 
     //일반 회원가입
     public String registerUser(SignupRequestDto requestDto){

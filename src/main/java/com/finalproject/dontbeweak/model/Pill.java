@@ -1,17 +1,11 @@
 package com.finalproject.dontbeweak.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.finalproject.dontbeweak.dto.PillHistoryRequestDto;
 import com.finalproject.dontbeweak.dto.PillRequestDto;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Entity
@@ -26,6 +20,7 @@ public class Pill {
     @JoinColumn(name = "user_id")
     private User user;
 
+    //영양제 이름
     @Column(nullable = false)
     private String productName;
 
@@ -37,7 +32,6 @@ public class Pill {
     @Column(nullable = false)
     private Boolean done;
 
-
     public Pill(User user, PillRequestDto pillRequestDto) {
         this.user = user;
         this.productName = pillRequestDto.getProductName();
@@ -47,5 +41,9 @@ public class Pill {
 
     public void donePill() {
         this.done = true;
+    }
+
+    public void reset(boolean done){
+        this.done = done;
     }
 }

@@ -11,6 +11,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    
 
 # workflow 는 하나 혹은 그 이상의 job 을 가질 수 있고
 # 각 job 은 여러 step 에 따라 단계를 나눌 수 있습니다.
@@ -31,6 +32,14 @@ jobs:
         with:
           java-version: 11
       
+      # DB Setting
+      - name: Setup MySQL
+        uses: samin/mysql-action@v1
+        with:
+          mysql database: 'springboot-db'
+          mysql user: 'hyerim'
+          mysql password: '${{ secrets.MYSQL_PASSWORD }}'
+          
       # 임의 추가. gradle wrapper없이 바로 빌드하면 경로 문제 때문인지 오류 남.
       - name: gradle wrapper
         run: gradle wrapper

@@ -30,13 +30,9 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 @RequiredArgsConstructor
 public class KakaoService {
-
     private final UserService userService;
-
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final CatService catService;
 
 //    @Value("${secret.key}")

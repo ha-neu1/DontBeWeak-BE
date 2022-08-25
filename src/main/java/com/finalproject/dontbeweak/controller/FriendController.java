@@ -37,6 +37,4 @@ public class FriendController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(friendResponseDtoList);
     }
-
-
 }

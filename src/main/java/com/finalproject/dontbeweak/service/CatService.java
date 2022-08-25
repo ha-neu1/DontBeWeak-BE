@@ -36,7 +36,6 @@ public class CatService {
         catRepository.save(cat);
     }
 
-
     // 내 고양이 조회
     @Transactional
     public CatResponseDto getMyCatStatus(UserDetails userDetails) {
