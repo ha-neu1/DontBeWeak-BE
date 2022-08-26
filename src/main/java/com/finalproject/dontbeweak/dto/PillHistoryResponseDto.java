@@ -18,6 +18,7 @@ public class PillHistoryResponseDto {
     private String productName;
     private String customColor;
     private boolean done;
+    private int dayOfWeek;
 
     public PillHistoryResponseDto(Pill pill, PillHistory pillHistory) {
         this.usedAt = pillHistory.getUsedAt();
@@ -31,5 +32,6 @@ public class PillHistoryResponseDto {
         this.productName = pillHistory.getPill().getProductName();
         this.customColor = pillHistory.getPill().getCustomColor();
         this.done = pillHistory.getPill().getDone();
+        this.dayOfWeek =
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -103,7 +104,7 @@ public class PillService {
     //주간 영양제 복용 조회
 
     @Transactional
-    public List<PillHistoryResponseDto> getPillList(String username, String startDate, String endDate) {
+    public List<PillHistoryResponseDto> getPillList(String username, String startDate, String endDate, PillHistory pillHistory) {
         Optional<User> user = userRepository.findByUsername(username);
         Long userId = user.get().getId();
         System.out.println(userId);
@@ -119,6 +120,14 @@ public class PillService {
 
         List<PillHistory> pillHistoryList = pillHistoryRepository.findAllByUser_IdAndUsedAtBetween(userId, startDateTime, endDateTime);
 
+        List<LocalDateTime> usedAtList = pillHistoryList.get()
+        LocalDateTime usedAt = pillHistory.getUsedAt();
+
+        DayOfWeek dayOfWeek = pillHistory.getDayOfWeek(usedAt);
+
+        List<DayOfWeek> dayOfWeekList = new ArrayList<>();
+        dayOfWeekList.add(dayOfWeek);
+
         System.out.println(pillHistoryList);
 
         List<PillHistoryResponseDto> pillHistoryResponseDtoList = new ArrayList<>();
@@ -129,9 +138,7 @@ public class PillService {
             pillHistoryResponseDtoList.add(pillHistoryResponseDto);
         }
 
-
         return pillHistoryResponseDtoList;
     }
-
 }
 

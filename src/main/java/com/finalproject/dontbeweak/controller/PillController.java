@@ -60,6 +60,7 @@ public class PillController {
 
         List<PillHistoryResponseDto> pillHistoryResponseDtoList = pillService.getPillList(username, startDate, endDate);
 
-        return ResponseEntity.ok().body(pillHistoryResponseDtoList);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(pillHistoryResponseDtoList);
     }
 }
