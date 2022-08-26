@@ -50,12 +50,12 @@ public class KakaoService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "599bca646044fc4147f7f8f4c461f9ca");
-        params.add("redirect_uri", "http://localhost:8080/auth/kakao/callback");
+        params.add("redirect_uri", "http://3.37.88.75/auth/kakao/callback");
         params.add("code", code);
 
         //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
-        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =
-                new HttpEntity<>(params, headers);
+        HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest =   //바디와 헤더값을 넣어준다
+                new HttpEntity<>(params, headers);  //아래의 exchange가 HttpEntity 오브젝트를 받게 되어있다.
 
         //Http 요청하기 - POST방식으로 - 그리고 response 변수의 응답 받음.
         ResponseEntity<String> responseEntity = rt.exchange(
@@ -88,8 +88,8 @@ public class KakaoService {
 
 
         //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
-        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =
-                new HttpEntity<>(headers2);
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest2 =   //바디와 헤더값을 넣어준다
+                new HttpEntity<>(headers2);  //아래의 exchange가 HttpEntity 오브젝트를 받게 되어있다.
 
         //Http 요청하기 - POST방식으로 - 그리고 response 변수의 응답 받음.
         ResponseEntity<String> response2 = rt2.exchange(
@@ -154,7 +154,6 @@ public class KakaoService {
 
         SocialLoginInfoDto socialLoginInfoDto = new SocialLoginInfoDto(username, nickname);
         return socialLoginInfoDto;
-//        return "로그인 한 회원의 유저네임: "+kakaoUser.getUsername()+", 닉네임: "+kakaoUser.getNickname();
     }
 
     //신규 카카오 회원 강제 가입

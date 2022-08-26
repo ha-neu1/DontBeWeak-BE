@@ -35,12 +35,14 @@ public class NaverService {
     private final UserService userService;
 
     public SocialLoginInfoDto requestNaver(String code, String state, HttpServletResponse response){
-
+        //POST방식으로 key=value 데이터를 요청(네이버쪽으로)
         RestTemplate rt = new RestTemplate();
 
+        //HttpHeader 오브젝트 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
+        //HttpBody 오브젝트 생성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type","authorization_code");
         params.add("client_id","k7spc3MRJ9Ut2UUxudqp");
@@ -49,6 +51,7 @@ public class NaverService {
         params.add("client_secret","1feqER4xKL");
         params.add("state", state);
 
+        //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
         HttpEntity<MultiValueMap<String, String>> naverTokenRequest = //바디와 헤더값을 넣어준다
                 new HttpEntity<>(params, headers); //아래의 exchange가 HttpEntity 오브젝트를 받게 되어있다.
 
@@ -60,6 +63,7 @@ public class NaverService {
                 String.class
         );
 
+        //Gson, Json Simple, ObjectMapper 중 하나로 json 데이터를 담는다.
         ObjectMapper objectMapper = new ObjectMapper();
         OAuthToken oauthToken = null;
         try {
@@ -69,20 +73,22 @@ public class NaverService {
                 JsonProcessingException e) {
             e.printStackTrace();
         }
+
         //엑세스 토큰만 뽑아서 확인
         System.out.println("네이버 엑세스 토큰 : " + oauthToken.getAccess_token());
 
-
         RestTemplate rt2 = new RestTemplate();
 
+        //HttpHeader 오브젝트 생성
         HttpHeaders headers2 = new HttpHeaders();
         headers2.add("Authorization","Bearer "+oauthToken.getAccess_token());
         headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
+        //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
         HttpEntity<MultiValueMap<String, String>> naverProfileRequest2 = //바디와 헤더값을 넣어준다
                 new HttpEntity<>(headers2); //아래의 exchange가 HttpEntity 오브젝트를 받게 되어있다.
 
-        //Http요청하기 - Post방식으로 - 그리고 responseEntity 변수의 응답 받음.
+        //Http 요청하기 - Post방식으로 - 그리고 responseEntity 변수의 응답 받음.
         ResponseEntity<String> response2 = rt2.exchange(
                 "https://openapi.naver.com/v1/nid/me",
                 HttpMethod.POST,
@@ -90,8 +96,10 @@ public class NaverService {
                 String.class
         );
 
+        //NaverProfile오브젝트를 ObjectMapper로 담는다.
         ObjectMapper objectMapper2 = new ObjectMapper();
         NaverProfile naverProfile = null;
+
         try {
             naverProfile = objectMapper2.readValue(response2.getBody(), NaverProfile.class);
         } catch (
@@ -99,6 +107,7 @@ public class NaverService {
             e.printStackTrace();
         }
 
+        //User 오브젝트: username, password, nickname
         System.out.println("네이버 아이디: "+naverProfile.getResponse().getId());
         System.out.println("네이버 닉네임: "+naverProfile.getResponse().getName());
         System.out.println("클라이언트 서버 유저네임 : " + "Naver_" + naverProfile.getResponse().getId());
@@ -110,6 +119,7 @@ public class NaverService {
                 .oauth("naver")
                 .build();
 
+        //가입자 혹은 비가입자 체크해서 처리
         User originUser = findByUser(naverUser.getUsername());
 
         if(originUser.getUsername() == null){
@@ -141,7 +151,6 @@ public class NaverService {
 
         SocialLoginInfoDto socialLoginInfoDto = new SocialLoginInfoDto(username, nickname);
         return socialLoginInfoDto;
-
     }
 
     //신규 네이버 회원 강제 가입
@@ -164,6 +173,7 @@ public class NaverService {
         return error;
     }
 
+    //회원찾기
     @Transactional(readOnly = true)
     public User findByUser(String username) {
         User user = userRepository.findByUsername(username).orElseGet(
