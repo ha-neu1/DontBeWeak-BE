@@ -69,7 +69,9 @@ public class User extends BaseEntity {
         this.oauth = oauth;
         this.nickname = nickname;
     }
-    public void setPoint(int point){
-    this.point = point;
-}
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
 }
