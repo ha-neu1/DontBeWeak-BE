@@ -17,6 +17,7 @@ public class PillHistoryResponseDto {
     private String productName;
     private String customColor;
     private boolean done;
+    private int dayOfWeek;
 
     public PillHistoryResponseDto(Pill pill, PillHistory pillHistory) {
         this.usedAt = pillHistory.getUsedAt();
