@@ -25,9 +25,9 @@ public class PillHistoryResponseDto {
         this.done = pill.getDone();
     }
 
-    public PillHistoryResponseDto(PillHistory pillHistory) {
+    public PillHistoryResponseDto(PillHistory pillHistory, int dayOfWeekValue) {
         this.usedAt = pillHistory.getUsedAt();
-        this.dayOfWeekValue = pillHistory.getUsedAt().getDayOfWeek().getValue();
+        this.dayOfWeekValue = dayOfWeekValue;
         this.productName = pillHistory.getPill().getProductName();
         this.customColor = pillHistory.getPill().getCustomColor();
         this.done = pillHistory.getPill().getDone();

@@ -1,16 +1,16 @@
 package com.finalproject.dontbeweak.pill.service;
 
+import com.finalproject.dontbeweak.login.auth.UserDetailsImpl;
+import com.finalproject.dontbeweak.login.model.User;
+import com.finalproject.dontbeweak.login.repository.UserRepository;
 import com.finalproject.dontbeweak.pill.dto.PillHistoryRequestDto;
 import com.finalproject.dontbeweak.pill.dto.PillHistoryResponseDto;
 import com.finalproject.dontbeweak.pill.dto.PillRequestDto;
 import com.finalproject.dontbeweak.pill.dto.PillResponseDto;
 import com.finalproject.dontbeweak.pill.model.Pill;
 import com.finalproject.dontbeweak.pill.model.PillHistory;
-import com.finalproject.dontbeweak.login.model.User;
 import com.finalproject.dontbeweak.pill.repository.PillHistoryRepository;
 import com.finalproject.dontbeweak.pill.repository.PillRepository;
-import com.finalproject.dontbeweak.login.repository.UserRepository;
-import com.finalproject.dontbeweak.login.auth.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +55,7 @@ public class PillService {
         List<Pill> pillList = pillRepository.findByUser_Username(username);
 
         for (Pill pill : pillList) {
-            PillResponseDto pillResponseDto = new PillResponseDto(pill.getProductName(),pill.getCustomColor(), pill.getDone());
+            PillResponseDto pillResponseDto = new PillResponseDto(pill);
             pillResponseDtoList.add(pillResponseDto);
         }
         return pillResponseDtoList;
@@ -103,8 +103,9 @@ public class PillService {
         List<PillHistoryResponseDto> pillHistoryResponseDtoList = new ArrayList<>();
 
         for (PillHistory pillHistory : pillHistoryList) {
+            int dayOfWeekValue = pillHistory.getUsedAt().getDayOfWeek().getValue();
 
-            PillHistoryResponseDto pillHistoryResponseDto = new PillHistoryResponseDto(pillHistory.getUsedAt(), pillHistory.getUsedAt().getDayOfWeek().getValue(), pillHistory.getPill().getProductName(),pillHistory.getPill().getCustomColor(), pillHistory.getPill().getDone());
+            PillHistoryResponseDto pillHistoryResponseDto = new PillHistoryResponseDto(pillHistory, dayOfWeekValue);
 
             pillHistoryResponseDtoList.add(pillHistoryResponseDto);
         }
