@@ -76,6 +76,10 @@ public class PillService {
         PillHistory pillHistory = new PillHistory(user, pill, pillHistoryRequestDto);
         pillHistoryRepository.save(pillHistory);
 
+        int userPoint = user.getPoint();
+        int point = 10;
+        user.setPoint(userPoint + point);
+
         return new PillHistoryResponseDto(pill, pillHistory);
     }
 

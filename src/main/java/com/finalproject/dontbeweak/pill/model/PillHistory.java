@@ -5,8 +5,8 @@ import com.finalproject.dontbeweak.pill.dto.PillHistoryRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 @Getter
@@ -39,11 +39,5 @@ public class PillHistory {
         this.pill = pill;
         this.productName = pill.getProductName();
         this.usedAt = pillHistoryRequestDto.getUsedAt();
-    }
-
-    public DayOfWeek getDayOfWeek(LocalDateTime usedAt) {
-        DayOfWeek dayOfWeek = usedAt.getDayOfWeek();
-
-        return dayOfWeek;
     }
 }
