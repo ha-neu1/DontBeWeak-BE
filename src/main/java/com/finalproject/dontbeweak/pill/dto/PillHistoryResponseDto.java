@@ -7,13 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PillHistoryResponseDto {
     private LocalDateTime usedAt;
+    private int dayOfWeekValue;
     private String productName;
     private String customColor;
     private boolean done;
@@ -27,6 +27,7 @@ public class PillHistoryResponseDto {
 
     public PillHistoryResponseDto(PillHistory pillHistory) {
         this.usedAt = pillHistory.getUsedAt();
+        this.dayOfWeekValue = pillHistory.getUsedAt().getDayOfWeek().getValue();
         this.productName = pillHistory.getPill().getProductName();
         this.customColor = pillHistory.getPill().getCustomColor();
         this.done = pillHistory.getPill().getDone();

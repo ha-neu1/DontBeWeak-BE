@@ -103,7 +103,8 @@ public class PillService {
         List<PillHistoryResponseDto> pillHistoryResponseDtoList = new ArrayList<>();
 
         for (PillHistory pillHistory : pillHistoryList) {
-            PillHistoryResponseDto pillHistoryResponseDto = new PillHistoryResponseDto(pillHistory);
+
+            PillHistoryResponseDto pillHistoryResponseDto = new PillHistoryResponseDto(pillHistory.getUsedAt(), pillHistory.getUsedAt().getDayOfWeek().getValue(), pillHistory.getPill().getProductName(),pillHistory.getPill().getCustomColor(), pillHistory.getPill().getDone());
 
             pillHistoryResponseDtoList.add(pillHistoryResponseDto);
         }
