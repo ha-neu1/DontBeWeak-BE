@@ -3,10 +3,7 @@ package com.finalproject.dontbeweak.pill.service;
 import com.finalproject.dontbeweak.login.auth.UserDetailsImpl;
 import com.finalproject.dontbeweak.login.model.User;
 import com.finalproject.dontbeweak.login.repository.UserRepository;
-import com.finalproject.dontbeweak.pill.dto.PillHistoryRequestDto;
-import com.finalproject.dontbeweak.pill.dto.PillHistoryResponseDto;
-import com.finalproject.dontbeweak.pill.dto.PillRequestDto;
-import com.finalproject.dontbeweak.pill.dto.PillResponseDto;
+import com.finalproject.dontbeweak.pill.dto.*;
 import com.finalproject.dontbeweak.pill.model.Pill;
 import com.finalproject.dontbeweak.pill.model.PillHistory;
 import com.finalproject.dontbeweak.pill.repository.PillHistoryRepository;
@@ -96,7 +93,7 @@ public class PillService {
 
     //주간 영양제 복용 조회
     @Transactional
-    public List<PillHistoryResponseDto> getPillList(String username, String startDate, String endDate) {
+    public List<WeekPillHistoryResponseDto> getPillList(String username, String startDate, String endDate) {
         Optional<User> user = userRepository.findByUsername(username);
         Long userId = user.get().getId();
 
@@ -104,14 +101,14 @@ public class PillService {
         LocalDateTime endDateTime = LocalDate.parse(endDate, DateTimeFormatter.ofPattern("yyyyMMdd")).atTime(23, 59, 59);
 
         List<PillHistory> pillHistoryList = pillHistoryRepository.findAllByUser_IdAndUsedAtBetween(userId, startDateTime, endDateTime);
-        List<PillHistoryResponseDto> pillHistoryResponseDtoList = new ArrayList<>();
+        List<WeekPillHistoryResponseDto> pillHistoryResponseDtoList = new ArrayList<>();
 
         for (PillHistory pillHistory : pillHistoryList) {
             int dayOfWeekValue = pillHistory.getUsedAt().getDayOfWeek().getValue();
 
-            PillHistoryResponseDto pillHistoryResponseDto = new PillHistoryResponseDto(pillHistory, dayOfWeekValue);
+            WeekPillHistoryResponseDto weekPillDto = new WeekPillHistoryResponseDto(pillHistory, dayOfWeekValue);
 
-            pillHistoryResponseDtoList.add(pillHistoryResponseDto);
+            pillHistoryResponseDtoList.add(weekPillDto);
         }
 
         return pillHistoryResponseDtoList;
