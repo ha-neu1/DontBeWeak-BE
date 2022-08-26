@@ -27,6 +27,8 @@ public class PillService {
     private final UserRepository userRepository;
     private final PillHistoryRepository pillHistoryRepository;
 
+    private static final Integer GET_POINT = 10;
+
     //영양제 등록
     @Transactional
     public PillResponseDto registerPill(PillRequestDto pillRequestDto, UserDetailsImpl userDetails){
@@ -59,6 +61,7 @@ public class PillService {
     }
 
     //영양제 복용 완료
+    @Transactional
     public PillHistoryResponseDto donePill(PillHistoryRequestDto pillHistoryRequestDto, UserDetailsImpl userDetails) {
         User user = userRepository.findByUsername(userDetails.getUsername()).orElseThrow(
                 () -> new IllegalArgumentException("회원이 존재하지 않습니다.")
@@ -74,8 +77,7 @@ public class PillService {
         pillHistoryRepository.save(pillHistory);
 
         int userPoint = user.getPoint();
-        int point = 10;
-        user.setPoint(userPoint + point);
+        user.setPoint(userPoint + GET_POINT);
 
         return new PillHistoryResponseDto(pill, pillHistory);
     }
