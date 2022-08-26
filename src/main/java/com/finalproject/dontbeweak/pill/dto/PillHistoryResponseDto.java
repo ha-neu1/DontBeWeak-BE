@@ -32,6 +32,5 @@ public class PillHistoryResponseDto {
         this.productName = pillHistory.getPill().getProductName();
         this.customColor = pillHistory.getPill().getCustomColor();
         this.done = pillHistory.getPill().getDone();
-        this.dayOfWeek =
     }
 }
