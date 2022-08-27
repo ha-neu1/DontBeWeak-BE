@@ -1,6 +1,5 @@
-package com.finalproject.dontbeweak.cat.model;
+package com.finalproject.dontbeweak.model;
 
-import com.finalproject.dontbeweak.login.model.User;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,4 +1,4 @@
-package com.finalproject.dontbeweak.cat.model;
+package com.finalproject.dontbeweak.model;
 
 public interface Pet {
 
