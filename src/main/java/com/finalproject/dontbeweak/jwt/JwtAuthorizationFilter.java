@@ -1,4 +1,4 @@
-package com.finalproject.dontbeweak.config.jwt;
+package com.finalproject.dontbeweak.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

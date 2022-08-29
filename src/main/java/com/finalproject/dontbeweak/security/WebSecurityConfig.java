@@ -1,8 +1,8 @@
-package com.finalproject.dontbeweak.config;
+package com.finalproject.dontbeweak.security;
 
 
-import com.finalproject.dontbeweak.config.jwt.JwtAuthorizationFilter;
-import com.finalproject.dontbeweak.config.jwt.FormLoginFilter;
+import com.finalproject.dontbeweak.jwt.JwtAuthorizationFilter;
+import com.finalproject.dontbeweak.jwt.FormLoginFilter;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
