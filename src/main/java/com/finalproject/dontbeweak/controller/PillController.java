@@ -1,11 +1,10 @@
 package com.finalproject.dontbeweak.controller;
 
 
-import com.finalproject.dontbeweak.dto.pill.*;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
+import com.finalproject.dontbeweak.dto.pill.*;
 import com.finalproject.dontbeweak.exception.CustomException;
 import com.finalproject.dontbeweak.exception.ErrorCode;
-import com.finalproject.dontbeweak.pill.pill.*;
 import com.finalproject.dontbeweak.service.PillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
