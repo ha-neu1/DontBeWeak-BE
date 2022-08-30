@@ -5,6 +5,7 @@ import com.finalproject.dontbeweak.dto.FriendResponseDto;
 import com.finalproject.dontbeweak.model.Friend;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.FriendService;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,9 @@ public class FriendController {
 
     //친구 추가
     @PostMapping("/friend")
-    public ResponseEntity<Friend> addfriend(@RequestBody FriendRequestDto friendRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    @ApiOperation(value = "친구 추가")
+    public ResponseEntity<Friend> addfriend(@RequestBody FriendRequestDto friendRequestDto,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails){
         friendService.addfriend(friendRequestDto,userDetails);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(null);
@@ -32,6 +35,7 @@ public class FriendController {
 
     //친구 목록 조회
     @GetMapping("/friend")
+    @ApiOperation(value = "내 친구 목록 조회")
     public  ResponseEntity<List<FriendResponseDto>> listfriend(@AuthenticationPrincipal UserDetailsImpl userDetails){
         List<FriendResponseDto> friendResponseDtoList = friendService.listfriend(userDetails);
         return ResponseEntity.status(HttpStatus.OK)

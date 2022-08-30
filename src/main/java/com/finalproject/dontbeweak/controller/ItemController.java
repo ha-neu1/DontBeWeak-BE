@@ -8,6 +8,7 @@ import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.model.item.Item;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
 import com.finalproject.dontbeweak.service.ItemService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class ItemController {
 
     //아이템 목록 조회
     @GetMapping("/items")
+    @ApiOperation(value = "아이템 목록 조회")
     public ResponseEntity<List<ItemResponseDto>> getItem(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (userDetails == null) {
             // 유저가 없다는 의미이므로 비정상 페이지 리턴
@@ -36,6 +38,7 @@ public class ItemController {
 
    // 아이템 구입 및 적용
     @PatchMapping("/items/{itemId}")
+    @ApiOperation(value = "아이템 구입 및 적용")
     public ResponseEntity<BuyItemResponseDto> patchItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         if (userDetails == null) {
             // 유저가 없다는 의미이므로 비정상 페이지 리턴
