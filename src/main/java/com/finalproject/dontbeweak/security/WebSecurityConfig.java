@@ -1,8 +1,7 @@
 package com.finalproject.dontbeweak.security;
 
 
-import com.finalproject.dontbeweak.jwt.JwtAuthorizationFilter;
-import com.finalproject.dontbeweak.jwt.FormLoginFilter;
+import com.finalproject.dontbeweak.jwt.*;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -29,7 +28,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
+    private final JwtService jwtService;
     private final UserRepository userRepository;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean   // 비밀번호 암호화
     public BCryptPasswordEncoder encodePassword() {
@@ -78,13 +80,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 // 그 외 모든 요청허용
                 .anyRequest().permitAll()
                 .and()
-
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler)
+                .and()
                 // 토큰을 활용하면 세션이 필요 없으므로 STATELESS로 설정하여 Session을 사용하지 않는다.
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
-                .addFilterBefore(new FormLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), userRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new FormLoginFilter(authenticationManager(), jwtService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), jwtService), UsernamePasswordAuthenticationFilter.class)
         ;
     }
 

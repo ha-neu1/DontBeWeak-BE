@@ -1,6 +1,7 @@
 package com.finalproject.dontbeweak.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
@@ -19,7 +20,15 @@ public enum ErrorCode {
     NO_ITEM(404,"C010", "아이템이 존재하지 않습니다."),
     NOT_FOUND_USER(404, "C011", "유저를 찾을 수 없습니다. 로그인을 다시 해주세요."),
     NOT_FOUND_CAT(404,"C012","고양이를 찾을 수 없습니다."),
-    NOT_FOUND_CATIMAGE(500,"C013","고양이의 모습을 찾을 수 없습니다.");
+    NOT_FOUND_CATIMAGE(500,"C013","고양이의 모습을 찾을 수 없습니다."),
+
+    USER_ERROR_NOT_FOUND_ENG(400,"C014","notFound"),
+
+    USER_ERROR_NOT_FOUND(400,"C015","해당 회원이 존재하지 않습니다."),
+
+    USER_ERROR_PASSWORD(400,"C016","비밀번호가 일치하지 않습니다.");
+
+
 
 
 

@@ -38,6 +38,9 @@ public class User extends BaseEntity {
 
     private String role;
 
+    @Column(length = 1000)
+    private String refreshToken;
+
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<Cat> cat;

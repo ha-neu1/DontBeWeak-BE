@@ -49,7 +49,7 @@ public class KakaoService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "599bca646044fc4147f7f8f4c461f9ca");
-        params.add("redirect_uri", "http://3.37.88.75/auth/kakao/callback");
+        params.add("redirect_uri", "http://localhost:8080/auth/kakao/callback");
         params.add("code", code);
 
         //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
