@@ -148,12 +148,11 @@ public class KakaoService {
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             //홀더에 검증이 완료된 정보 값 넣어준다. -> 이제 controller 에서 @AuthenticationPrincipal UserDetailsImpl userDetails 로 정보를 꺼낼 수 있다.
             SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//            //JWT 토큰 발급
-//            String jwtToken = userService.JwtTokenCreate(userDetails.getUser().getUsername());
+
 
             // 3. 인증 정보를 기반으로 JWT 토큰 생성
             UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+
             System.out.println("access token : " + tokenInfo.getAccessToken());
             System.out.println("refresh token : " + tokenInfo.getRefreshToken());
             System.out.println("access token, refresh token 생성 완료");

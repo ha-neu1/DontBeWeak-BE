@@ -35,13 +35,13 @@
 //
 //public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
 //
-//    private static final String AUTHORITIES_KEY = "auth";
-//    private static final String BEARER_TYPE = "Bearer";
-//    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;   // 30분
-//    private static final Long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
-//    private Key key;
-//    private RedisTemplate redisTemplate;
-//    private JwtTokenProvider jwtTokenProvider;
+////    private static final String AUTHORITIES_KEY = "auth";
+////    private static final String BEARER_TYPE = "Bearer";
+////    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;   // 30분
+////    private static final Long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
+////    private Key key;
+////    private RedisTemplate redisTemplate;
+////    private JwtTokenProvider jwtTokenProvider;
 //
 //
 //    public FormLoginFilter(AuthenticationManager authenticationManager) {
@@ -77,10 +77,6 @@
 //        return null;
 //    }
 //
-//    public void JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
-//        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-//        this.key = Keys.hmacShaKeyFor(keyBytes);
-//    }
 //
 //    //attemptAuthentication실행 후 인증이 정상적으로 되었으면 successfulAuthentication 함수가 실행됨.
 //    //JWT 토큰을 만들어서 request요청한 사용자에게 JWT토큰을 response해주면 됨.
@@ -98,12 +94,6 @@
 ////                .withClaim("username",userDetails.getUser().getUsername())
 ////                .sign(Algorithm.HMAC512("thwjd2"));
 //
-//
-//        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authResult);
-//
-//        // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
-//        redisTemplate.opsForValue()
-//                .set("RT:" + authResult.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
 //
 //        response.addHeader("Authorization", BEARER_TYPE +tokenInfo.getAccessToken());
 //    }
