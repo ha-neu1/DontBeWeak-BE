@@ -20,6 +20,8 @@ public class Api {
     private String DISTB_PD;
     @Column
     private String PRDUCT;
+
+
 }
 
 

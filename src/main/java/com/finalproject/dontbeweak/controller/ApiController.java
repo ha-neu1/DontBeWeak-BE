@@ -2,6 +2,7 @@ package com.finalproject.dontbeweak.controller;
 import com.finalproject.dontbeweak.dto.ApiResponseDto;
 import com.finalproject.dontbeweak.model.Api;
 import com.finalproject.dontbeweak.repository.ApiRepository;
+import com.finalproject.dontbeweak.service.ApiService;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -20,59 +21,36 @@ import java.net.URL;
 @AllArgsConstructor
 public class ApiController {
 
-    private final ApiRepository apiRepository;
+    private final ApiService apiService;
 
-    @RestController
-    @AllArgsConstructor
-    public class ApiiController {
+    @GetMapping("/api")
+        public String load_save(ApiResponseDto apiResponseDto) throws IOException{
 
-        private final ApiRepository apiRepository;
-
-        @GetMapping("/api")
-        public String load_save(ApiResponseDto apiResponseDto) throws NullPointerException {
-//        RL(String protocol, String host, int port, String file) : 프로토콜 식별자 protocol, 호스트 주소 host, 포트 번호 port, 파일 이름 file이 지정하는 자원에 대한 URL 객체 생성
-//        생성RL(String protocol, String host, intnt port, String file) : 프로토콜 식별자 protocol, 호스트 주소 host, 포트 번호 port, 파일 이름 file이 지정하는 자원에 대한 URL 객체 생성
             StringBuilder result = new StringBuilder();
-            try {
-                String urla = "http://apis.data.go.kr/1471000/HtfsInfoService2/getHtfsItem?ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D&numOfRows=99&pageNo=1&type=json";
-                URL url = new URL(urla);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                BufferedReader br;
-                br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-                String returnLine;
-                while ((returnLine = br.readLine()) != null) {
-                    result.append(returnLine + "\n\r");
-                }
-                urlConnection.disconnect();
 
-                JSONObject Object;
-                //json 객체 생성
-                JSONParser jsonParser = new JSONParser();
-                //json 파싱 객체 생성
-                JSONObject jsonObject = (JSONObject) jsonParser.parse(result.toString());
+            int pagenumber = 1;
+            String urla = "http://apis.data.go.kr/1471000/HtfsInfoService2/getHtfsItem?"
+                    + "ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D" // 서비스키
+                    + "&numOfRows=" + 99
+                    + "&pageNo=" + pagenumber
+                    + "&type=json";
 
-                //데이터 분해
-                JSONObject parseResponse = (JSONObject) jsonObject.get("body");
-                JSONArray array = (JSONArray) parseResponse.get("items");
-                for (int i = 0; i < array.size(); i++) {
-                    Object = (JSONObject) array.get(i);
-                    String product = Object.get("PRDUCT").toString();
-                    String distb_pd = Object.get("DISTB_PD").toString();
 
-                    Api api = Api.builder()
-                            .DISTB_PD(distb_pd)
-                            .PRDUCT(product)
-                            .build();
-                    apiRepository.save(api);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            URL url = new URL(urla);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            BufferedReader br;
+            br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+            String returnLine;
+            while ((returnLine = br.readLine()) != null) {
+                result.append(returnLine + "\n\r");
             }
+            urlConnection.disconnect();
+
+            apiService.parsing(apiResponseDto,result);
             return result.toString();
+
         }
     }
 
 
-}
