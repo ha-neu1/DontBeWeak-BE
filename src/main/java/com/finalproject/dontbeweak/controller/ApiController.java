@@ -1,6 +1,8 @@
 package com.finalproject.dontbeweak.controller;
+import com.finalproject.dontbeweak.dto.ApiResponseDto;
 import com.finalproject.dontbeweak.model.Api;
 import com.finalproject.dontbeweak.repository.ApiRepository;
+import com.finalproject.dontbeweak.service.ApiService;
 import lombok.AllArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -19,15 +21,21 @@ import java.net.URL;
 @AllArgsConstructor
 public class ApiController {
 
-    private final ApiRepository apiRepository;
+    private final ApiService apiService;
 
     @GetMapping("/api")
-    public String load_save() throws IOException,NullPointerException {
-//        RL(String protocol, String host, int port, String file) : 프로토콜 식별자 protocol, 호스트 주소 host, 포트 번호 port, 파일 이름 file이 지정하는 자원에 대한 URL 객체 생성
-//        생성RL(String protocol, String host, intnt port, String file) : 프로토콜 식별자 protocol, 호스트 주소 host, 포트 번호 port, 파일 이름 file이 지정하는 자원에 대한 URL 객체 생성
-        StringBuilder result = new StringBuilder();
-        try {
-            String urla = "http://apis.data.go.kr/1471000/HtfsInfoService2/getHtfsList?ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D&numOfRows=99&pageNo=2&type=json";
+        public String load_save(ApiResponseDto apiResponseDto) throws IOException{
+
+            StringBuilder result = new StringBuilder();
+
+            int pagenumber = 1;
+            String urla = "http://apis.data.go.kr/1471000/HtfsInfoService2/getHtfsItem?"
+                    + "ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D" // 서비스키
+                    + "&numOfRows=" + 99
+                    + "&pageNo=" + pagenumber
+                    + "&type=json";
+
+
             URL url = new URL(urla);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -39,42 +47,10 @@ public class ApiController {
             }
             urlConnection.disconnect();
 
-            JSONObject Object;
-            //json 객체 생성
-            JSONParser jsonParser = new JSONParser();
-            //json 파싱 객체 생성
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(result.toString());
+            apiService.parsing(apiResponseDto,result);
+            return result.toString();
 
-//           //데이터 분해
-            JSONObject parseResponse = (JSONObject) jsonObject.get("body");
-
-            JSONArray array = (JSONArray)parseResponse.get("items");
-            for (int i = 0; i < array.size(); i++) {
-                Object=(JSONObject)array.get(i);
-
-
-
-                String entrps =Object.get("ENTRPS").toString();
-                String product = Object.get("PRDUCT").toString();
-                String redist = Object.get("REGIST_DT").toString();
-                String stt = Object.get("STTEMNT_NO").toString();
-
-                Api api = Api.builder()
-                        .ENTRPS(entrps)
-                        .PRDUCT(product)
-                        .REGIST_DT(redist)
-                        .STTEMNT_NO(stt)
-                        .build();
-                apiRepository.save(api);
-            }
-        }catch (Exception e) {
-            e.printStackTrace();
         }
-
-
-        return result.toString();
-
     }
 
 
-}

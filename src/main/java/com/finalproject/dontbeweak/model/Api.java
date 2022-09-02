@@ -17,14 +17,11 @@ public class Api {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private String ENTRPS;
+    private String DISTB_PD;
     @Column
     private String PRDUCT;
-    @Column
-    private String STTEMNT_NO;
-    @Column
-    private String REGIST_DT;
-
 
 
 }
+
+
