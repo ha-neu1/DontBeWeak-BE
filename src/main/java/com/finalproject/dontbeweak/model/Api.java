@@ -16,12 +16,10 @@ public class Api {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
-    private String DISTB_PD;
+    private String SRV_USE;
+
     @Column
     private String PRDUCT;
-
-
 }
-
-

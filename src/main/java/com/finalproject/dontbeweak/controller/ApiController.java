@@ -1,34 +1,36 @@
 package com.finalproject.dontbeweak.controller;
+
+
 import com.finalproject.dontbeweak.dto.ApiResponseDto;
-import com.finalproject.dontbeweak.model.Api;
-import com.finalproject.dontbeweak.repository.ApiRepository;
 import com.finalproject.dontbeweak.service.ApiService;
 import lombok.AllArgsConstructor;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+
 
 @RestController
 @AllArgsConstructor
 public class ApiController {
 
+
+
     private final ApiService apiService;
 
+
     @GetMapping("/api")
-        public String load_save(ApiResponseDto apiResponseDto) throws IOException{
+    public ResponseEntity<List<ApiResponseDto>> load_save(ApiResponseDto apiResponseDto) throws IOException{
 
-            StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder();
 
-            int pagenumber = 1;
+            int pagenumber = 3;
             String urla = "http://apis.data.go.kr/1471000/HtfsInfoService2/getHtfsItem?"
                     + "ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D" // 서비스키
                     + "&numOfRows=" + 99
@@ -47,10 +49,19 @@ public class ApiController {
             }
             urlConnection.disconnect();
 
-            apiService.parsing(apiResponseDto,result);
-            return result.toString();
+            List<ApiResponseDto> friendResponseDtoList = apiService.parsing(apiResponseDto,result);
 
-        }
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(friendResponseDtoList);
     }
+}
+
+
+
+
+
+
+
+
 
 
