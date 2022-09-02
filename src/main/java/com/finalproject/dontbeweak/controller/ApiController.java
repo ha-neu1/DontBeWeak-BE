@@ -19,16 +19,15 @@ import java.net.URL;
 @AllArgsConstructor
 public class ApiController {
 
-
     private final ApiRepository apiRepository;
 
     @GetMapping("/api")
     public String load_save() throws IOException,NullPointerException {
-        //        RL(String protocol, String host, int port, String file) : 프로토콜 식별자 protocol, 호스트 주소 host, 포트 번호 port, 파일 이름 file이 지정하는 자원에 대한 URL 객체 생성
+//        RL(String protocol, String host, int port, String file) : 프로토콜 식별자 protocol, 호스트 주소 host, 포트 번호 port, 파일 이름 file이 지정하는 자원에 대한 URL 객체 생성
 //        생성RL(String protocol, String host, intnt port, String file) : 프로토콜 식별자 protocol, 호스트 주소 host, 포트 번호 port, 파일 이름 file이 지정하는 자원에 대한 URL 객체 생성
         StringBuilder result = new StringBuilder();
         try {
-            String urla = "http://apis.data.go.kr/1471000/HtfsInfoService2/getHtfsList?ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D&numOfRows=99&pageNo=1&type=json";
+            String urla = "http://apis.data.go.kr/1471000/HtfsInfoService2/getHtfsList?ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D&numOfRows=99&pageNo=2&type=json";
             URL url = new URL(urla);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -49,9 +48,12 @@ public class ApiController {
 //           //데이터 분해
             JSONObject parseResponse = (JSONObject) jsonObject.get("body");
 
-            JSONArray array = (JSONArray) parseResponse.get("items");
+            JSONArray array = (JSONArray)parseResponse.get("items");
             for (int i = 0; i < array.size(); i++) {
-                Object = (JSONObject) array.get(i);
+                Object=(JSONObject)array.get(i);
+
+
+
                 String entrps =Object.get("ENTRPS").toString();
                 String product = Object.get("PRDUCT").toString();
                 String redist = Object.get("REGIST_DT").toString();
@@ -65,9 +67,14 @@ public class ApiController {
                         .build();
                 apiRepository.save(api);
             }
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
+
+
         return result.toString();
+
     }
+
+
 }
