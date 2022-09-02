@@ -52,11 +52,16 @@ public class ApiController {
             JSONArray array = (JSONArray) parseResponse.get("items");
             for (int i = 0; i < array.size(); i++) {
                 Object = (JSONObject) array.get(i);
+                String entrps =Object.get("ENTRPS").toString();
+                String product = Object.get("PRDUCT").toString();
+                String redist = Object.get("REGIST_DT").toString();
+                String stt = Object.get("STTEMNT_NO").toString();
+
                 Api api = Api.builder()
-                        .ENTRPS(Object.get("ENTRPS").toString())
-                        .PRDUCT(Object.get("PRDUCT").toString())
-                        .REGIST_DT(Object.get("REGIST_DT").toString())
-                        .STTEMNT_NO(Object.get("STTEMNT_NO").toString())
+                        .ENTRPS(entrps)
+                        .PRDUCT(product)
+                        .REGIST_DT(redist)
+                        .STTEMNT_NO(stt)
                         .build();
                 apiRepository.save(api);
             }
