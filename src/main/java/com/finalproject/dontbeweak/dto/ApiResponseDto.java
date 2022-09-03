@@ -9,5 +9,5 @@ import lombok.*;
 @Builder
 public class ApiResponseDto {
     private String PRDUCT;
-    private String DISTB_PD;
+    private String SRV_USE;
 }

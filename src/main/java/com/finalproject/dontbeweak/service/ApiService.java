@@ -9,6 +9,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 @AllArgsConstructor
@@ -16,7 +19,7 @@ public class ApiService {
 
     private final ApiRepository apiRepository;
 
-    public void parsing(ApiResponseDto apiResponseDto, StringBuilder result) {
+    public List<ApiResponseDto> parsing(ApiResponseDto apiResponseDto, StringBuilder result) {
         try {
             JSONObject Object;
             //json 객체 생성
@@ -30,10 +33,10 @@ public class ApiService {
             for (int i = 0; i < array.size(); i++) {
                 Object = (JSONObject) array.get(i);
                 String product = Object.get("PRDUCT").toString();
-                String distb_pd = Object.get("DISTB_PD").toString();
+                String srv_use = Object.get("SRV_USE").toString();
 
                 Api api = Api.builder()
-                        .DISTB_PD(distb_pd)
+                        .SRV_USE(srv_use)
                         .PRDUCT(product)
                         .build();
                 apiRepository.save(api);
@@ -42,6 +45,15 @@ public class ApiService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        List<Api> apiList = apiRepository.findAll();
+        List<ApiResponseDto> responseDtos = new ArrayList<>();
+        for(Api api: apiList){
+            ApiResponseDto apiResponsedto = new ApiResponseDto(api.getPRDUCT(), api.getSRV_USE());
+            responseDtos.add(apiResponsedto);
+        }
+        return responseDtos;
+
 
     }
 }
