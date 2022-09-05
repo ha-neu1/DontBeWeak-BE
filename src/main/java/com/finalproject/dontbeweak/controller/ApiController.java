@@ -30,6 +30,8 @@ public class ApiController {
 
         StringBuilder result = new StringBuilder();
 
+
+
             int pagenumber = 3;
             String urla = "http://apis.data.go.kr/1471000/HtfsInfoService2/getHtfsItem?"
                     + "ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D" // 서비스키
