@@ -26,8 +26,8 @@
 //        this.userRepository = userRepository;
 //
 //    }
-////    @Value("${secret.key}")
-////    private String secretKey;
+//    @Value("${secret.key}")
+//    private String secretKey;
 //
 //    //인증이나 권한이 필요한 주소요청이 있을 때 해당 필터를 타게 됨
 //    @Override
@@ -54,7 +54,7 @@
 //
 //        //JWT토큰을 검증을 해서 정상적인 사용자인지 확인
 //        String username =
-//                JWT.require(Algorithm.HMAC512("thwjd2")).build().verify(jwtToken).getClaim("username").asString();
+//                JWT.require(Algorithm.HMAC512(secretKey)).build().verify(jwtToken).getClaim("username").asString();
 //
 //
 //        //서명이 정상적으로 됨
@@ -64,7 +64,6 @@
 //            );
 //
 //            UserDetailsImpl userDetails = new UserDetailsImpl(user);
-//
 //
 //            //JWT 토큰 서명을 통해 서명이 정상이면 Authentication 객체를 만들어준다. (인증된 Authentication 객체로 token이 setAuthenticated(true)이다)
 //            Authentication authentication =
