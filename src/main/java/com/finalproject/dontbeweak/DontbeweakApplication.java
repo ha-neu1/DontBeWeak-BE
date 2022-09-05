@@ -11,12 +11,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class DontbeweakApplication {
     public static final String APPLICATION_LOCATIONS = "spring.config.location="
-            + "classpath:application-redis.properties,"
-            + "classpath:application.properties,"
+            + "classpath:application-jwt.yml,"
             + "classpath:application.yml";
 
     public static void main(String[] args) {
-//        SpringApplication.run(DontbeweakApplication.class, args);
         new SpringApplicationBuilder(DontbeweakApplication.class)
                 .properties(APPLICATION_LOCATIONS)
                 .run(args);

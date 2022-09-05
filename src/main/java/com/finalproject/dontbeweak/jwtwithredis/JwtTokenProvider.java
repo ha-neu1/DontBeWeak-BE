@@ -1,5 +1,8 @@
 package com.finalproject.dontbeweak.jwtwithredis;
 
+import com.finalproject.dontbeweak.auth.UserDetailsImpl;
+import com.finalproject.dontbeweak.model.User;
+import com.finalproject.dontbeweak.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -9,8 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -26,14 +27,18 @@ public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
-    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;   // 30분
+    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 10 * 60 * 1000L;   // 10분
     private static final Long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
 
     private final Key key;
 
-    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
+    private UserRepository userRepository;
+
+
+    public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserRepository userRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.userRepository = userRepository;
     }
 
     // 사용자 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
@@ -68,6 +73,30 @@ public class JwtTokenProvider {
                 .build();
     }
 
+    // AccessToken 재생성
+    public UserResponseDto.TokenInfo regenerateAccessToken(Authentication authentication) {
+        // 권한 가져오기
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
+
+        Long now = (new Date().getTime());
+
+        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        String newAccessToken = Jwts.builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .setExpiration(accessTokenExpiresIn)
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
+
+        return UserResponseDto.TokenInfo.builder()
+                .grantType(BEARER_TYPE)
+                .accessToken(newAccessToken)
+                .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+                .build();
+    }
+
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
@@ -83,15 +112,24 @@ public class JwtTokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        String username = claims.getSubject(); //화면에서 입력한 유저네임을 username에 담는다.
+        System.out.println("claims.getSubject + " + username);
+
+        if (username != null) {
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다"));
+
+            UserDetailsImpl userDetails = new UserDetailsImpl(user);
+
+            return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        }
+        return null;
     }
 
     // 토큰 정보를 검증하는 메서드
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJwt(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (
                 io.jsonwebtoken.security.SecurityException |

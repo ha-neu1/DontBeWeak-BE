@@ -1,9 +1,10 @@
 package com.finalproject.dontbeweak.config;
 
 
+import com.finalproject.dontbeweak.config.jwt.FormLoginFilter;
 import com.finalproject.dontbeweak.jwtwithredis.JwtAuthenticationFilter;
 import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
-import com.finalproject.dontbeweak.repository.UserRepository;
+import com.finalproject.dontbeweak.jwtwithredis.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -30,9 +31,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
-    private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate redisTemplate;
+    private final Response response2;
 
     @Bean   // 비밀번호 암호화
     public BCryptPasswordEncoder encodePassword() {
@@ -86,10 +87,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
-//                .addFilterBefore(new FormLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new FormLoginFilter(authenticationManager(), jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class)
 //                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), userRepository), UsernamePasswordAuthenticationFilter.class)
                 // JwtAuthenticationFilter를 UsernamePasswordAuthentictaionFilter 전에 적용시킨다.
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate, response2), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

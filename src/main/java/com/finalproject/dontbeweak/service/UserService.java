@@ -42,7 +42,6 @@ public class UserService {
     private final CatService catService;
     private final RedisTemplate redisTemplate;
     private final JwtTokenProvider jwtTokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final Response response;
 
     //일반 회원가입
@@ -88,8 +87,14 @@ public class UserService {
 
     //로그인 유저 정보 반환
     public LoginIdCheckDto userInfo(UserDetailsImpl userDetails) {
+
+        System.out.println("userdetails 아이디 추출 시작");
         String username = userDetails.getUser().getUsername();
+        System.out.println(username);
+        System.out.println("userdetails 닉네임 추출 시작");
         String nickname = userDetails.getUser().getNickname();
+        System.out.println(nickname);
+        System.out.println("userdetails 포인트 추출 시작");
         int point = userDetails.getUser().getPoint();
 
         Optional<Cat> catTemp = catRepository.findByUser_Username(username);
@@ -100,41 +105,41 @@ public class UserService {
         return userInfo;
     }
 
-    //소셜로그인 토큰 발급
-    public String JwtTokenCreate(String username){
-        String jwtToken = JWT.create()
-                .withSubject("cos토큰")
-                .withExpiresAt(new Date(System.currentTimeMillis()+(60000*10)))
-                .withClaim("username", username)
-                .sign(Algorithm.HMAC512("thwjd2"));
-        return jwtToken;
-    }
+//    //소셜로그인 토큰 발급
+//    public String JwtTokenCreate(String username){
+//        String jwtToken = JWT.create()
+//                .withSubject("cos토큰")
+//                .withExpiresAt(new Date(System.currentTimeMillis()+(60000*10)))
+//                .withClaim("username", username)
+//                .sign(Algorithm.HMAC512("thwjd2"));
+//        return jwtToken;
+//    }
 
 
-    // refresh token, access token
-    public ResponseEntity<?> login(LoginRequestDto loginRequestDto) {
-
-        if (userRepository.findByUsername(loginRequestDto.getUsername()).orElse(null) == null) {
-            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-
-        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-
-        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-
-        // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
-        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
-    }
+    // 로그인 시 refresh token, access token 생성 및 저장
+//    public ResponseEntity<?> login(LoginRequestDto loginRequestDto) {
+//
+//        if (userRepository.findByUsername(loginRequestDto.getUsername()).orElse(null) == null) {
+//            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+//        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+//
+//        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
+//        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+//        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+//
+//        // 3. 인증 정보를 기반으로 JWT 토큰 생성
+//        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+//
+//        // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
+//        redisTemplate.opsForValue()
+//                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+//
+//        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
+//    }
 
     public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {
         // 1. Refresh Token 검증
@@ -171,7 +176,7 @@ public class UserService {
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        // 2. Access Token 에서 User email 을 가져옵니다.
+        // 2. Access Token 에서 Username 을 가져옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(logout.getAccessToken());
 
         // 3. Redis 에서 해당 User email 로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
