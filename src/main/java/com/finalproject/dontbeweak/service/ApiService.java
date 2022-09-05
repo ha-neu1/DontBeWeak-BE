@@ -19,7 +19,7 @@ public class ApiService {
 
     private final ApiRepository apiRepository;
 
-    public List<ApiResponseDto> parsing(ApiResponseDto apiResponseDto, StringBuilder result) {
+    public List<ApiResponseDto> parsing(StringBuilder result) {
         try {
             JSONObject Object;
             //json 객체 생성

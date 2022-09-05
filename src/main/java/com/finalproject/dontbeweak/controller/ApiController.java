@@ -51,7 +51,7 @@ public class ApiController {
             }
             urlConnection.disconnect();
 
-            List<ApiResponseDto> friendResponseDtoList = apiService.parsing(apiResponseDto,result);
+            List<ApiResponseDto> friendResponseDtoList = apiService.parsing(result);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(friendResponseDtoList);
