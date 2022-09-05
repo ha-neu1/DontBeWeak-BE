@@ -2,6 +2,7 @@ package com.finalproject.dontbeweak.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

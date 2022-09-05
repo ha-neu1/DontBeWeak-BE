@@ -36,8 +36,8 @@ public class ApiService {
                 String srv_use = Object.get("SRV_USE").toString();
 
                 Api api = Api.builder()
-                        .SRV_USE(srv_use)
                         .PRDUCT(product)
+                        .SRV_USE(srv_use)
                         .build();
                 apiRepository.save(api);
             }

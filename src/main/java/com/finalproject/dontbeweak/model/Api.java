@@ -18,8 +18,9 @@ public class Api {
     private Long id;
 
     @Column
-    private String SRV_USE;
+    private String PRDUCT;
 
     @Column
-    private String PRDUCT;
+    private String SRV_USE;
+
 }
