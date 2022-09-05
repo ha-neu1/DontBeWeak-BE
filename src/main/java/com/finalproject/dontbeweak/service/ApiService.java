@@ -32,8 +32,16 @@ public class ApiService {
             JSONArray array = (JSONArray) parseResponse.get("items");
             for (int i = 0; i < array.size(); i++) {
                 Object = (JSONObject) array.get(i);
-                String product = Object.get("PRDUCT").toString();
-                String srv_use = Object.get("SRV_USE").toString();
+                String product = (String) Object.get("PRDUCT");
+                if(product ==null){
+                    product ="";
+                }
+
+                String srv_use = (String) Object.get("SRV_USE");
+                if(srv_use ==null){
+                    srv_use ="";
+                }
+
 
                 Api api = Api.builder()
                         .PRDUCT(product)
