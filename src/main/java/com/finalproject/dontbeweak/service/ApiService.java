@@ -60,6 +60,11 @@ public class ApiService {
                 for (int i = 0; i < array.size(); i++) {
                     Object = (JSONObject) array.get(i);
 
+                    String entrps = (String) Object.get("ENTRPS");
+                    if (entrps == null) {
+                        entrps = "";
+                    }
+
                     String product = (String) Object.get("PRDUCT");
                     if (product == null) {
                         product = "";
@@ -71,6 +76,7 @@ public class ApiService {
                     }
 
                     Api api = Api.builder()
+                            .ENTRPS(entrps)
                             .PRDUCT(product)
                             .SRV_USE(srv_use)
                             .build();
