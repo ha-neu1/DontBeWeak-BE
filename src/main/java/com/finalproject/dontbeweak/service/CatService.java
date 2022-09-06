@@ -56,6 +56,7 @@ public class CatService {
     }
 
     // 고양이 경험치 상승
+    @Transactional
     public void addExp(Cat cat) {
         cat.addExpAndLevel();
         int resultLevel = cat.getLevel();
@@ -65,6 +66,7 @@ public class CatService {
     }
 
     // 고양이 이미지 변경
+    @Transactional
     public void changeCatImage(Cat cat, int level) {
         CatImage catImage = catImageRepository.findCatImageByChangeLevel(level)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATIMAGE));

@@ -1,12 +1,15 @@
-package com.finalproject.dontbeweak.security;
+package com.finalproject.dontbeweak.config;
 
 
-import com.finalproject.dontbeweak.jwt.*;
-import com.finalproject.dontbeweak.repository.UserRepository;
+import com.finalproject.dontbeweak.config.jwt.FormLoginFilter;
+import com.finalproject.dontbeweak.jwtwithredis.JwtAuthenticationFilter;
+import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.jwtwithredis.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -28,10 +31,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
-    private final JwtService jwtService;
-    private final UserRepository userRepository;
-    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RedisTemplate redisTemplate;
+    private final Response response2;
 
     @Bean   // 비밀번호 암호화
     public BCryptPasswordEncoder encodePassword() {
@@ -80,17 +82,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 // 그 외 모든 요청허용
                 .anyRequest().permitAll()
                 .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(customAuthenticationEntryPoint)
-                .accessDeniedHandler(customAccessDeniedHandler)
-                .and()
+
                 // 토큰을 활용하면 세션이 필요 없으므로 STATELESS로 설정하여 Session을 사용하지 않는다.
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
-                .addFilterBefore(new FormLoginFilter(authenticationManager(), jwtService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), jwtService), UsernamePasswordAuthenticationFilter.class)
-        ;
+                .addFilterBefore(new FormLoginFilter(authenticationManager(), jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), userRepository), UsernamePasswordAuthenticationFilter.class)
+                // JwtAuthenticationFilter를 UsernamePasswordAuthentictaionFilter 전에 적용시킨다.
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate, response2), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -98,6 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         CorsConfiguration configuration = new CorsConfiguration();
         // 수정 필요
         configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://localhost:3001");
         configuration.addAllowedOrigin("http://dontbeweak.s3-website.ap-northeast-2.amazonaws.com/");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");

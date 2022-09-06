@@ -3,16 +3,18 @@ package com.finalproject.dontbeweak.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalproject.dontbeweak.dto.SocialLoginInfoDto;
+import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.jwtwithredis.Response;
+import com.finalproject.dontbeweak.jwtwithredis.UserRequestDto;
+import com.finalproject.dontbeweak.jwtwithredis.UserResponseDto;
 import com.finalproject.dontbeweak.model.NaverProfile;
 import com.finalproject.dontbeweak.model.OAuthToken;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,9 +23,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +35,9 @@ public class NaverService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CatService catService;
-    private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RedisTemplate redisTemplate;
+    private final Response response;
 
     public SocialLoginInfoDto requestNaver(String code, String state, HttpServletResponse response){
         //POST방식으로 key=value 데이터를 요청(네이버쪽으로)
@@ -138,11 +144,20 @@ public class NaverService {
             //홀더에 검증이 완료된 정보 값 넣어준다. -> 이제 controller 에서 @AuthenticationPrincipal UserDetailsImpl userDetails 로 정보를 꺼낼 수 있다.
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            //JWT 토큰 발급
-            String jwtToken = userService.JwtTokenCreate(userDetails.getUser().getUsername());
+            // 인증 정보를 기반으로 JWT 토큰 생성
+            UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
 
-            response.addHeader("Authorization", jwtToken);
-            System.out.println("JWT토큰 : " + "Bearer "+jwtToken);
+            System.out.println("access token : " + tokenInfo.getAccessToken());
+            System.out.println("refresh token : " + tokenInfo.getRefreshToken());
+            System.out.println("access token, refresh token 생성 완료");
+
+            // RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
+            redisTemplate.opsForValue()
+                    .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+            System.out.println("refresh token redis 저장 완료");
+
+            response.addHeader("Authorization", tokenInfo.getAccessToken());
+            System.out.println("JWT토큰 : " + "Bearer "+tokenInfo.getAccessToken());
         }
 
         String username = naverUser.getUsername();
@@ -151,6 +166,7 @@ public class NaverService {
         SocialLoginInfoDto socialLoginInfoDto = new SocialLoginInfoDto(username, nickname);
         return socialLoginInfoDto;
     }
+
 
     //신규 네이버 회원 강제 가입
     public String SignupNaverUser(User naverUser) {
