@@ -1,13 +1,14 @@
 package com.finalproject.dontbeweak.controller;
 
 
-import com.finalproject.dontbeweak.dto.ApiResponseDto;
+import com.finalproject.dontbeweak.dto.ApiRequestDto;
 import com.finalproject.dontbeweak.service.ApiService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,26 +20,20 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 public class ApiController {
-
-
-
     private final ApiService apiService;
 
-
-    @GetMapping("/api")
-    public ResponseEntity<List<ApiResponseDto>> load_save(ApiResponseDto apiResponseDto) throws IOException{
+    @PostMapping("/api")
+    public ResponseEntity<List<ApiRequestDto>> load_save(ApiRequestDto apiRequestDto) throws IOException {
 
         StringBuilder result = new StringBuilder();
 
-
-
-            int pagenumber = 3;
+        int pageNumber = 354;
+        for (int i = 1; i <= pageNumber; i++) {
             String urla = "http://apis.data.go.kr/1471000/HtfsInfoService2/getHtfsItem?"
-                    + "ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D" // 서비스키
+                    + "ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D"
                     + "&numOfRows=" + 99
-                    + "&pageNo=" + pagenumber
+                    + "&pageNo=" + pageNumber
                     + "&type=json";
-
 
             URL url = new URL(urla);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -50,11 +45,12 @@ public class ApiController {
                 result.append(returnLine + "\n\r");
             }
             urlConnection.disconnect();
+        }
+            List<ApiRequestDto> apiRequestDtos = apiService.parsing(result);
 
-            List<ApiResponseDto> friendResponseDtoList = apiService.parsing(apiResponseDto,result);
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(friendResponseDtoList);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(apiRequestDtos);
     }
 }
 

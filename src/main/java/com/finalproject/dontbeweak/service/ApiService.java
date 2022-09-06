@@ -1,6 +1,6 @@
 package com.finalproject.dontbeweak.service;
 
-import com.finalproject.dontbeweak.dto.ApiResponseDto;
+import com.finalproject.dontbeweak.dto.ApiRequestDto;
 import com.finalproject.dontbeweak.model.Api;
 import com.finalproject.dontbeweak.repository.ApiRepository;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class ApiService {
 
     private final ApiRepository apiRepository;
 
-    public List<ApiResponseDto> parsing(ApiResponseDto apiResponseDto, StringBuilder result) {
+    public List<ApiRequestDto> parsing(StringBuilder result) {
         try {
             JSONObject Object;
             //json 객체 생성
@@ -32,16 +32,16 @@ public class ApiService {
             JSONArray array = (JSONArray) parseResponse.get("items");
             for (int i = 0; i < array.size(); i++) {
                 Object = (JSONObject) array.get(i);
+
                 String product = (String) Object.get("PRDUCT");
-                if(product ==null){
-                    product ="";
+                if (product == null) {
+                    product = "";
                 }
 
                 String srv_use = (String) Object.get("SRV_USE");
-                if(srv_use ==null){
-                    srv_use ="";
+                if (srv_use == null) {
+                    srv_use = "";
                 }
-
 
                 Api api = Api.builder()
                         .PRDUCT(product)
@@ -55,13 +55,12 @@ public class ApiService {
         }
 
         List<Api> apiList = apiRepository.findAll();
-        List<ApiResponseDto> responseDtos = new ArrayList<>();
+        List<ApiRequestDto> requestDtos = new ArrayList<>();
         for(Api api: apiList){
-            ApiResponseDto apiResponsedto = new ApiResponseDto(api.getPRDUCT(), api.getSRV_USE());
-            responseDtos.add(apiResponsedto);
+            ApiRequestDto apiRequestDto1 = new ApiRequestDto(api.getPRDUCT(), api.getSRV_USE());
+            requestDtos.add(apiRequestDto1);
         }
-        return responseDtos;
-
-
+        return requestDtos;
     }
+
 }
