@@ -80,9 +80,9 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         System.out.println("인증 실패 : unsuccessfulAuthentication");
-        ErrorCode failMessage = failed.getMessage().equals(ErrorCode.USER_ERROR_NOT_FOUND_ENG.getMessage()) ?
-                                ErrorCode.USER_ERROR_NOT_FOUND:
-                                ErrorCode.USER_ERROR_PASSWORD;
+        String failMessage = failed.getMessage().equals(ErrorCode.USER_ERROR_NOT_FOUND_ENG.getMessage()) ?
+                                ErrorCode.USER_ERROR_NOT_FOUND.getMessage():
+                                ErrorCode.USER_ERROR_PASSWORD.getMessage();
         jwtService.setResponseMessage(false,response,"로그인 실패: " + failMessage);
 //        response.setStatus(400);
 //        response.setCharacterEncoding("UTF-8");
