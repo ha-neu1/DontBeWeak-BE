@@ -39,32 +39,39 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate redisTemplate;
     private final Response response2;
+    private final HttpServletRequest httpServletRequest;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        // 1. Request Header에서 JWT 토큰 추출
-        String accessToken = resolveToken((HttpServletRequest) request);
-        System.out.println("============ Request Header 액세스 토큰 추출 완료 " + accessToken + " ==============");
-
-        // 2. validationToken으로 토큰 유효성 검사
-        if (accessToken != null) {
-            if (jwtTokenProvider.validateToken(accessToken)) {
-                System.out.println("============= 액세스 토큰 유효성 검사 통과 ==============");
-                // Redis에 해당 accessToken logout 여부 확인
-                String isLogout = (String) redisTemplate.opsForValue().get(accessToken);
-
-                if (ObjectUtils.isEmpty(isLogout)) {
-                    // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
-                    Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            } else {
-                // 토큰이 존재하지만 유효성 검사를 통과하지 못했을 경우 토큰 재발급
-                regenerateAccessToken(accessToken, (HttpServletResponse) response);
-            }
+        if (httpServletRequest.getServletPath().equals("/user/signup")) {// 회원가입은 그냥 건너 뛴다
             chain.doFilter(request, response);
+        } else {
+            // 1. Request Header에서 JWT 토큰 추출
+            String accessToken = resolveToken((HttpServletRequest) request);
+            System.out.println("============ 액세스 토큰 추출 완료 from REQUEST HEADER : " + accessToken + " ==============");
+
+            // 2. validationToken으로 토큰 유효성 검사
+            if (accessToken != null) {
+                if (jwtTokenProvider.validateToken(accessToken)) {
+                    System.out.println("============= 액세스 토큰 유효성 검사 통과 ==============");
+
+                    // Redis에 해당 accessToken logout 여부 확인
+                    String isLogout = (String) redisTemplate.opsForValue().get(accessToken);
+
+                    if (ObjectUtils.isEmpty(isLogout)) {
+                        // 토큰이 유효할 경우 토큰에서 Authentication 객체를 가지고 와서 SecurityContext에 저장
+                        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                        chain.doFilter(request, response);
+                    }
+                } else {
+                    // 토큰이 존재하지만 유효성 검사를 통과하지 못했을 경우 토큰 재발급
+                    regenerateAccessToken(accessToken, (HttpServletResponse) response);
+                }
+            }
         }
     }
 
@@ -79,7 +86,9 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     }
 
     // RefreshToken으로 AccessToken 재생성
+//    private ResponseEntity<?> regenerateAccessToken(String accessToken) throws ServletException, IOException {
     private ResponseEntity<?> regenerateAccessToken(String accessToken, HttpServletResponse response) throws ServletException, IOException {
+
         // 2. Access Token 에서 Username 을 가져옵니다.
         Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
@@ -94,14 +103,14 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         UserResponseDto.TokenInfo newAccessToken = jwtTokenProvider.regenerateAccessToken(authentication);
 
         System.out.println("============== NEW ACCESSTOKEN : " + BEARER_TYPE + " " + newAccessToken.getAccessToken() + "=============");
-        System.out.println("=========== ACCESS 재발급 완료 ============");
+        System.out.println("=========== ACCESSTOKEN 재발급 완료 ============");
 
         String username = authentication.getName();
         System.out.println(username);
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         response.setHeader("Authorization", BEARER_TYPE + " " + newAccessToken.getAccessToken());
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return response2.success(newAccessToken, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }

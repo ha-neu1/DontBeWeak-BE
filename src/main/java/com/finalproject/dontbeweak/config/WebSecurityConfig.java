@@ -24,6 +24,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @Configuration
 @EnableWebSecurity// 시큐리티 활성화 -> 기본 스프링 필터체인에 등록
@@ -34,6 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate redisTemplate;
     private final Response response2;
+    private final HttpServletRequest request2;
+
 
     @Bean   // 비밀번호 암호화
     public BCryptPasswordEncoder encodePassword() {
@@ -88,9 +92,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .and()
 
                 .addFilterBefore(new FormLoginFilter(authenticationManager(), jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore(new JwtAuthorizationFilter(authenticationManager(), userRepository), UsernamePasswordAuthenticationFilter.class)
                 // JwtAuthenticationFilter를 UsernamePasswordAuthentictaionFilter 전에 적용시킨다.
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate, response2), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate, response2, request2), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
