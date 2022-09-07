@@ -73,7 +73,7 @@ public class JwtTokenProvider {
                 .build();
     }
 
-    // AccessToken 재생성
+    // AccessToken 재발급
     public UserResponseDto.TokenInfo regenerateAccessToken(Authentication authentication) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
@@ -136,7 +136,7 @@ public class JwtTokenProvider {
                 MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token");
+            log.info("Expired JWT Token", e);
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT Token", e);
         } catch (IllegalArgumentException e) {

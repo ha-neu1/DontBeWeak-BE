@@ -6,7 +6,6 @@ import com.finalproject.dontbeweak.dto.SignupRequestDto;
 import com.finalproject.dontbeweak.dto.SocialLoginInfoDto;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
 import com.finalproject.dontbeweak.jwtwithredis.Helper;
-import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
 import com.finalproject.dontbeweak.jwtwithredis.Response;
 import com.finalproject.dontbeweak.jwtwithredis.UserRequestDto;
 import com.finalproject.dontbeweak.service.KakaoService;
@@ -31,7 +30,6 @@ public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
     private final NaverService naverService;
-    private final JwtTokenProvider jwtTokenProvider;
     private final Response response;
 
     //회원가입 요청 처리
@@ -44,6 +42,15 @@ public class UserController {
             return res;
         }
     }
+
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@Validated UserRequestDto.Login login, Errors errors) {
+//        // validation check
+//        if (errors.hasErrors()) {
+//            return response.invalidFields(Helper.refineErrors(errors));
+//        }
+//        return userService.login(login);
+//    }
 
     //카카오 소셜 로그인
     @GetMapping("/auth/kakao/callback")
@@ -63,7 +70,8 @@ public class UserController {
         return userService.userInfo(userDetails);
     }
 
-    @PostMapping("/reissue")
+    // Access Token 재발급
+    @PostMapping("/user/reissue")
     public ResponseEntity<?> reissue(@Validated UserRequestDto.Reissue reissue, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
@@ -72,4 +80,13 @@ public class UserController {
         return userService.reissue(reissue);
     }
 
+    // 로그아웃
+    @PostMapping("/user/logout")
+    public ResponseEntity<?> logout(@Validated UserRequestDto.Logout logout, Errors errors) {
+        // validation check
+        if (errors.hasErrors()) {
+            return response.invalidFields(Helper.refineErrors(errors));
+        }
+        return userService.logout(logout);
+    }
 }
