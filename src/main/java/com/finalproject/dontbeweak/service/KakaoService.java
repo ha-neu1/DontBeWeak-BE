@@ -46,6 +46,7 @@ public class KakaoService {
 
     public SocialLoginInfoDto requestKakao(String code, HttpServletResponse response) { //Data를 리턴해주는 컨트롤러 함수
         //POST방식으로 key=value 데이터를 요청(카카오쪽으로)
+        System.out.println("code: "+code);
         RestTemplate rt = new RestTemplate();
 
         //HttpHeader 오브젝트 생성
@@ -56,7 +57,7 @@ public class KakaoService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "599bca646044fc4147f7f8f4c461f9ca");
-        params.add("redirect_uri", "http://3.37.88.75/auth/kakao/callback");
+        params.add("redirect_uri", "http://localhost:8080/auth/kakao/callback");
 //        params.add("redirect_uri", "http://localhost:8080/auth/kakao/callback");
         params.add("code", code);
 
