@@ -126,6 +126,14 @@ public class JwtTokenProvider {
         return null;
     }
 
+    private Claims parseClaims(String accessToken) {
+        try {
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
+
     // 토큰 정보를 검증하는 메서드
     public boolean validateToken(String token) {
         try {
@@ -145,13 +153,22 @@ public class JwtTokenProvider {
         return false;
     }
 
-    private Claims parseClaims(String accessToken) {
+    public boolean validateExpiredAccessToken(String AccessToken) {
         try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(AccessToken);
+            return true;
+        } catch (
+                io.jsonwebtoken.security.SecurityException |
+                MalformedJwtException e) {
+            log.info("Invalid JWT Token", e);
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT Token", e);
+        } catch (IllegalArgumentException e) {
+            log.info("JWT claims string is empty.", e);
         }
+        return false;
     }
+
 
     public Long getExpiration(String accessToken) {
         // accessToken 남은 유효시간

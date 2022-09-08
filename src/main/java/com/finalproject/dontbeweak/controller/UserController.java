@@ -19,6 +19,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -30,7 +31,6 @@ public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
     private final NaverService naverService;
-    private final Response response;
 
     //회원가입 요청 처리
     @PostMapping("/user/signup")
@@ -72,21 +72,29 @@ public class UserController {
 
     // Access Token 재발급
     @PostMapping("/user/reissue")
-    public ResponseEntity<?> reissue(@Validated UserRequestDto.Reissue reissue, Errors errors) {
+    public ResponseEntity<?> reissue(HttpServletRequest httpServletRequest, Response response, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return userService.reissue(reissue);
+        return userService.reissue(httpServletRequest);
     }
+//    @PostMapping("/user/reissue")
+//    public ResponseEntity<?> reissue(@Validated UserRequestDto.Reissue reissue, Errors errors) {
+//        // validation check
+//        if (errors.hasErrors()) {
+//            return response.invalidFields(Helper.refineErrors(errors));
+//        }
+//        return userService.reissue(reissue);
+//    }
 
     // 로그아웃
     @PostMapping("/user/logout")
-    public ResponseEntity<?> logout(@Validated UserRequestDto.Logout logout, Errors errors) {
+    public ResponseEntity<?> logout(@Validated UserRequestDto.Logout logout, HttpServletRequest httpServletRequest, Response response, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
             return response.invalidFields(Helper.refineErrors(errors));
         }
-        return userService.logout(logout);
+        return userService.logout(httpServletRequest);
     }
 }

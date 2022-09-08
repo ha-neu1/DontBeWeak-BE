@@ -21,7 +21,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -38,6 +40,10 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final Response response;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_TYPE = "Bearer";
+
 
     //일반 회원가입
     public String registerUser(SignupRequestDto requestDto){
@@ -131,47 +137,61 @@ public class UserService {
         return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
     }
 
+
+
     // 액세스 토큰 재발급
-        public ResponseEntity<?> reissue(UserRequestDto.Reissue reissue) {
-            // 1. Refresh Token 검증
-            if (!jwtTokenProvider.validateToken(reissue.getRefreshToken())) {
-                return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
-            }
+    public ResponseEntity<?> reissue(HttpServletRequest httpServletRequest) {
 
-            // 2. Access Token 에서 Username 을 가져옵니다.
-            Authentication authentication = jwtTokenProvider.getAuthentication(reissue.getAccessToken());
+        // 1. Request Header에서 토큰 정보 추출
+        String accessToken = resolveToken(httpServletRequest);
+        System.out.println("==== EXPIERED ACCESSTOKEN : " + accessToken + " ====");
 
-            // 3. Redis 에서 Username을 기반으로 저장된 Refresh Token 값을 가져옵니다.
-            String refreshToken = (String)redisTemplate.opsForValue().get("RT:" + authentication.getName());
-            // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
-            if(ObjectUtils.isEmpty(refreshToken)) {
-                return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
-            }
-            if(!refreshToken.equals(reissue.getRefreshToken())) {
-                return response.fail("Refresh Token 정보가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
-            }
-
-            // 4. 새로운 토큰 생성
-            UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-
-            // 5. RefreshToken Redis 업데이트
-            redisTemplate.opsForValue()
-                    .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
-            return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
+        // 2. 만료된 Access Token 유효성 확인
+        if (!jwtTokenProvider.validateExpiredAccessToken(accessToken)) {
+            return response.fail("Access Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
+
+        // 3. Access Token 복호화로 추출한 username으로 authentication 객체 만들기
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+
+        // 4. Redis 에서 Username을 기반으로 저장된 Refresh Token 값을 가져옵니다.
+        String refreshToken = (String)redisTemplate.opsForValue().get("RT:" + authentication.getName());
+        // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
+        if(ObjectUtils.isEmpty(refreshToken)) {
+            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        // 5. Refresh Token 검증
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        // 6. 새로운 토큰 생성
+        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+        // 7. RefreshToken Redis 업데이트
+        redisTemplate.opsForValue()
+                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+
+        return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
+    }
+
 
 
 
     // 로그아웃
-    public ResponseEntity<?> logout(UserRequestDto.Logout logout) {
+    public ResponseEntity<?> logout(HttpServletRequest httpServletRequest) {
+
+        // 1. Request Header에서 토큰 정보 추출
+        String accessToken = resolveToken(httpServletRequest);
+
         // 1. Access Token 검증
-        if (!jwtTokenProvider.validateToken(logout.getAccessToken())) {
+        if (!jwtTokenProvider.validateToken(accessToken)) {
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
 
         // 2. Access Token 에서 Username을 가져옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(logout.getAccessToken());
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
         // 3. Redis 에서 해당 Username으로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
         if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
@@ -181,11 +201,24 @@ public class UserService {
         }
 
         // 4. 해당 Access Token 유효시간 가지고 와서 BlackList 로 저장하기
-        Long expiration = jwtTokenProvider.getExpiration(logout.getAccessToken());
+        Long expiration = jwtTokenProvider.getExpiration(accessToken);
         redisTemplate.opsForValue()
-                .set(logout.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
+                .set(accessToken, "logout", expiration, TimeUnit.MILLISECONDS);
 
         return response.success("로그아웃 되었습니다.");
+    }
+
+
+    // Request Header에서 토큰 정보 추출
+    private String resolveToken(HttpServletRequest httpServletRequest) {
+
+        System.out.println("==== 헤더 추출 시작 ====");
+        String bearerToken = httpServletRequest.getHeader(AUTHORIZATION_HEADER);
+        System.out.println("==== 헤더 추출 완료 ====");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_TYPE)) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
 //    public ResponseEntity<?> authority() {
