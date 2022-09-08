@@ -1,11 +1,12 @@
 package com.finalproject.dontbeweak.config.jwt;
 
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.jwtwithredis.UserResponseDto;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,16 +18,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
+@RequiredArgsConstructor
 public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
 
-    public FormLoginFilter(AuthenticationManager authenticationManager) {
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RedisTemplate redisTemplate;
+
+    public FormLoginFilter(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, RedisTemplate redisTemplate) {
         super(authenticationManager);
+
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.redisTemplate = redisTemplate;
     }
 
-//    @Value("${secret.key}")
-//    private String secretKey;
 
     //login 요청하면 로그인 시도를 위해 실행되는 함수
     @Override
@@ -36,7 +42,7 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
         try {
             ObjectMapper om = new ObjectMapper();
             User user = om.readValue(request.getInputStream(), User.class);
-            System.out.println(user);
+            System.out.println("사용자 : " + user.getUsername());
             System.out.println("=============================================");
 
             UsernamePasswordAuthenticationToken authenticationToken =
@@ -60,13 +66,26 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
 
         //RSA방식은 아니고 Hash암호 방식
-        String jwtToken = JWT.create()
-                .withSubject("cos토큰")
-                .withExpiresAt(new Date(System.currentTimeMillis()+(60000*60)))
-                .withClaim("username",userDetails.getUser().getUsername())
-                .sign(Algorithm.HMAC512("thwjd2"));
+//        String jwtToken = JWT.create()
+//                .withSubject("cos토큰")
+//                .withExpiresAt(new Date(System.currentTimeMillis()+(60000*60)))
+//                .withClaim("username",userDetails.getUser().getUsername())
+//                .sign(Algorithm.HMAC512("thwjd2"));
 
-        response.addHeader("Authorization", "Bearer "+jwtToken);
+        // 3. 인증 정보를 기반으로 JWT AccessToken, RefreshToken 생성
+        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authResult);
+
+        System.out.println("ACCESS TOKEN : " + tokenInfo.getAccessToken());
+        System.out.println("REFRESH TOKEN : " + tokenInfo.getRefreshToken());
+        System.out.println("==== access token, refresh token 생성 완료 ====");
+
+
+        // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
+        redisTemplate.opsForValue()
+                .set("RT:" + authResult.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+        System.out.println("==== refresh token redis 저장 완료 ====");
+
+        response.addHeader("Authorization", "Bearer "+tokenInfo.getAccessToken());
     }
 
 

@@ -3,12 +3,15 @@ package com.finalproject.dontbeweak.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalproject.dontbeweak.dto.SocialLoginInfoDto;
+import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.jwtwithredis.UserResponseDto;
 import com.finalproject.dontbeweak.model.KakaoProfile;
 import com.finalproject.dontbeweak.model.OAuthToken;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -33,6 +37,9 @@ public class KakaoService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CatService catService;
+    private final RedisTemplate redisTemplate;
+    private final JwtTokenProvider jwtTokenProvider;
+
 
 //    @Value("${secret.key}")
 //    private String secretKey;
@@ -49,7 +56,8 @@ public class KakaoService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "599bca646044fc4147f7f8f4c461f9ca");
-        params.add("redirect_uri", "http://3.37.88.75/auth/kakao/callback");
+        params.add("redirect_uri", "http://localhost:3000/auth/kakao/callback");
+//        params.add("redirect_uri", "http://localhost:8080/auth/kakao/callback");
         params.add("code", code);
 
         //HttpHeader와 HttpBody를 하나의 오브젝트에 담기
@@ -141,11 +149,22 @@ public class KakaoService {
             //홀더에 검증이 완료된 정보 값 넣어준다. -> 이제 controller 에서 @AuthenticationPrincipal UserDetailsImpl userDetails 로 정보를 꺼낼 수 있다.
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            //JWT 토큰 발급
-            String jwtToken = userService.JwtTokenCreate(userDetails.getUser().getUsername());
 
-            response.addHeader("Authorization", jwtToken);
-            System.out.println("JWT토큰 : " + "Bearer "+jwtToken);
+            // 3. 인증 정보를 기반으로 JWT 토큰 생성
+            UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+
+            System.out.println("access token : " + tokenInfo.getAccessToken());
+            System.out.println("refresh token : " + tokenInfo.getRefreshToken());
+            System.out.println("access token, refresh token 생성 완료");
+
+
+            // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
+            redisTemplate.opsForValue()
+                    .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+            System.out.println("refresh token redis 저장 완료");
+
+            response.addHeader("Authorization", tokenInfo.getAccessToken());
+            System.out.println("JWT토큰 : " + "Bearer "+tokenInfo.getAccessToken());
         }
 
         String username = kakaoUser.getUsername();
