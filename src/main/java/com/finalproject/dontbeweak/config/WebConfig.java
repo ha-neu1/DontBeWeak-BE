@@ -1,4 +1,4 @@
-package com.finalproject.dontbeweak.security;
+package com.finalproject.dontbeweak.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

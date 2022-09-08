@@ -1,7 +1,8 @@
 package com.finalproject.dontbeweak.config;
 
 
-import com.finalproject.dontbeweak.config.jwt.FormLoginFilter;
+
+import com.finalproject.dontbeweak.jwt.FormLoginFilter;
 import com.finalproject.dontbeweak.jwtwithredis.JwtAuthenticationFilter;
 import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
 import com.finalproject.dontbeweak.jwtwithredis.Response;

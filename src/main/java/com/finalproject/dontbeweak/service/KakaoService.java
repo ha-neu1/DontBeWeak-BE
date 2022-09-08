@@ -163,7 +163,8 @@ public class KakaoService {
                     .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
             System.out.println("refresh token redis 저장 완료");
 
-            response.addHeader("Authorization", tokenInfo.getAccessToken());
+
+            response.addHeader("Authorization", "Bearer "+tokenInfo.getAccessToken());
             System.out.println("JWT토큰 : " + "Bearer "+tokenInfo.getAccessToken());
         }
 
