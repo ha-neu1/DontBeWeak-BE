@@ -14,7 +14,7 @@ public class DontbeweakApplication {
     public static final String APPLICATION_LOCATIONS = "spring.config.location="
             + "classpath:application.properties,"
             + "classpath:application.yml,"
-            + "classpath:application-swagger.properties";
+            + "classpath:application-swagger.yml";
 
     public static void main(String[] args) {
 //        SpringApplication.run(DontbeweakApplication.class, args);
