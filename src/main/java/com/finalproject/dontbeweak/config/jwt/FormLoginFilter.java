@@ -75,15 +75,15 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
         // 3. 인증 정보를 기반으로 JWT AccessToken, RefreshToken 생성
         UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authResult);
 
-        System.out.println("access token : " + tokenInfo.getAccessToken());
-        System.out.println("refresh token : " + tokenInfo.getRefreshToken());
-        System.out.println("access token, refresh token 생성 완료");
+        System.out.println("ACCESS TOKEN : " + tokenInfo.getAccessToken());
+        System.out.println("REFRESH TOKEN : " + tokenInfo.getRefreshToken());
+        System.out.println("==== access token, refresh token 생성 완료 ====");
 
 
         // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
         redisTemplate.opsForValue()
                 .set("RT:" + authResult.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-        System.out.println("refresh token redis 저장 완료");
+        System.out.println("==== refresh token redis 저장 완료 ====");
 
         response.addHeader("Authorization", "Bearer "+tokenInfo.getAccessToken());
     }
