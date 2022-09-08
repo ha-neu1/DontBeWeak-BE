@@ -27,7 +27,7 @@ public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
-    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 10 * 60 * 1000L;   // 10분
+    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 15 * 60 * 1000L;   // 15분
     private static final Long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
 
     private final Key key;
@@ -93,7 +93,7 @@ public class JwtTokenProvider {
         return UserResponseDto.TokenInfo.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(newAccessToken)
-                .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
+                .accessTokenExpirationTime(ACCESS_TOKEN_EXPIRE_TIME)
                 .build();
     }
 
@@ -113,7 +113,6 @@ public class JwtTokenProvider {
                         .collect(Collectors.toList());
 
         String username = claims.getSubject();
-        System.out.println("=========== USERNAME from ACCESSTOKEN : " + username + " =============");
 
         if (username != null) {
             User user = userRepository.findByUsername(username)
@@ -153,6 +152,7 @@ public class JwtTokenProvider {
         return false;
     }
 
+    // 액세스 토큰 재발급 중 유효한 토큰인지 검증하는 메서드
     public boolean validateExpiredAccessToken(String AccessToken) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(AccessToken);

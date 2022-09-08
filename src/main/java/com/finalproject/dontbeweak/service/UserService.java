@@ -18,12 +18,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -40,6 +42,7 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final Response response;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final HttpServletResponse httpServletResponse;
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_TYPE = "Bearer";
@@ -166,13 +169,17 @@ public class UserService {
             return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
-        // 6. 새로운 토큰 생성
-        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        // 6. 새로운 Access Token 생성
+        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.regenerateAccessToken(authentication);
 
-        // 7. RefreshToken Redis 업데이트
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
+        System.out.println("==== NEW ACCESSTOKEN : " + tokenInfo.getAccessToken() + " ====");
 
+        // 7. Response Header에 새 Access Token 세팅
+        httpServletResponse.setHeader("Authorization", BEARER_TYPE + " " + tokenInfo.getAccessToken());
+
+//        // 8. SecurityContextHolder에 사용자 정보 넣기
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//
         return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
 
@@ -185,15 +192,15 @@ public class UserService {
         // 1. Request Header에서 토큰 정보 추출
         String accessToken = resolveToken(httpServletRequest);
 
-        // 1. Access Token 검증
+        // 2. Access Token 검증
         if (!jwtTokenProvider.validateToken(accessToken)) {
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        // 2. Access Token 에서 Username을 가져옵니다.
+        // 3. Access Token 복호화로 추출한 username으로 authentication 객체 만들기
         Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
 
-        // 3. Redis 에서 해당 Username으로 저장된 Refresh Token 이 있는지 여부를 확인 후 있을 경우 삭제합니다.
+        // 3. Redis 에서 해당 Username으로 저장된 Refresh Token 이 있는지 여부를 확인 후, 있을 경우 삭제.
         if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
             // Refresh Token 삭제
             redisTemplate.delete("RT:" + authentication.getName());
@@ -212,9 +219,7 @@ public class UserService {
     // Request Header에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest httpServletRequest) {
 
-        System.out.println("==== 헤더 추출 시작 ====");
         String bearerToken = httpServletRequest.getHeader(AUTHORIZATION_HEADER);
-        System.out.println("==== 헤더 추출 완료 ====");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_TYPE)) {
             return bearerToken.substring(7);
         }
