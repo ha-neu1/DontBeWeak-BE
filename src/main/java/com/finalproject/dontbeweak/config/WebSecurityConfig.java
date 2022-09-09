@@ -1,12 +1,11 @@
 package com.finalproject.dontbeweak.config;
 
 
-import com.finalproject.dontbeweak.config.jwt.FormLoginFilter;
-import com.finalproject.dontbeweak.jwtwithredis.JwtAuthenticationFilter;
-import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.auth.jwt.FormLoginFilter;
+import com.finalproject.dontbeweak.auth.jwt.JwtAuthenticationFilter;
+import com.finalproject.dontbeweak.auth.jwt.JwtTokenProvider;
 import com.finalproject.dontbeweak.jwtwithredis.Response;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;

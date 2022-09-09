@@ -3,7 +3,7 @@ package com.finalproject.dontbeweak.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalproject.dontbeweak.dto.SocialLoginInfoDto;
-import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.auth.jwt.JwtTokenProvider;
 import com.finalproject.dontbeweak.jwtwithredis.UserResponseDto;
 import com.finalproject.dontbeweak.model.KakaoProfile;
 import com.finalproject.dontbeweak.model.OAuthToken;

@@ -77,6 +77,7 @@ public class UserController {
 
     // Access Token 재발급
     @PostMapping("/user/reissue")
+    @ApiOperation(value = "Access Token 재발급", notes = "")
     public ResponseEntity<?> reissue(HttpServletRequest httpServletRequest, Response response, Errors errors) {
         // validation check
         if (errors.hasErrors()) {
@@ -88,6 +89,7 @@ public class UserController {
 
     // 로그아웃
     @PostMapping("/user/logout")
+    @ApiOperation(value = "로그아웃")
     public ResponseEntity<?> logout(HttpServletRequest httpServletRequest, Response response, Errors errors) {
         // validation check
         if (errors.hasErrors()) {

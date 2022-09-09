@@ -3,9 +3,8 @@ package com.finalproject.dontbeweak.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalproject.dontbeweak.dto.SocialLoginInfoDto;
-import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.auth.jwt.JwtTokenProvider;
 import com.finalproject.dontbeweak.jwtwithredis.Response;
-import com.finalproject.dontbeweak.jwtwithredis.UserRequestDto;
 import com.finalproject.dontbeweak.jwtwithredis.UserResponseDto;
 import com.finalproject.dontbeweak.model.NaverProfile;
 import com.finalproject.dontbeweak.model.OAuthToken;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;

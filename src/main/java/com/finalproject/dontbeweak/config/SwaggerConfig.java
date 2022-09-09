@@ -34,7 +34,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     public Docket swagger() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("dontbeweak"))
+                .apis(RequestHandlerSelectors.basePackage("com.finalproject.dontbeweak"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

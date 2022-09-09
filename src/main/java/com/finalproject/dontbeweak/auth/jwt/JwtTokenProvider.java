@@ -1,6 +1,7 @@
-package com.finalproject.dontbeweak.jwtwithredis;
+package com.finalproject.dontbeweak.auth.jwt;
 
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
+import com.finalproject.dontbeweak.jwtwithredis.UserResponseDto;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import io.jsonwebtoken.*;
