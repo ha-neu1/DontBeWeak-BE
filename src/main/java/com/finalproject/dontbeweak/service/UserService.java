@@ -150,7 +150,7 @@ public class UserService {
         System.out.println("==== EXPIERED ACCESSTOKEN : " + accessToken + " ====");
 
         // 2. 만료된 Access Token 유효성 확인
-        if (!jwtTokenProvider.validateExpiredAccessToken(accessToken)) {
+        if (!jwtTokenProvider.validateAccessToken(accessToken)) {
             return response.fail("Access Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
         }
 
