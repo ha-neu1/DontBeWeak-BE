@@ -1,4 +1,4 @@
-package com.finalproject.dontbeweak.jwtwithredis;
+package com.finalproject.dontbeweak.repository.jwtwithredis;
 
 import lombok.Getter;
 import lombok.Setter;

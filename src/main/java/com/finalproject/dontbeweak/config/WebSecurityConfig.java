@@ -2,10 +2,10 @@ package com.finalproject.dontbeweak.config;
 
 
 
-import com.finalproject.dontbeweak.jwt.FormLoginFilter;
-import com.finalproject.dontbeweak.jwtwithredis.JwtAuthenticationFilter;
-import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
-import com.finalproject.dontbeweak.jwtwithredis.Response;
+import com.finalproject.dontbeweak.config.jwt.FormLoginFilter;
+import com.finalproject.dontbeweak.repository.jwtwithredis.JwtAuthenticationFilter;
+import com.finalproject.dontbeweak.repository.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.repository.jwtwithredis.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

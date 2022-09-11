@@ -1,4 +1,4 @@
-package com.finalproject.dontbeweak.jwtwithredis;
+package com.finalproject.dontbeweak.repository.jwtwithredis;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
