@@ -38,9 +38,9 @@ public class JwtTokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
     private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 30 * 1000L;   // 15분
+    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 15 * 60 * 1000L;   // 15분
     private static final Long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
-    private static final Long EXPIRED_AT_REDIS_SAVETIME = 50 * 1000L;
+    private static final Long EXPIRED_AT_REDIS_SAVETIME = 7 * 24 * 60 * 60 * 1000L; // 7일
 
     private final Key key;
 
@@ -201,18 +201,20 @@ public class JwtTokenProvider {
     }
 
 
-
+    // accessToken 남은 유효시간
     public Long getExpiration(String accessToken) {
-        // accessToken 남은 유효시간
         Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();
         // 현재 시간
         Long now = new Date().getTime();
         return (expiration.getTime() - now);
     }
 
-    public boolean getExpiredAccessTokenExpiration(String accessToken) {
+    public boolean getExpiredAccessTokenlifeSpan(String accessToken) {
         // accessToken 만료시간
-        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();
+//        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();
+
+        Claims claims = parseClaims(accessToken);
+        Date expiration = claims.getExpiration();
 
         Long expiredATValidTime = expiration.getTime() + EXPIRED_AT_REDIS_SAVETIME;
 

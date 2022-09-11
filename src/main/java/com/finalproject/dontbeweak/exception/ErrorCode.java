@@ -20,8 +20,11 @@ public enum ErrorCode {
     NOT_FOUND_USER(404, "C011", "유저를 찾을 수 없습니다. 로그인을 다시 해주세요."),
     NOT_FOUND_CAT(404,"C012","고양이를 찾을 수 없습니다."),
     NOT_FOUND_CATIMAGE(500,"C013","고양이의 모습을 찾을 수 없습니다."),
-    INVAILD_EXPIRED_TOKEN(400, "C014", "이미 재발급에 사용된 만료 토큰입니다."),
-    LOGGED_OUT_TOKEN(400, "C015", "로그아웃 된 토큰입니다.");
+    USED_EXPIRED_TOKEN(400, "C014", "이미 재발급에 사용된 만료 토큰입니다."),
+    LOGGED_OUT_TOKEN(400, "C015", "로그아웃 된 토큰입니다."),
+    INVALIED_EXPIRED_TOKEN(400, "C017", "만료된 지 너무 오래된 토큰입니다."),
+    TOKEN_IN_BLACKLIST(400,"C016","폐기된 토큰입니다.");
+
 
 
 

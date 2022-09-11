@@ -60,12 +60,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 System.out.println("==== 3. [PASS] 만료되지 않은 토큰입니다. ====");
 
                 // Redis 에 해당 accessToken logout 여부 확인 (로그아웃 시 RT가 삭제되고 AT가 Redis에 저장됨)
-                String isLogout = (String) redisTemplate.opsForValue().get(accessToken);
-                Optional<String> optionalIsLogout = Optional.ofNullable(isLogout);
+                String isLoggedOut = (String) redisTemplate.opsForValue().get(accessToken);
 
-                // 로그아웃 된 토큰일 경우,
-                if (optionalIsLogout.isPresent()) {
+                System.out.println("==== BLACKLIST : Redis에서 토큰 찾기 ====");
+
+                if (!ObjectUtils.isEmpty(isLoggedOut)) {
                     log.error(ErrorCode.LOGGED_OUT_TOKEN.getMessage(), ErrorCode.LOGGED_OUT_TOKEN.getStatus());
+                    response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
 
                     return;
                 }
@@ -84,18 +85,24 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
                 // Redis에서 이전에 만료되어 재발급에 사용된 적 있는 토큰인지 찾기
                 String isExpired = (String) redisTemplate.opsForValue().get(accessToken);
-                Optional<String> optionalIsExpired = Optional.ofNullable(isExpired);
 
-                System.out.println("==== 3-2. Redis에서 AT 토큰 찾기 ====");
+                System.out.println("==== 3-2. BLACKLIST : Redis에서 토큰 찾기 ====");
 
-                // Redis BLACKLIST에 있는 토큰일 경우 (한 번 재발급에 사용된 토큰일 경우),
-                if (optionalIsExpired.isPresent()) {
-                    log.error(ErrorCode.INVAILD_EXPIRED_TOKEN.getMessage(), ErrorCode.INVAILD_EXPIRED_TOKEN.getStatus());
+                if (!ObjectUtils.isEmpty(isExpired)) {
+                    log.error(ErrorCode.USED_EXPIRED_TOKEN.getMessage(), ErrorCode.USED_EXPIRED_TOKEN.getStatus());
+                    response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
 
                     return;
                 }
 
-                System.out.println("==== 3-3. [PASS] 재발급에 사용된 적 없는 만료 토큰입니다. ====");
+//                System.out.println("==== 3-3. Redis에서 영구삭제되어 폐기된 토큰이 아닌지 확인 ====");
+//                if (!jwtTokenProvider.getExpiredAccessTokenlifeSpan(accessToken)) {
+//                    log.error(ErrorCode.INVALIED_EXPIRED_TOKEN.getMessage(), ErrorCode.INVALIED_EXPIRED_TOKEN.getStatus());
+//
+//                    return;
+//                }
+
+                System.out.println("==== 3-4. [PASS] 사용될 수 있는 만료 토큰입니다. ====");
 
                 jwtTokenProvider.regenerateAccessTokenProcess((HttpServletResponse) servletResponse, accessToken, response);
 
@@ -107,6 +114,17 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
     }
 
 
+    private boolean findTokenInBlackList(String accessToken) {
+
+        String blackListToken = (String) redisTemplate.opsForValue().get(accessToken);
+
+        System.out.println("==== BLACKLIST : Redis에서 토큰 찾기 ====");
+
+        if (!ObjectUtils.isEmpty(blackListToken)) {
+            log.error(ErrorCode.TOKEN_IN_BLACKLIST.getMessage(), ErrorCode.TOKEN_IN_BLACKLIST.getStatus());
+        }
+        return true;
+    }
 
     // Request Header에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {
