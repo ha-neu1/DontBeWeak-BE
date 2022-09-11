@@ -13,7 +13,4 @@ public class LoginIdCheckDto {
     private int point;
     private int level;
     private int exp;
-
-
-
 }

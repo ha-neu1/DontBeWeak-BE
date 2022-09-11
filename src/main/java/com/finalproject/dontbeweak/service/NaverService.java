@@ -169,8 +169,14 @@ public class NaverService {
         password = passwordEncoder.encode(password);
         naverUser.setPassword(password);
 
-        User user = new User(username, password, oauth, nickname);
-        user.setRole("ROLE_USER");
+        User user = User.builder()
+                .username(username)
+                .nickname(nickname)
+                .password(password)
+                .oauth(oauth)
+                .role("ROLE_USER")
+                .build();
+
         userRepository.save(user);
         catService.createNewCat(user);
 

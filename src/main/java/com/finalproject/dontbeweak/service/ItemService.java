@@ -31,7 +31,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
-
     private final UserRepository userRepository;
     private final CatRepository catRepository;
     private final CatService catService;
