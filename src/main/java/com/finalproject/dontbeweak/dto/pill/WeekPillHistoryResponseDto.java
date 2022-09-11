@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class WeekPillHistoryResponseDto {
     private LocalDateTime usedAt;
-    private int dayOfWeekValue;
+    private int dayOfWeek;
     private String productName;
     private String customColor;
     private boolean done;
 
-    public WeekPillHistoryResponseDto(PillHistory pillHistory, int dayOfWeekValue) {
+    public WeekPillHistoryResponseDto(PillHistory pillHistory, int dayOfWeek) {
         this.usedAt = pillHistory.getUsedAt();
-        this.dayOfWeekValue = dayOfWeekValue;
+        this.dayOfWeek = dayOfWeek;
         this.productName = pillHistory.getPill().getProductName();
         this.customColor = pillHistory.getPill().getCustomColor();
         this.done = pillHistory.getPill().getDone();

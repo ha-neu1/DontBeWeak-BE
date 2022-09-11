@@ -105,10 +105,13 @@ public class PillService {
         List<PillHistory> pillHistoryList = pillHistoryRepository.findAllByUser_IdAndUsedAtBetween(userId, startDateTime, endDateTime);
         List<WeekPillHistoryResponseDto> pillHistoryResponseDtoList = new ArrayList<>();
 
+
         for (PillHistory pillHistory : pillHistoryList) {
             int dayOfWeekValue = pillHistory.getUsedAt().getDayOfWeek().getValue();
+            int dayOfWeek = dayOfWeekValue - 1;
+            System.out.println(dayOfWeek);
 
-            WeekPillHistoryResponseDto weekPillDto = new WeekPillHistoryResponseDto(pillHistory, dayOfWeekValue);
+            WeekPillHistoryResponseDto weekPillDto = new WeekPillHistoryResponseDto(pillHistory, dayOfWeek);
 
             pillHistoryResponseDtoList.add(weekPillDto);
         }
