@@ -1,6 +1,7 @@
 package com.finalproject.dontbeweak.auth.jwt;
 
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
+import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.jwtwithredis.Response;
 import com.finalproject.dontbeweak.jwtwithredis.UserResponseDto;
 import com.finalproject.dontbeweak.model.User;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -37,13 +39,11 @@ public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 15 * 60 * 1000L;   // 15분
+    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 20 * 60 * 1000L;   // 15분
     private static final Long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
-    private static final Long EXPIRED_AT_REDIS_SAVETIME = 7 * 24 * 60 * 60 * 1000L; // 7일
+    private static final Long EXPIRED_ACCESSTOKEN_REDIS_SAVETIME = 7 * 24 * 60 * 60 * 1000L; // 7일
 
     private final Key key;
-
     private final UserRepository userRepository;
     private final RedisTemplate redisTemplate;
 
@@ -216,7 +216,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(accessToken);
         Date expiration = claims.getExpiration();
 
-        Long expiredATValidTime = expiration.getTime() + EXPIRED_AT_REDIS_SAVETIME;
+        Long expiredATValidTime = expiration.getTime() + EXPIRED_ACCESSTOKEN_REDIS_SAVETIME;
 
         Long now = new Date().getTime();
 
@@ -238,6 +238,8 @@ public class JwtTokenProvider {
 
         // 로그아웃되어 Redis 에 RefreshToken이 존재하지 않는 경우 처리
         if(ObjectUtils.isEmpty(refreshToken)) {
+            System.out.println("==== 리프레시 토큰이 존재하지 않음 ====");
+            log.error(ErrorCode.NOT_FOUND_REFRESH_TOKEN.getMessage(), ErrorCode.NOT_FOUND_REFRESH_TOKEN.getStatus());
             return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
         }
 
@@ -254,18 +256,24 @@ public class JwtTokenProvider {
 
         System.out.println("==== NEW ACCESSTOKEN : " + BEARER_TYPE + " " + tokenInfo.getAccessToken() + " ====");
 
+        Authentication newAuthentication = getAuthentication(tokenInfo.getAccessToken());
+        SecurityContextHolder.getContext().setAuthentication(newAuthentication);
+        System.out.println("==== 3-3. [PASS] SecurityContext 저장 ====");
+
+
         // 만료된 AT를 Redis에 저장
         saveAceessTokenBlackList(accessToken);
         System.out.println("==== Redis에 만료된 Access Token 저장 완료 ====");
+
 
         return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
 
 
-    // 만료된 Access Token을 Redis에 저장하는 method
+    // 재발급에 사용된 만료 Access Token을 Redis에 저장하는 method
     public void saveAceessTokenBlackList(String accessToken) {
 
-        Long savetime = EXPIRED_AT_REDIS_SAVETIME;
+        Long savetime = EXPIRED_ACCESSTOKEN_REDIS_SAVETIME;
 
         redisTemplate.opsForValue().set(accessToken, "expired", savetime, TimeUnit.MILLISECONDS);
     }
