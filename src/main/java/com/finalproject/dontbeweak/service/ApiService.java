@@ -95,16 +95,15 @@ public class ApiService {
         return result.toString();
     }
 
-    // 메인
+    // 모든 영양제 목록 조회
     @Transactional
-    public Page<Api> api(Pageable pageable) {
-
-        return apiRepository.findAll(pageable);
+    public Page<Api> api(Pageable pageNo) {
+        return apiRepository.findAll(pageNo);
     }
 
-    // 메인 무한스크롤
+    // 무한스크롤 발생시 반응하는 목록 조회
     @Transactional
-    public Page<Api> apiInfinity(String product, Pageable pageable) {
-        return apiRepository.findAllByPRDUCTLessThan(product, pageable);
+    public Page<Api> apiInfinity(String product, Pageable pageNo) {
+        return apiRepository.findAllByPRDUCTLessThan(product, pageNo);
     }
 }

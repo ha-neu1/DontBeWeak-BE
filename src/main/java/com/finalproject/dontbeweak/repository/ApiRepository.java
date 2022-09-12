@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ApiRepository extends JpaRepository<Api,Long> {
-    Page<Api> findAllByPRDUCTLessThan(String product, Pageable pageable);
+    Page<Api> findAllByPRDUCTLessThan(String product, Pageable pageNo);
 }

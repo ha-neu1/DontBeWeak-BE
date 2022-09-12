@@ -34,12 +34,12 @@ public class ApiController {
                 .body("공공 데이터가 담겼습니다");
     }
 
-    // 모든 영양제 목록을 보여주는 컨트롤러
+    // 모든 영양제 목록 조회
     @GetMapping("/apiList")
-    public List<ApiResponseDto> api(@PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageable){
+    public List<ApiResponseDto> api(@PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
         // 응답 list 객체 생성
         List<ApiResponseDto> data = new ArrayList<>();
-        Page<Api> list = apiService.api(pageable);
+        Page<Api> list = apiService.api(pageNo);
         for (int i = 0; i < pageSize; i++){
             data.add(new ApiResponseDto(list.getContent().get(i)));
         }
@@ -47,14 +47,13 @@ public class ApiController {
         return data;
     }
 
-    // 무한스크롤 발생시 반응하는 컨트롤러
+    // 무한스크롤 발생시 반응하는 목록 조회
     @GetMapping("/apiList/infinity")
     public List<ApiResponseDto> apiInfinity(@RequestParam String product,
-                                                  @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageable){
-
+                                                  @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
         // 응답 list 객체 생성
         List<ApiResponseDto> data = new ArrayList<>();
-        Page<Api> list = apiService.apiInfinity(product,pageable);
+        Page<Api> list = apiService.apiInfinity(product,pageNo);
         for (int i = 0; i < pageSize; i++){
             data.add(new ApiResponseDto(list.getContent().get(i)));
         }
