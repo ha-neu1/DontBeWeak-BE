@@ -2,11 +2,14 @@ package com.finalproject.dontbeweak.service;
 
 import com.finalproject.dontbeweak.model.Api;
 import com.finalproject.dontbeweak.repository.ApiRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +20,7 @@ import java.util.ArrayList;
 
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ApiService {
 
     private final ApiRepository apiRepository;
@@ -26,7 +29,7 @@ public class ApiService {
     public String parsing() throws IOException, NullPointerException {
         StringBuilder result = null;
 
-        for (int pageNumber = 1; pageNumber <= 3; pageNumber++) {
+        for (int pageNumber = 1; pageNumber <= 354; pageNumber++) {
             String urla = "http://apis.data.go.kr/1471000/HtfsInfoService2/getHtfsItem?"
                     + "ServiceKey=AEwuEzexgJKaPYcUDyX8Z5ZLxbtExL6%2FnS5eaQp6%2Bq7sD%2BEIyFWTgMwUW1qkvL9ZTs30dx5H1xsZyOzFP9bNyA%3D%3D"
                     + "&numOfRows=" + 99
@@ -35,6 +38,8 @@ public class ApiService {
 
             URL url = new URL(urla);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(10000);
+            urlConnection.setReadTimeout(60000);
             urlConnection.setRequestMethod("GET");
             BufferedReader br;
             br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
@@ -88,5 +93,18 @@ public class ApiService {
             }
         }
         return result.toString();
+    }
+
+    // 메인
+    @Transactional
+    public Page<Api> api(Pageable pageable) {
+
+        return apiRepository.findAll(pageable);
+    }
+
+    // 메인 무한스크롤
+    @Transactional
+    public Page<Api> apiInfinity(String product, Pageable pageable) {
+        return apiRepository.findAllByPRDUCTLessThan(product, pageable);
     }
 }
