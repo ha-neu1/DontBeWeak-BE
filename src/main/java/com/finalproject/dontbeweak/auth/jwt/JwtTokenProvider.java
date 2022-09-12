@@ -39,9 +39,9 @@ public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "Bearer";
-    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 20 * 60 * 1000L;   // 15분
+    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 20 * 60 * 1000L;   // 20분
     private static final Long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L; // 7일
-    private static final Long EXPIRED_ACCESSTOKEN_REDIS_SAVETIME = 7 * 24 * 60 * 60 * 1000L; // 7일
+    private static final Long EXPIRED_ACCESSTOKEN_REDIS_SAVETIME = 3 * 24 * 60 * 60 * 1000L; // 3일
 
     private final Key key;
     private final UserRepository userRepository;
@@ -209,18 +209,23 @@ public class JwtTokenProvider {
         return (expiration.getTime() - now);
     }
 
+    // 만료 토큰 유효 기간
+    // 재발급 시 사용된 만료된 얙세스 토큰은 바로 레디스로 저장된다 (blacklist)
+    // 3일 간 레디스에 저장된 후 삭제되는데
+    // 3일이 지난 후 블랙리스트에 없는 것이 확인되면 재발급에 이용될 수 있는 것을 막기 위해
+    // 토큰 만료 시간에 3일을 더하여 현재 시간과 비교한다. (만료 토큰의 수명은 3일로 지정)
+    // 현재 시간이 '만료시간 + 3일'보다 이전인 것이 확인되면 다음 절차로 넘어간다.
     public boolean getExpiredAccessTokenlifeSpan(String accessToken) {
-        // accessToken 만료시간
-//        Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();
-
         Claims claims = parseClaims(accessToken);
-        Date expiration = claims.getExpiration();
+        Long expiration = claims.getExpiration().getTime();
 
-        Long expiredATValidTime = expiration.getTime() + EXPIRED_ACCESSTOKEN_REDIS_SAVETIME;
+        // 현재 시간
+        Date now = new Date();
 
-        Long now = new Date().getTime();
+        // 만료 토큰 폐기 시간
+        Date expiredATValidTime = new Date(expiration + EXPIRED_ACCESSTOKEN_REDIS_SAVETIME);
 
-        if ((expiredATValidTime - now) > 0) {
+        if (now.before(expiredATValidTime)) {
             return true;
         } else {
             return false;

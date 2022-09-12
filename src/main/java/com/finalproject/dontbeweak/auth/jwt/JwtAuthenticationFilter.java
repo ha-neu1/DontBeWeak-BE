@@ -75,8 +75,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 System.out.println("==== 3-2. BLACKLIST : Redis에서 토큰 찾기 ====");
 
                 if (ObjectUtils.isEmpty(isExpired)) {
-                    jwtTokenProvider.regenerateAccessTokenProcess(response, accessToken, customResponse);
-                    return;
+                    System.out.println("==== 토큰 폐기시간 확인 ====");
+                    // 3일이 지나서 블랙리스트에서 영구삭제된 것인지 확인함.
+                    if (jwtTokenProvider.getExpiredAccessTokenlifeSpan(accessToken)) {
+                        jwtTokenProvider.regenerateAccessTokenProcess(response, accessToken, customResponse);
+                        return;
+                    } else {
+                        log.warn(ErrorCode.INVALIED_EXPIRED_TOKEN.getMessage(), ErrorCode.INVALIED_EXPIRED_TOKEN.getStatus());
+                    }
                 } else {
                     log.error(ErrorCode.USED_EXPIRED_TOKEN.getMessage(), ErrorCode.USED_EXPIRED_TOKEN.getStatus());
                     customResponse.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
