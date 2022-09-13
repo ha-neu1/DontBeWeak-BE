@@ -190,8 +190,14 @@ public class KakaoService {
         password = passwordEncoder.encode(password);
         kakaoUser.setPassword(password);
 
-        User user = new User(username, password, oauth, nickname);
-        user.setRole("ROLE_USER");
+        User user = User.builder()
+                .username(username)
+                .nickname(nickname)
+                .oauth(oauth)
+                .password(password)
+                .role("ROLE_USER")
+                .build();
+
         userRepository.save(user);
         catService.createNewCat(user);
 
