@@ -9,8 +9,10 @@
 바쁜 현대 사회에서 
 
 
+
 ## 📆제작 기간
 <h3>2022-08-05 ~ 2022-09-15</h3>
+
 
 
 ## 👩‍💻Back-End 팀원 소개
@@ -22,7 +24,8 @@
 |윤혜림|[@hryun11](https://github.com/hryun11)|고양이 관련 기능|
 
 
-## 🛠Teck Stack🛠
+
+## 🛠Teck Stack & Tools🛠
 ![Java](https://img.shields.io/badge/java11-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
 ![](https://img.shields.io/badge/Spring-6DB33F.svg?&style=for-the-badge&logo=Spring&logoColor=white)
 <img src="https://img.shields.io/badge/SpringBoot2.6.10-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
@@ -31,9 +34,10 @@
 <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 <img alt="Amazon S3" src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white">
-
-## 🛠Tools🛠
 ![](https://img.shields.io/badge/IntelliJ%20IDEA-000000.svg?&style=for-the-badge&logo=IntelliJ%20IDEA&logoColor=white)
+<img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+<img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white">
+
 
 
 ## 🔗API
