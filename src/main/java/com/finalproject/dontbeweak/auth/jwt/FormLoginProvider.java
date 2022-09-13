@@ -1,4 +1,4 @@
-package com.finalproject.dontbeweak.config.jwt;
+package com.finalproject.dontbeweak.auth.jwt;
 
 
 import com.finalproject.dontbeweak.exception.CustomException;

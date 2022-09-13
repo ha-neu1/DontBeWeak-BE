@@ -10,6 +10,7 @@ import com.finalproject.dontbeweak.jwtwithredis.Response;
 import com.finalproject.dontbeweak.service.KakaoService;
 import com.finalproject.dontbeweak.service.NaverService;
 import com.finalproject.dontbeweak.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ public class UserController {
 
     //회원가입 요청 처리
     @PostMapping("/user/signup")
+    @ApiOperation(value = "회원가입 요청 처리")
     public String registerUser(@Valid @RequestBody SignupRequestDto requestDto){
         String res = userService.registerUser(requestDto);
         if(res.equals("")){
@@ -52,35 +54,29 @@ public class UserController {
 
     //카카오 소셜 로그인
     @GetMapping("/auth/kakao/callback")
+    @ApiOperation(value = "카카오 소셜 로그인")
     public @ResponseBody SocialLoginInfoDto kakaoCallback(String code, HttpServletResponse response) {      //ResponseBody -> Data를 리턴해주는 컨트롤러 함수
         return kakaoService.requestKakao(code, response);
     }
 
     //네이버 소셜 로그인
     @GetMapping("/auth/naver/callback")
-    public @ResponseBody SocialLoginInfoDto naverCallback(String code, String state, HttpServletResponse response){
-        return naverService.requestNaver(code, state, response);
+    @ApiOperation(value = "네이버 소셜 로그인")
+    public @ResponseBody SocialLoginInfoDto naverCallback(String code, HttpServletResponse response){
+        return naverService.requestNaver(code, response);
     }
 
     //로그인 유저 정보
     @GetMapping("/user")
+    @ApiOperation(value = "로그인 유저 정보", notes = "로그인 한 사용자 정보를 조회한다.")
     public LoginIdCheckDto userDetails(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.userInfo(userDetails);
-    }
-
-    // Access Token 재발급
-    @PostMapping("/user/reissue")
-    public ResponseEntity<?> reissue(HttpServletRequest httpServletRequest, Response response, Errors errors) {
-        // validation check
-        if (errors.hasErrors()) {
-            return response.invalidFields(Helper.refineErrors(errors));
-        }
-        return userService.reissue(httpServletRequest);
     }
 
 
     // 로그아웃
     @PostMapping("/user/logout")
+    @ApiOperation(value = "로그아웃")
     public ResponseEntity<?> logout(HttpServletRequest httpServletRequest, Response response, Errors errors) {
         // validation check
         if (errors.hasErrors()) {

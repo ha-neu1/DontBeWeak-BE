@@ -1,13 +1,11 @@
 package com.finalproject.dontbeweak.config;
 
 
-
-import com.finalproject.dontbeweak.config.jwt.FormLoginFilter;
-import com.finalproject.dontbeweak.jwtwithredis.JwtAuthenticationFilter;
-import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.auth.jwt.FormLoginFilter;
+import com.finalproject.dontbeweak.auth.jwt.JwtAuthenticationFilter;
+import com.finalproject.dontbeweak.auth.jwt.JwtTokenProvider;
 import com.finalproject.dontbeweak.jwtwithredis.Response;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -36,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate redisTemplate;
-    private final Response response2;
+    private final Response response;
     private final HttpServletRequest request2;
 
 
@@ -52,9 +50,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     }
 
     // 정적 자원에 대해서는 Security 설정을 적용하지 않음.
+    // swagger resource 허용
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+//        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                web.ignoring().antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/swagger-ui/**", "/webjars/**", "/swagger/**");
     }
 
 //    @Override
@@ -78,7 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 // api 요청 접근허용
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/items").access("hasRole('ADMIN')")
-                .antMatchers(HttpMethod.POST, "/login", "/user/logout", "user/reissue").permitAll()
+                .antMatchers(HttpMethod.POST, "/login", "user/reissue").permitAll()
+                .mvcMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/swagger-ui/**", "/webjars/**", "/swagger/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/**").permitAll()
 //                .antMatchers("product/basketList").authenticated()
@@ -95,7 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
                 .addFilterBefore(new FormLoginFilter(authenticationManager(), jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class)
                 // JwtAuthenticationFilter를 UsernamePasswordAuthentictaionFilter 전에 적용시킨다.
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate, response), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -106,6 +107,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         configuration.addAllowedOrigin("http://localhost:3001");
         configuration.addAllowedOrigin("http://dontbeweak.s3-website.ap-northeast-2.amazonaws.com/");
         configuration.addAllowedOrigin("http://dontbeweak.kr/");
+        configuration.addAllowedOrigin("http://3.37.88.75/");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("Authorization");

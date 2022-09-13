@@ -1,4 +1,4 @@
-package com.finalproject.dontbeweak.jwtwithredis;
+package com.finalproject.dontbeweak.config.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

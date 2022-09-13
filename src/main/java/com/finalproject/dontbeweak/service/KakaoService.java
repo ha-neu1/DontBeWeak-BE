@@ -3,7 +3,7 @@ package com.finalproject.dontbeweak.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.finalproject.dontbeweak.dto.SocialLoginInfoDto;
-import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.auth.jwt.JwtTokenProvider;
 import com.finalproject.dontbeweak.jwtwithredis.UserResponseDto;
 import com.finalproject.dontbeweak.model.KakaoProfile;
 import com.finalproject.dontbeweak.model.OAuthToken;
@@ -39,6 +39,9 @@ public class KakaoService {
     private final CatService catService;
     private final RedisTemplate redisTemplate;
     private final JwtTokenProvider jwtTokenProvider;
+
+    private static final String BEARER_TYPE = "Bearer";
+
 
 
 //    @Value("${secret.key}")
@@ -90,7 +93,7 @@ public class KakaoService {
 
         //HttpHeader 오브젝트 생성
         HttpHeaders headers2 = new HttpHeaders();
-        headers2.add("Authorization", "Bearer " + oauthToken.getAccess_token());
+        headers2.add("Authorization", BEARER_TYPE + " " + oauthToken.getAccess_token());
         headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
 
@@ -163,9 +166,8 @@ public class KakaoService {
                     .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
             System.out.println("refresh token redis 저장 완료");
 
-
-            response.addHeader("Authorization", "Bearer "+tokenInfo.getAccessToken());
-            System.out.println("JWT토큰 : " + "Bearer "+tokenInfo.getAccessToken());
+            response.addHeader("Authorization", BEARER_TYPE + " " + tokenInfo.getAccessToken());
+            System.out.println("JWT토큰 : " + BEARER_TYPE + " " + tokenInfo.getAccessToken());
         }
 
         String username = kakaoUser.getUsername();
@@ -188,8 +190,14 @@ public class KakaoService {
         password = passwordEncoder.encode(password);
         kakaoUser.setPassword(password);
 
-        User user = new User(username, password, oauth, nickname);
-        user.setRole("ROLE_USER");
+        User user = User.builder()
+                .username(username)
+                .nickname(nickname)
+                .oauth(oauth)
+                .password(password)
+                .role("ROLE_USER")
+                .build();
+
         userRepository.save(user);
         catService.createNewCat(user);
 

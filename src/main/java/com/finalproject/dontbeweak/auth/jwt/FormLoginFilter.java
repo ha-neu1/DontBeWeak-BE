@@ -1,7 +1,6 @@
-package com.finalproject.dontbeweak.config.jwt;
+package com.finalproject.dontbeweak.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
 import com.finalproject.dontbeweak.jwtwithredis.UserResponseDto;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;

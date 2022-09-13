@@ -9,12 +9,10 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
+
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class User extends BaseEntity {
     @Id
@@ -52,28 +50,25 @@ public class User extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<ItemHistory> itemHistory;
 
-    public User(String username, String password, String nickname) {
+
+    @Builder
+    public User(String username, String password, String nickname, String oauth, int point, String role, List<Cat> cat, List<Friend> friends, List<ItemHistory> itemHistory) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-    }
-
-    public User(Long id, String username, String nickname) {
-        this.id = id;
-        this.username = username;
-        this.nickname = nickname;
-        this.friends = getFriends();
-    }
-
-    public User(String username, String password, String oauth, String nickname) {
-        this.username = username;
-        this.password = password;
         this.oauth = oauth;
-        this.nickname = nickname;
+        this.point = point;
+        this.role = role;
+        this.cat = cat;
+        this.friends = friends;
+        this.itemHistory = itemHistory;
     }
 
     public void setPoint(int point) {
         this.point = point;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
