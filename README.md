@@ -1,6 +1,5 @@
 # :pill:DontBeWeak-BE:cat2:
 
-<h3></h3>
 ![image](https://user-images.githubusercontent.com/107821879/189889783-88ce54db-bd70-40c9-a9e8-7d179e96c6fd.jpg)
 </br></br></br>
 
