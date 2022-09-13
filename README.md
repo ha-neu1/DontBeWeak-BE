@@ -54,6 +54,7 @@
 
 ## 💻ERD
 
+![erd](https://user-images.githubusercontent.com/107821879/189952729-a1aeb168-15b8-43f2-8870-c46945c2d29c.PNG)
 
 
 
