@@ -40,6 +40,9 @@ public class KakaoService {
     private final RedisTemplate redisTemplate;
     private final JwtTokenProvider jwtTokenProvider;
 
+    private static final String BEARER_TYPE = "Bearer";
+
+
 
 //    @Value("${secret.key}")
 //    private String secretKey;
@@ -90,7 +93,7 @@ public class KakaoService {
 
         //HttpHeader 오브젝트 생성
         HttpHeaders headers2 = new HttpHeaders();
-        headers2.add("Authorization", "Bearer " + oauthToken.getAccess_token());
+        headers2.add("Authorization", BEARER_TYPE + " " + oauthToken.getAccess_token());
         headers2.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
 
@@ -163,8 +166,8 @@ public class KakaoService {
                     .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
             System.out.println("refresh token redis 저장 완료");
 
-            response.addHeader("Authorization", tokenInfo.getAccessToken());
-            System.out.println("JWT토큰 : " + "Bearer "+tokenInfo.getAccessToken());
+            response.addHeader("Authorization", BEARER_TYPE + " " + tokenInfo.getAccessToken());
+            System.out.println("JWT토큰 : " + BEARER_TYPE + " " + tokenInfo.getAccessToken());
         }
 
         String username = kakaoUser.getUsername();
