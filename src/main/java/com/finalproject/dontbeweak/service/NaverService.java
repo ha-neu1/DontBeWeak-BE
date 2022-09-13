@@ -36,8 +36,10 @@ public class NaverService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate redisTemplate;
     private final Response response;
+    private static final String BEARER_TYPE = "Bearer";
 
-    public SocialLoginInfoDto requestNaver(String code, String state, HttpServletResponse response){
+
+    public SocialLoginInfoDto requestNaver(String code, HttpServletResponse response){
 
         RestTemplate rt = new RestTemplate();
 
@@ -50,7 +52,7 @@ public class NaverService {
         params.add("client_secret","1feqER4xKL");
         params.add("code",code);
         params.add("client_secret","1feqER4xKL");
-        params.add("state", state);
+        params.add("state", "dontbeweak");
 
         HttpEntity<MultiValueMap<String, String>> naverTokenRequest = //바디와 헤더값을 넣어준다
                 new HttpEntity<>(params, headers); //아래의 exchange가 HttpEntity 오브젝트를 받게 되어있다.
@@ -144,8 +146,8 @@ public class NaverService {
                     .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
             System.out.println("refresh token redis 저장 완료");
 
-            response.addHeader("Authorization", tokenInfo.getAccessToken());
-            System.out.println("JWT토큰 : " + "Bearer "+tokenInfo.getAccessToken());
+            response.addHeader("Authorization", BEARER_TYPE + " " + tokenInfo.getAccessToken());
+            System.out.println("JWT토큰 : " + BEARER_TYPE + " " + tokenInfo.getAccessToken());
         }
 
         String username = naverUser.getUsername();
