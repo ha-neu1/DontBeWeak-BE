@@ -58,19 +58,23 @@
 <details>
 <summary>영양제 복용 기록 관리</summary>
 <div markdown="1">
-
-예시
-
-</div>
-<summary>아이템 구매 기록</summary>
-<div markdown="1">
-
-
-
+![1](https://user-images.githubusercontent.com/107821879/189935895-07caec67-71d5-49d4-8de3-5f70b12dc3b2.png)
 </div>
 </details>
 
+<details>
+<summary>아이템 구매 기록</summary>
+<div markdown="1">
+|![2](https://user-images.githubusercontent.com/107821879/189935913-5a59953e-5666-43d3-8d6b-94a45da18871.png)
+</div>
+</details>
 
+<details>
+<summary>아이템 등록(서버)</summary>
+<div markdown="1">
+![3](https://user-images.githubusercontent.com/107821879/189935929-29562498-0e4e-4391-8a18-361c05f9a76a.png)
+</div>
+</details>
 
 
 ## :bookmark:swagger ui
