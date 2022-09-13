@@ -46,7 +46,7 @@
 
 ## 🔗API
 
-
+[API](https://octagonal-archeology-790.notion.site/7acdcfe28a0b43d7b47e47146ae7acb2?v=e65e0f88c16b4826b7917bb694052ea5)
 
 
 ## 💻ERD
