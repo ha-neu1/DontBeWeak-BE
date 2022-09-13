@@ -39,7 +39,7 @@ public class ApiService {
             URL url = new URL(urla);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setConnectTimeout(10000);
-            urlConnection.setReadTimeout(60000);
+            urlConnection.setReadTimeout(30000);
             urlConnection.setRequestMethod("GET");
             BufferedReader br;
             br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
