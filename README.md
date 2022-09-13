@@ -39,11 +39,41 @@
 <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white">
 
 
+## Service Architecture
+![image]
+
+
 
 ## 🔗API
 
+
+
+
 ## 💻ERD
 
+
+
+
 ## :rocket:trouble shooting
+<details>
+<summary>영양제 복용 기록 관리</summary>
+<div markdown="1">
+
+예시
+
+</div>
+<summary>아이템 구매 기록</summary>
+<div markdown="1">
+
+
+
+</div>
+</details>
+
+
+
 
 ## :bookmark:swagger ui
+
+
+
