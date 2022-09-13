@@ -37,26 +37,26 @@ public class ApiController {
     // 모든 영양제 목록 조회
     @GetMapping("/apiList")
     public List<ApiResponseDto> api(@PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
-        // 응답 list 객체 생성
         List<ApiResponseDto> data = new ArrayList<>();
         Page<Api> list = apiService.api(pageNo);
+
         for (int i = 0; i < pageSize; i++){
             data.add(new ApiResponseDto(list.getContent().get(i)));
         }
-        System.out.println(data);
+
         return data;
     }
 
     // 무한스크롤 발생시 반응하는 목록 조회
     @GetMapping("/apiList/infinity")
-    public List<ApiResponseDto> apiInfinity(@RequestParam(value = "product", required = false) String product,
-                                                  @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
-        // 응답 list 객체 생성
+    public List<ApiResponseDto> apiInfinity(@RequestParam(value = "product", required = false) String product, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
         List<ApiResponseDto> data = new ArrayList<>();
         Page<Api> list = apiService.apiInfinity(product,pageNo);
+
         for (int i = 0; i < pageSize; i++){
             data.add(new ApiResponseDto(list.getContent().get(i)));
         }
+
         return data;
     }
 
