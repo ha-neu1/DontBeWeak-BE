@@ -1,4 +1,4 @@
-package com.finalproject.dontbeweak.repository.jwtwithredis;
+package com.finalproject.dontbeweak.jwtwithredis;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

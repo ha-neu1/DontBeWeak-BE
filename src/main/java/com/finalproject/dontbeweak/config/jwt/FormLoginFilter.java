@@ -1,8 +1,8 @@
 package com.finalproject.dontbeweak.config.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.finalproject.dontbeweak.repository.jwtwithredis.JwtTokenProvider;
-import com.finalproject.dontbeweak.repository.jwtwithredis.UserResponseDto;
+import com.finalproject.dontbeweak.jwtwithredis.JwtTokenProvider;
+import com.finalproject.dontbeweak.jwtwithredis.UserResponseDto;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
