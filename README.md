@@ -89,5 +89,5 @@
 
 ## :bookmark:swagger ui
 
-[swagger ui](http://52.78.29.70/swagger-ui.html/)
+<!-- [swagger ui](http://52.78.29.70/swagger-ui.html/) -->
 
