@@ -1,6 +1,7 @@
 # JDK11 이미지 사용.
-FROM openjdk:11-jdk
-VOLUME /tmp
+FROM openjdk:11-jre-slim-buster
+#VOLUME /tmp
+
 # JAR_FILE 변수에 값을 저장.
 # 즉, build가 되는 시점에 JAR_FILE 이라는 변수명에 build/libs/*.jar 표현식을 선언했다는 의미.
 ARG JAR_FILE=build/libs/*.jar
