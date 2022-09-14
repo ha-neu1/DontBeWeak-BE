@@ -54,7 +54,7 @@
 
 ## 💻ERD
 
-![erd](https://user-images.githubusercontent.com/107821879/189952729-a1aeb168-15b8-43f2-8870-c46945c2d29c.PNG)
+![erd](https://user-images.githubusercontent.com/107821879/190107162-fc051921-d314-432b-8c3e-12f9bcca400d.PNG)
 
 
 
@@ -88,6 +88,6 @@
 
 
 ## :bookmark:swagger ui
-<!-- 
-http://localhost:8080/swagger-ui.html/ -->
+
+[swagger ui](http://52.78.29.70/swagger-ui.html/)
 
