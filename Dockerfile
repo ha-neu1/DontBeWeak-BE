@@ -4,7 +4,7 @@ FROM openjdk:11-jre-slim-buster
 
 # JAR_FILE 변수에 값을 저장.
 # 즉, build가 되는 시점에 JAR_FILE 이라는 변수명에 build/libs/*.jar 표현식을 선언했다는 의미.
-ARG JAR_FILE=build/libs/*.jar
+ARG JAR_FILE=build/libs/dontbeweak-0.0.1-SNAPSHOT.jar
 
 # 변수에 저장된 것을 컨테이너 실행시 이름을 app.jar파일로 변경하여 컨테이너에 저장.
 # 즉, 위에 선언한 JAR_FILE 을 app.jar 로 복사한다.
