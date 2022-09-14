@@ -1,15 +1,16 @@
 package com.finalproject.dontbeweak.service;
 
+import com.finalproject.dontbeweak.dto.ApiResponseDto;
 import com.finalproject.dontbeweak.model.Api;
 import com.finalproject.dontbeweak.repository.ApiRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApiService {
@@ -39,7 +40,7 @@ public class ApiService {
             URL url = new URL(urla);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setConnectTimeout(10000);
-            urlConnection.setReadTimeout(30000);
+            urlConnection.setReadTimeout(80000);
             urlConnection.setRequestMethod("GET");
             BufferedReader br;
             br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
@@ -80,6 +81,7 @@ public class ApiService {
                         srv_use = "";
                     }
 
+
                     Api api = Api.builder()
                             .ENTRPS(entrps)
                             .PRDUCT(product)
@@ -95,15 +97,27 @@ public class ApiService {
         return result.toString();
     }
 
-    // 모든 영양제 목록 조회
-    @Transactional
-    public Page<Api> api(Pageable pageNo) {
-        return apiRepository.findAll(pageNo);
+    // 영양제 조회 및 검색
+    public Page<ApiResponseDto> searchProducts(String product, Pageable pageNo) {
+        log.info("product -> {}", product);
+        log.info("pageNo -> {}", pageNo);
+
+        Page<Api> products = apiRepository.selectProduct(product, pageNo);
+
+        log.info("result=> {}", products);
+        log.info("result=> {}", products.getContent());
+
+        return apiResponseDto(products);
+
     }
 
-    // 무한스크롤 발생시 반응하는 목록 조회
-    @Transactional
-    public Page<Api> apiInfinity(String product, Pageable pageNo) {
-        return apiRepository.findAllByPRDUCTLessThan(product, pageNo);
+    private Page<ApiResponseDto> apiResponseDto(Page<Api> products) {
+        return products.map(p ->
+                ApiResponseDto.builder()
+                        .product(p.getPRDUCT())
+                        .entrps(p.getENTRPS())
+                        .srv_use(p.getSRV_USE())
+                        .build());
     }
+
 }
