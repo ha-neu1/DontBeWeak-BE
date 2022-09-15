@@ -5,9 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 @Getter
-@Setter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 public class Friend {
 
@@ -27,7 +25,7 @@ public class Friend {
     private User user;
 
     @Builder
-    public Friend(String nickname, String friendname, User user, FriendRequestDto requestDto) {
+    public Friend(String nickname, String friendname, User user) {
         this.nickname = nickname;
         this.friendname = friendname;
         this.user = user;
