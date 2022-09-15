@@ -38,7 +38,6 @@ out/
 
 ####
 .gitignore
-.yml
 .db
 application.properties
 application.yml
