@@ -106,7 +106,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         configuration.addAllowedOrigin("http://localhost:3001");
         configuration.addAllowedOrigin("http://dontbeweak.s3-website.ap-northeast-2.amazonaws.com/");
         configuration.addAllowedOrigin("http://dontbeweak.kr/");
+        configuration.addAllowedOrigin("http://3.37.88.75/");
+        configuration.addAllowedOrigin("http://3.39.193.57:8080/");
         configuration.addAllowedOrigin("http://52.78.29.70/");
+        configuration.addAllowedOrigin("http://13.124.191.194:8080/");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("Authorization");
