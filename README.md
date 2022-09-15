@@ -63,7 +63,7 @@
 
 ## 💻ERD
 
-![erd](https://user-images.githubusercontent.com/107821879/190452629-506be2ab-86b4-4936-ac19-ea11add07426.png)
+![erd](https://user-images.githubusercontent.com/107821879/190452593-a3bef973-5ead-41dc-b83f-aace468f69ea.PNG)
 
 
 
