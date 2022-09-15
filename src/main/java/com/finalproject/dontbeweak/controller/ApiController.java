@@ -2,7 +2,6 @@ package com.finalproject.dontbeweak.controller;
 
 
 import com.finalproject.dontbeweak.dto.ApiResponseDto;
-import com.finalproject.dontbeweak.model.Api;
 import com.finalproject.dontbeweak.service.ApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @RestController
@@ -35,29 +32,17 @@ public class ApiController {
     }
 
     // 모든 영양제 목록 조회
-    @GetMapping("/apiList")
-    public List<ApiResponseDto> api(@PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
-        // 응답 list 객체 생성
-        List<ApiResponseDto> data = new ArrayList<>();
-        Page<Api> list = apiService.api(pageNo);
-        for (int i = 0; i < pageSize; i++){
-            data.add(new ApiResponseDto(list.getContent().get(i)));
-        }
-        System.out.println(data);
-        return data;
+    @GetMapping("/api/list")
+    public ResponseEntity<Page<ApiResponseDto>> api(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = pageSize) Pageable pageNo){
+        Page<ApiResponseDto> api = apiService.getApi(pageNo);
+        return ResponseEntity.status(HttpStatus.OK).body(api);
     }
 
-    // 무한스크롤 발생시 반응하는 목록 조회
-    @GetMapping("/apiList/infinity")
-    public List<ApiResponseDto> apiInfinity(@RequestParam String product,
-                                                  @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
-        // 응답 list 객체 생성
-        List<ApiResponseDto> data = new ArrayList<>();
-        Page<Api> list = apiService.apiInfinity(product,pageNo);
-        for (int i = 0; i < pageSize; i++){
-            data.add(new ApiResponseDto(list.getContent().get(i)));
-        }
-        return data;
+    // 영양제 검색
+    @GetMapping("/api/search")
+    public ResponseEntity<Page<ApiResponseDto>> searchProducts(@RequestParam(value = "product", required = false) String product, @PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = pageSize) Pageable pageNo){
+        Page<ApiResponseDto> products = apiService.searchProducts(product,pageNo);
+        return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
 }
