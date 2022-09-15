@@ -51,36 +51,15 @@ public class JwtTokenProvider {
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey, UserRepository userRepository, RedisTemplate redisTemplate) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
-
         this.userRepository = userRepository;
-
         this.redisTemplate = redisTemplate;
     }
 
     // 사용자 정보를 가지고 AccessToken, RefreshToken을 생성하는 메서드
     public UserResponseDto.TokenInfo generateToken(Authentication authentication) {
-        // 권한 가져오기
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
 
-        // 발급되는 현재 시간
-        Long now = (new Date().getTime());
-
-        // AccessToken 생성
-        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .setExpiration(accessTokenExpiresIn)
-                .signWith(SignatureAlgorithm.HS256, key)
-                .compact();
-
-        // RefreshToken 생성
-        String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
-                .signWith(SignatureAlgorithm.HS256, key)
-                .compact();
+        String accessToken = generateAccessToken(authentication);
+        String refreshToken = generateRefreshToken();
 
         return UserResponseDto.TokenInfo.builder()
                 .grantType(BEARER_TYPE)
@@ -90,22 +69,46 @@ public class JwtTokenProvider {
                 .build();
     }
 
-    // AccessToken 재발급
-    public UserResponseDto.TokenInfo regenerateAccessToken(Authentication authentication) {
+    // 액세스 토큰 생성
+    public String generateAccessToken(Authentication authentication) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+        // 발급되는 현재 시간
         Long now = (new Date().getTime());
-
+        // AccessToken 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        String newAccessToken = Jwts.builder()
+
+        String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(SignatureAlgorithm.HS256, key)
                 .compact();
+
+        return accessToken;
+    }
+
+    // 리프레시 토큰 생성
+    public String generateRefreshToken() {
+        // 발급되는 현재 시간
+        Long now = (new Date().getTime());
+
+        // RefreshToken 생성
+        String refreshToken = Jwts.builder()
+                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
+
+        return refreshToken;
+    }
+
+
+    // AccessToken 재발급
+    public UserResponseDto.TokenInfo regenerateAccessToken(Authentication authentication) {
+        String newAccessToken = generateAccessToken(authentication);
 
         return UserResponseDto.TokenInfo.builder()
                 .grantType(BEARER_TYPE)
@@ -265,11 +268,9 @@ public class JwtTokenProvider {
         SecurityContextHolder.getContext().setAuthentication(newAuthentication);
         System.out.println("==== 3-3. [PASS] SecurityContext 저장 ====");
 
-
         // 만료된 AT를 Redis에 저장
         saveAceessTokenBlackList(accessToken);
         System.out.println("==== Redis에 만료된 Access Token 저장 완료 ====");
-
 
         return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
     }
@@ -277,10 +278,8 @@ public class JwtTokenProvider {
 
     // 재발급에 사용된 만료 Access Token을 Redis에 저장하는 method
     public void saveAceessTokenBlackList(String accessToken) {
-
         Long savetime = EXPIRED_ACCESSTOKEN_REDIS_SAVETIME;
 
         redisTemplate.opsForValue().set(accessToken, "expired", savetime, TimeUnit.MILLISECONDS);
     }
-
 }
