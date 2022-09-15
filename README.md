@@ -51,7 +51,8 @@
 <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
 
 ## Service Architecture
-![image]
+
+![image](https://user-images.githubusercontent.com/107821879/190452120-eaa05477-abe2-4a47-98b3-a828faa96e20.png)
 
 
 
@@ -62,7 +63,7 @@
 
 ## 💻ERD
 
-![erd](https://user-images.githubusercontent.com/107821879/190107162-fc051921-d314-432b-8c3e-12f9bcca400d.PNG)
+![erd](https://user-images.githubusercontent.com/107821879/190452629-506be2ab-86b4-4936-ac19-ea11add07426.png)
 
 
 
