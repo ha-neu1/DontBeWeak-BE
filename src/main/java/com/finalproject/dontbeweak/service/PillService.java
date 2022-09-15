@@ -2,6 +2,8 @@ package com.finalproject.dontbeweak.service;
 
 import com.finalproject.dontbeweak.dto.pill.*;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
+import com.finalproject.dontbeweak.exception.CustomException;
+import com.finalproject.dontbeweak.exception.ErrorCode;
 import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.model.pill.Pill;
@@ -19,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.finalproject.dontbeweak.exception.ErrorCode.PILL_DUPLICATION_CODE;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +43,7 @@ public class PillService {
         boolean isProductName = pillRepository.existsByUser_IdAndProductName(userDetails.getUser().getId(), pillRequestDto.getProductName());
 
         if(isProductName){
-            throw new IllegalArgumentException("이미 같은 이름의 영양제가 존재합니다.");
+            throw new CustomException(PILL_DUPLICATION_CODE);
         }
 
         Pill pill = new Pill(user, pillRequestDto);
