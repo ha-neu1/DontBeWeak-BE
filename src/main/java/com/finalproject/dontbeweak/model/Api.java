@@ -21,7 +21,7 @@ public class Api {
     private String ENTRPS;
 
     @Column
-    private String PRDUCT;
+    private String PRODUCT;
 
     @Column
     private String SRV_USE;

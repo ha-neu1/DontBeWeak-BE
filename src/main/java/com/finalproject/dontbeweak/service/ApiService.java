@@ -1,8 +1,10 @@
 package com.finalproject.dontbeweak.service;
 
+import com.finalproject.dontbeweak.dto.ApiResponseDto;
 import com.finalproject.dontbeweak.model.Api;
 import com.finalproject.dontbeweak.repository.ApiRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,7 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApiService {
@@ -82,7 +84,7 @@ public class ApiService {
 
                     Api api = Api.builder()
                             .ENTRPS(entrps)
-                            .PRDUCT(product)
+                            .PRODUCT(product)
                             .SRV_USE(srv_use)
                             .build();
                     apiRepository.save(api);
@@ -97,13 +99,32 @@ public class ApiService {
 
     // 모든 영양제 목록 조회
     @Transactional
-    public Page<Api> api(Pageable pageNo) {
-        return apiRepository.findAll(pageNo);
+    public Page<ApiResponseDto> getApi(Pageable pageNo) {
+        Page<Api> api = apiRepository.findAll(pageNo);
+        return apiResponseDto(api);
     }
 
-    // 무한스크롤 발생시 반응하는 목록 조회
-    @Transactional
-    public Page<Api> apiInfinity(String product, Pageable pageNo) {
-        return apiRepository.findAllByPRDUCTLessThan(product, pageNo);
+    //영양제 검색
+    public Page<ApiResponseDto> searchProducts(String product, Pageable pageNo) {
+        log.info("product -> {}", product);
+        log.info("pageNo -> {}", pageNo);
+
+        Page<Api> products = apiRepository.selectProduct(product, pageNo);
+
+        log.info("result=> {}", products);
+        log.info("result=> {}", products.getContent());
+
+        return apiResponseDto(products);
+
     }
+
+    private Page<ApiResponseDto> apiResponseDto(Page<Api> productSlice) {
+        return productSlice.map(p ->
+                ApiResponseDto.builder()
+                        .product(p.getPRODUCT())
+                        .entrps(p.getENTRPS())
+                        .srv_use(p.getSRV_USE())
+                        .build());
+    }
+
 }
