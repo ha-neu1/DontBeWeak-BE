@@ -33,14 +33,14 @@ public class ApiController {
 
     // 모든 영양제 목록 조회
     @GetMapping("/api/list")
-    public ResponseEntity<Page<ApiResponseDto>> api(@PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
+    public ResponseEntity<Page<ApiResponseDto>> api(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = pageSize) Pageable pageNo){
         Page<ApiResponseDto> api = apiService.getApi(pageNo);
         return ResponseEntity.status(HttpStatus.OK).body(api);
     }
 
     // 영양제 검색
     @GetMapping("/api/search")
-    public ResponseEntity<Page<ApiResponseDto>> searchProducts(@RequestParam(value = "product", required = false) String product, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
+    public ResponseEntity<Page<ApiResponseDto>> searchProducts(@RequestParam(value = "product", required = false) String product, @PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = pageSize) Pageable pageNo){
         Page<ApiResponseDto> products = apiService.searchProducts(product,pageNo);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
