@@ -6,7 +6,6 @@ import com.finalproject.dontbeweak.service.ApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ApiController {
     private final ApiService apiService;
-    public static final int pageSize = 8;
+    public static final int pageSize = 7;
 
     //공공API 데이터 DB 저장
     @GetMapping("/api")
@@ -32,9 +31,16 @@ public class ApiController {
                 .body("공공 데이터가 담겼습니다");
     }
 
-    // 영양제 조회 및 검색
+    // 모든 영양제 목록 조회
+    @GetMapping("/api/list")
+    public ResponseEntity<Page<ApiResponseDto>> api(@PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
+        Page<ApiResponseDto> api = apiService.getApi(pageNo);
+        return ResponseEntity.status(HttpStatus.OK).body(api);
+    }
+
+    // 영양제 검색
     @GetMapping("/api/search")
-    public ResponseEntity<Slice<ApiResponseDto>> searchProducts(@RequestParam(value = "product", required = false) String product, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
+    public ResponseEntity<Page<ApiResponseDto>> searchProducts(@RequestParam(value = "product", required = false) String product, @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = pageSize) Pageable pageNo){
         Page<ApiResponseDto> products = apiService.searchProducts(product,pageNo);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }

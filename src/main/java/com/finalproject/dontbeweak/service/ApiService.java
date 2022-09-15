@@ -11,6 +11,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,10 +82,9 @@ public class ApiService {
                         srv_use = "";
                     }
 
-
                     Api api = Api.builder()
                             .ENTRPS(entrps)
-                            .PRDUCT(product)
+                            .PRODUCT(product)
                             .SRV_USE(srv_use)
                             .build();
                     apiRepository.save(api);
@@ -97,7 +97,14 @@ public class ApiService {
         return result.toString();
     }
 
-    // 영양제 조회 및 검색
+    // 모든 영양제 목록 조회
+    @Transactional
+    public Page<ApiResponseDto> getApi(Pageable pageNo) {
+        Page<Api> api = apiRepository.findAll(pageNo);
+        return apiResponseDto(api);
+    }
+
+    //영양제 검색
     public Page<ApiResponseDto> searchProducts(String product, Pageable pageNo) {
         log.info("product -> {}", product);
         log.info("pageNo -> {}", pageNo);
@@ -111,10 +118,10 @@ public class ApiService {
 
     }
 
-    private Page<ApiResponseDto> apiResponseDto(Page<Api> products) {
-        return products.map(p ->
+    private Page<ApiResponseDto> apiResponseDto(Page<Api> productSlice) {
+        return productSlice.map(p ->
                 ApiResponseDto.builder()
-                        .product(p.getPRDUCT())
+                        .product(p.getPRODUCT())
                         .entrps(p.getENTRPS())
                         .srv_use(p.getSRV_USE())
                         .build());

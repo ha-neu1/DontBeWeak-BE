@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ApiRepository extends JpaRepository<Api,Long> {
-    @Query(value = "SELECT * FROM api WHERE prduct LIKE %:product%", nativeQuery = true)
+    @Query(value = "SELECT * FROM api WHERE product LIKE %:product%", nativeQuery = true)
     Page<Api> selectProduct(@Param("product") String product,
                           Pageable pageNo);
 }
