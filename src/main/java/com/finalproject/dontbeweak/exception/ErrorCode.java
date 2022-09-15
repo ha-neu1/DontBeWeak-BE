@@ -23,7 +23,8 @@ public enum ErrorCode {
     USED_EXPIRED_TOKEN(400, "C014", "이미 재발급에 사용된 만료 토큰입니다."),
     LOGGED_OUT_TOKEN(400, "C015", "로그아웃 된 토큰입니다."),
     INVALIED_EXPIRED_TOKEN(400, "C017", "만료된 지 너무 오래된 토큰입니다."),
-    NOT_FOUND_REFRESH_TOKEN(400, "C018", "리프레시 토큰을 찾을 수 없습니다.");
+    NOT_FOUND_REFRESH_TOKEN(400, "C018", "리프레시 토큰을 찾을 수 없습니다."),
+    PILL_DUPLICATION_CODE(400, "C019", "이미 등록된 영양제입니다.");
 
 
 

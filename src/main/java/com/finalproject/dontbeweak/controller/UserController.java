@@ -64,8 +64,8 @@ public class UserController {
     //네이버 소셜 로그인
     @GetMapping("/auth/naver/callback")
     @ApiOperation(value = "네이버 소셜 로그인")
-    public @ResponseBody SocialLoginInfoDto naverCallback(String code, String state, HttpServletResponse response){
-        return naverService.requestNaver(code, state, response);
+    public @ResponseBody SocialLoginInfoDto naverCallback(String code, HttpServletResponse response){
+        return naverService.requestNaver(code, response);
     }
 
     //로그인 유저 정보

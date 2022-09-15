@@ -59,7 +59,7 @@ public class KakaoService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", "599bca646044fc4147f7f8f4c461f9ca");
-        params.add("redirect_uri", "http://localhost:3000/auth/kakao/callback");
+        params.add("redirect_uri", "http://dontbeweak.kr/auth/kakao/callback");
 //        params.add("redirect_uri", "http://localhost:8080/auth/kakao/callback");
         params.add("code", code);
 
@@ -190,8 +190,14 @@ public class KakaoService {
         password = passwordEncoder.encode(password);
         kakaoUser.setPassword(password);
 
-        User user = new User(username, password, oauth, nickname);
-        user.setRole("ROLE_USER");
+        User user = User.builder()
+                .username(username)
+                .nickname(nickname)
+                .oauth(oauth)
+                .password(password)
+                .role("ROLE_USER")
+                .build();
+
         userRepository.save(user);
         catService.createNewCat(user);
 

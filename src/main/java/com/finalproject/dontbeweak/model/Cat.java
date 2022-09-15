@@ -37,6 +37,7 @@ public class Cat implements Pet {
 
 
     // 최초 고양이 생성
+    @Builder
     public Cat(User user, String firstCatImage) {
         this.user = user;
         this.level = MIN_LEVEL;

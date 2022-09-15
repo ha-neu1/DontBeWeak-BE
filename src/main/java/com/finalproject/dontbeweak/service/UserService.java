@@ -11,6 +11,7 @@ import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.CatRepository;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -80,8 +81,13 @@ public class UserService {
         requestDto.setPassword(password);
 
         //유저 정보 저장
-        User user = new User(username, password, nickname);
-        user.setRole("ROLE_USER");
+        User user = User.builder()
+                .username(username)
+                .nickname(nickname)
+                .password(password)
+                .role("ROLE_USER")
+                .build();
+
         userRepository.save(user);
 
         // 회원가입 후 사용자의 새 고양이 자동 생성
