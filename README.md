@@ -28,7 +28,7 @@
 
 
 
-## 🛠Teck Stack & Tools🛠
+## 🛠Teck Stack & Tools
 ![Java](https://img.shields.io/badge/java11-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white)
 ![](https://img.shields.io/badge/Spring-6DB33F.svg?&style=for-the-badge&logo=Spring&logoColor=white)
 <img src="https://img.shields.io/badge/SpringBoot2.6.10-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
@@ -50,7 +50,7 @@
 <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
 <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white">
 
-## Service Architecture
+## :file_folder: Service Architecture
 
 ![image](https://user-images.githubusercontent.com/107821879/190452120-eaa05477-abe2-4a47-98b3-a828faa96e20.png)
 
