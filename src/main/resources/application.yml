@@ -11,8 +11,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://springboot-database.ca4vje8oi1es.ap-northeast-2.rds.amazonaws.com:3306/test_dontbeweak
-    username: thwjd
-    password: wjdvkfxor2
+    username: 
+    password: 
   cache:
     type: redis
   redis:
