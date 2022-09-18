@@ -10,7 +10,7 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://springboot-db.cj0bstca4lvc.ap-northeast-2.rds.amazonaws.com:3306/test_finalproject_dontbeweak
+    url: jdbc:mysql://springboot-database.ca4vje8oi1es.ap-northeast-2.rds.amazonaws.com:3306/test_dontbeweak
     username: thwjd
     password: wjdvkfxor2
   cache:
@@ -18,7 +18,6 @@ spring:
   redis:
     host: localhost
     port: 6379
-
   jpa:
     hibernate:
       ddl-auto: update #create update none
