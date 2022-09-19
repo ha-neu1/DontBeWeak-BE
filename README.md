@@ -68,11 +68,11 @@
 
 ## :rocket:trouble shooting
   
-![영양제 복용 기록 관리](https://github.com/finalproject-hanghae/DontBeWeak-BE/wiki/%EC%98%81%EC%96%91%EC%A0%9C-%EB%B3%B5%EC%9A%A9-%EA%B8%B0%EB%A1%9D-%EA%B4%80%EB%A6%AC)
+* [영양제 복용 기록 관리](https://github.com/finalproject-hanghae/DontBeWeak-BE/wiki/%EC%98%81%EC%96%91%EC%A0%9C-%EB%B3%B5%EC%9A%A9-%EA%B8%B0%EB%A1%9D-%EA%B4%80%EB%A6%AC)
 
-![아이템 구매 기록](https://github.com/finalproject-hanghae/DontBeWeak-BE/wiki/%EC%95%84%EC%9D%B4%ED%85%9C-%EA%B5%AC%EB%A7%A4-%EA%B8%B0%EB%A1%9D)
+* [아이템 구매 기록](https://github.com/finalproject-hanghae/DontBeWeak-BE/wiki/%EC%95%84%EC%9D%B4%ED%85%9C-%EA%B5%AC%EB%A7%A4-%EA%B8%B0%EB%A1%9D)
 
-![아이템 등록(서버)](https://github.com/finalproject-hanghae/DontBeWeak-BE/wiki/%EC%95%84%EC%9D%B4%ED%85%9C-%EB%93%B1%EB%A1%9D)
+* [아이템 등록(서버)](https://github.com/finalproject-hanghae/DontBeWeak-BE/wiki/%EC%95%84%EC%9D%B4%ED%85%9C-%EB%93%B1%EB%A1%9D)
 
 
 ## :bookmark:swagger ui
