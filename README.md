@@ -67,32 +67,12 @@
 
 
 ## :rocket:trouble shooting
-<details>
-<summary>영양제 복용 기록 관리</summary>
-<div markdown="1">
   
-![1](https://user-images.githubusercontent.com/107821879/189935895-07caec67-71d5-49d4-8de3-5f70b12dc3b2.png)
-  
-</div>
-</details>
+![영양제 복용 기록 관리](https://github.com/finalproject-hanghae/DontBeWeak-BE/wiki/%EC%98%81%EC%96%91%EC%A0%9C-%EB%B3%B5%EC%9A%A9-%EA%B8%B0%EB%A1%9D-%EA%B4%80%EB%A6%AC)
 
-<details>
-<summary>아이템 구매 기록</summary>
-<div markdown="1">
-  
-![2](https://user-images.githubusercontent.com/107821879/189935913-5a59953e-5666-43d3-8d6b-94a45da18871.png)
-  
-</div>
-</details>
+![아이템 구매 기록](https://github.com/finalproject-hanghae/DontBeWeak-BE/wiki/%EC%95%84%EC%9D%B4%ED%85%9C-%EA%B5%AC%EB%A7%A4-%EA%B8%B0%EB%A1%9D)
 
-<details>
-<summary>아이템 등록(서버)</summary>
-<div markdown="1">
-  
-![3](https://user-images.githubusercontent.com/107821879/189935929-29562498-0e4e-4391-8a18-361c05f9a76a.png)
-  
-</div>
-</details>
+![아이템 등록(서버)](https://github.com/finalproject-hanghae/DontBeWeak-BE/wiki/%EC%95%84%EC%9D%B4%ED%85%9C-%EB%93%B1%EB%A1%9D)
 
 
 ## :bookmark:swagger ui
