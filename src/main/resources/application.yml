@@ -11,8 +11,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://springboot-db.cj0bstca4lvc.ap-northeast-2.rds.amazonaws.com:3306/test_finalproject_dontbeweak
-    username: hyerim
-    password: hyerim12
+    username: ${{ secrets.AWS_RDS_USERNAME }}
+    password: ${{ secrets.AWS_RDS_PASSWORD }}
   cache:
     type: redis
   redis:
