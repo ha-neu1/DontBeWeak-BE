@@ -1,15 +1,13 @@
 package com.finalproject.dontbeweak.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
-//@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class ApiResponseDto {
     private String product;
     private String entrps;

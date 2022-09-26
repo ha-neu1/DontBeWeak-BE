@@ -5,8 +5,9 @@ import com.finalproject.dontbeweak.model.Api;
 import com.finalproject.dontbeweak.repository.ApiRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.json.JSONObject;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 @Slf4j
@@ -44,7 +46,7 @@ public class ApiService {
             urlConnection.setReadTimeout(80000);
             urlConnection.setRequestMethod("GET");
             BufferedReader br;
-            br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
             String returnLine;
             result = new StringBuilder();
             ArrayList<StringBuilder> urls = new ArrayList<>();
