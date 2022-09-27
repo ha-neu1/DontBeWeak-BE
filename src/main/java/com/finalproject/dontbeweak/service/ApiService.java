@@ -21,10 +21,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ApiService {
 
     private final ApiRepository apiRepository;
@@ -84,12 +86,14 @@ public class ApiService {
                         srv_use = "";
                     }
 
+                    List<Api> apis = new ArrayList<>();
                     Api api = Api.builder()
                             .ENTRPS(entrps)
                             .PRODUCT(product)
                             .SRV_USE(srv_use)
                             .build();
-                    apiRepository.save(api);
+                    apis.add(api);
+                    apiRepository.saveAll(apis);
                 }
 
             } catch (Exception e) {
