@@ -1,5 +1,6 @@
 package com.finalproject.dontbeweak.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,16 +15,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Api {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column
+    @Column(length=500)
     private String ENTRPS;
 
-    @Column
+    @Column(length=500)
     private String PRODUCT;
 
-    @Column
+    @Column(length=500)
     private String SRV_USE;
 
 }
