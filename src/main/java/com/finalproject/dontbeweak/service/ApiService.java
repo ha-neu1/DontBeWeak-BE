@@ -44,7 +44,7 @@ public class ApiService {
 
             URL url = new URL(urla);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setConnectTimeout(10000);
+            urlConnection.setConnectTimeout(3000);
             urlConnection.setReadTimeout(80000);
             urlConnection.setRequestMethod("GET");
             BufferedReader br;
