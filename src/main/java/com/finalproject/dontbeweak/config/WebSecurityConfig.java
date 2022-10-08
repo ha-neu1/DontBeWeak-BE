@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisTemplate redisTemplate;
-    private final Response response2;
+    private final Response response;
     private final HttpServletRequest request2;
 
 
@@ -78,7 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 // api 요청 접근허용
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/items").access("hasRole('ADMIN')")
-                .antMatchers(HttpMethod.POST, "/login", "/user/logout", "user/reissue").permitAll()
+                .antMatchers(HttpMethod.POST, "/login", "user/reissue").permitAll()
+                .mvcMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/swagger-ui/**", "/webjars/**", "/swagger/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/**").permitAll()
 //                .antMatchers("product/basketList").authenticated()
@@ -95,7 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
                 .addFilterBefore(new FormLoginFilter(authenticationManager(), jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class)
                 // JwtAuthenticationFilter를 UsernamePasswordAuthentictaionFilter 전에 적용시킨다.
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, redisTemplate, response), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -107,6 +108,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         configuration.addAllowedOrigin("http://dontbeweak.s3-website.ap-northeast-2.amazonaws.com/");
         configuration.addAllowedOrigin("http://dontbeweak.kr/");
         configuration.addAllowedOrigin("http://3.37.88.75/");
+        configuration.addAllowedOrigin("http://3.39.193.57:8080/");
+        configuration.addAllowedOrigin("http://52.78.29.70/");
+        configuration.addAllowedOrigin("http://13.124.191.194:8080/");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("Authorization");

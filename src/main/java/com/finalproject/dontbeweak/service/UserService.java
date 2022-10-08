@@ -11,6 +11,7 @@ import com.finalproject.dontbeweak.model.User;
 import com.finalproject.dontbeweak.repository.CatRepository;
 import com.finalproject.dontbeweak.repository.UserRepository;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -79,8 +81,13 @@ public class UserService {
         requestDto.setPassword(password);
 
         //유저 정보 저장
-        User user = new User(username, password, nickname);
-        user.setRole("ROLE_USER");
+        User user = User.builder()
+                .username(username)
+                .nickname(nickname)
+                .password(password)
+                .role("ROLE_USER")
+                .build();
+
         userRepository.save(user);
 
         // 회원가입 후 사용자의 새 고양이 자동 생성
@@ -103,87 +110,6 @@ public class UserService {
         LoginIdCheckDto userInfo = new LoginIdCheckDto(username, nickname, point, level, exp);
         return userInfo;
     }
-
-//    //소셜로그인 토큰 발급
-//    public String JwtTokenCreate(String username){
-//        String jwtToken = JWT.create()
-//                .withSubject("cos토큰")
-//                .withExpiresAt(new Date(System.currentTimeMillis()+(60000*10)))
-//                .withClaim("username", username)
-//                .sign(Algorithm.HMAC512("thwjd2"));
-//        return jwtToken;
-//    }
-
-
-    // 로그인 시 refresh token, access token 생성 및 저장
-    public ResponseEntity<?> login(UserRequestDto.Login login) {
-
-        if (userRepository.findByUsername(login.getUsername()).orElse(null) == null) {
-            return response.fail("해당하는 유저가 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-
-        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
-        UsernamePasswordAuthenticationToken authenticationToken = login.toAuthentication();
-
-        // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
-        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        // 3. 인증 정보를 기반으로 JWT 토큰 생성
-        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-
-        // 4. RefreshToken Redis 저장 (expirationTime 설정을 통해 자동 삭제 처리)
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(), tokenInfo.getRefreshToken(), tokenInfo.getRefreshTokenExpirationTime(), TimeUnit.MILLISECONDS);
-
-        return response.success(tokenInfo, "로그인에 성공했습니다.", HttpStatus.OK);
-    }
-
-
-
-    // 액세스 토큰 재발급
-    public ResponseEntity<?> reissue(HttpServletRequest httpServletRequest) {
-
-        // 1. Request Header에서 토큰 정보 추출
-        String accessToken = resolveToken(httpServletRequest);
-        System.out.println("==== EXPIERED ACCESSTOKEN : " + accessToken + " ====");
-
-        // 2. 만료된 Access Token 유효성 확인
-        if (!jwtTokenProvider.validateExpiredAccessToken(accessToken)) {
-            return response.fail("Access Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-
-        // 3. Access Token 복호화로 추출한 username으로 authentication 객체 만들기
-        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
-
-        // 4. Redis 에서 Username을 기반으로 저장된 Refresh Token 값을 가져옵니다.
-        String refreshToken = (String)redisTemplate.opsForValue().get("RT:" + authentication.getName());
-        // (추가) 로그아웃되어 Redis 에 RefreshToken 이 존재하지 않는 경우 처리
-        if(ObjectUtils.isEmpty(refreshToken)) {
-            return response.fail("잘못된 요청입니다.", HttpStatus.BAD_REQUEST);
-        }
-
-        // 5. Refresh Token 검증
-        if (!jwtTokenProvider.validateToken(refreshToken)) {
-            return response.fail("Refresh Token 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-
-        // 6. 새로운 Access Token 생성
-        UserResponseDto.TokenInfo tokenInfo = jwtTokenProvider.regenerateAccessToken(authentication);
-
-        System.out.println("==== NEW ACCESSTOKEN : " + tokenInfo.getAccessToken() + " ====");
-
-        // 7. Response Header에 새 Access Token 세팅
-        httpServletResponse.setHeader("Authorization", BEARER_TYPE + " " + tokenInfo.getAccessToken());
-
-//        // 8. SecurityContextHolder에 사용자 정보 넣기
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-        return response.success(tokenInfo, "Token 정보가 갱신되었습니다.", HttpStatus.OK);
-    }
-
-
 
 
     // 로그아웃

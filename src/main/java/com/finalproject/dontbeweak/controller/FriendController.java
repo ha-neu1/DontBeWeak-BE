@@ -26,7 +26,7 @@ public class FriendController {
     //친구 추가
     @PostMapping("/friend")
     @ApiOperation(value = "친구 추가")
-    public ResponseEntity<Friend> addfriend(@RequestBody FriendRequestDto friendRequestDto,
+    public ResponseEntity<FriendRequestDto> addfriend(@RequestBody FriendRequestDto friendRequestDto,
                                             @AuthenticationPrincipal UserDetailsImpl userDetails){
         friendService.addfriend(friendRequestDto,userDetails);
         return ResponseEntity.status(HttpStatus.CREATED)

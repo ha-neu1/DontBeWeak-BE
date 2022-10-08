@@ -1,0 +1,2 @@
+jwt:
+  secret: ${{ secrets.JWT_SECRET_KEY }}

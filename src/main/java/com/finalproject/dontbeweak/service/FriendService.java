@@ -29,7 +29,7 @@ public class FriendService {
 
     //친구 추가
     @Transactional
-    public Friend addfriend(FriendRequestDto friendRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public FriendRequestDto addfriend(FriendRequestDto friendRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         //유저에 없는 사람을 추가 못하도록 함
         User friend = userRepository.findUserByUsername(friendRequestDto.getFriendname())
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을수 없습니다"));
@@ -55,7 +55,7 @@ public class FriendService {
                 .nickname(nickname)
                 .build();
         friendRepository.save(newFriend);
-        return newFriend;
+        return friendRequestDto;
 
     }
 
@@ -64,8 +64,6 @@ public class FriendService {
 
         User userTemp = userRepository.findById(userDetails.getUser().getId())
                 .orElseThrow(()->new CustomException(ErrorCode.FRIEND_ADD_CODE));
-
-
         List<Friend> friends = userTemp.getFriends();
         List<FriendResponseDto> responseDtos = new ArrayList<>();
         for(Friend friend: friends){

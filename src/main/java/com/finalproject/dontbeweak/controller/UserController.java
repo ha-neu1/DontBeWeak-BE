@@ -7,7 +7,6 @@ import com.finalproject.dontbeweak.dto.SocialLoginInfoDto;
 import com.finalproject.dontbeweak.auth.UserDetailsImpl;
 import com.finalproject.dontbeweak.jwtwithredis.Helper;
 import com.finalproject.dontbeweak.jwtwithredis.Response;
-import com.finalproject.dontbeweak.jwtwithredis.UserRequestDto;
 import com.finalproject.dontbeweak.service.KakaoService;
 import com.finalproject.dontbeweak.service.NaverService;
 import com.finalproject.dontbeweak.service.UserService;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,8 +62,8 @@ public class UserController {
     //네이버 소셜 로그인
     @GetMapping("/auth/naver/callback")
     @ApiOperation(value = "네이버 소셜 로그인")
-    public @ResponseBody SocialLoginInfoDto naverCallback(String code, String state, HttpServletResponse response){
-        return naverService.requestNaver(code, state, response);
+    public @ResponseBody SocialLoginInfoDto naverCallback(String code, HttpServletResponse response){
+        return naverService.requestNaver(code, response);
     }
 
     //로그인 유저 정보
@@ -73,17 +71,6 @@ public class UserController {
     @ApiOperation(value = "로그인 유저 정보", notes = "로그인 한 사용자 정보를 조회한다.")
     public LoginIdCheckDto userDetails(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.userInfo(userDetails);
-    }
-
-    // Access Token 재발급
-    @PostMapping("/user/reissue")
-    @ApiOperation(value = "Access Token 재발급", notes = "")
-    public ResponseEntity<?> reissue(HttpServletRequest httpServletRequest, Response response, Errors errors) {
-        // validation check
-        if (errors.hasErrors()) {
-            return response.invalidFields(Helper.refineErrors(errors));
-        }
-        return userService.reissue(httpServletRequest);
     }
 
 
