@@ -70,30 +70,22 @@ public class ApiService {
                 JSONArray array = (JSONArray) parseResponse.get("items");
                 for (int i = 0; i < array.size(); i++) {
                     Object = (JSONObject) array.get(i);
-
                     String entrps = (String) Object.get("ENTRPS");
-                    if (entrps == null) {
-                        entrps = "";
-                    }
-
-                    String product = (String) Object.get("PRDUCT");
-                    if (product == null) {
-                        product = "";
-                    }
-
+                    if (entrps == null) entrps = "";
                     String srv_use = (String) Object.get("SRV_USE");
-                    if (srv_use == null) {
-                        srv_use = "";
-                    }
+                    if (srv_use == null) srv_use = "";
+                    String product = (String) Object.get("PRDUCT");
 
-                    List<Api> apis = new ArrayList<>();
-                    Api api = Api.builder()
-                            .ENTRPS(entrps)
-                            .PRODUCT(product)
-                            .SRV_USE(srv_use)
-                            .build();
-                    apis.add(api);
-                    apiRepository.saveAll(apis);
+                    if (!product.equals("null")) {
+                        List<Api> apis = new ArrayList<>();
+                        Api api = Api.builder()
+                                .ENTRPS(entrps)
+                                .PRODUCT(product)
+                                .SRV_USE(srv_use)
+                                .build();
+                        apis.add(api);
+                        apiRepository.saveAll(apis);
+                    }
                 }
 
             } catch (Exception e) {
