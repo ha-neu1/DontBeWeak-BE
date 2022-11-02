@@ -25,11 +25,13 @@ spring:
       ddl-auto: create-drop
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${{ secrets.JWT_SECRET_KEY }}
-    username: ${{ secrets.JWT_SECRET_KEY }}
-    password: ${{ secrets.JWT_SECRET_KEY }}
+    url: ${{ secrets.AWS_RDS_URL }}
+    username: ${{ secrets.AWS_RDS_USERNAME }}
+    password: ${{ secrets.AWS_RDS_PASSWORD }}
   cache:
-    type:redis
-redis:
-  host: localhost
-  port: 6379
+    type: redis
+  redis:
+    host: localhost
+    port: 6379
+
+
