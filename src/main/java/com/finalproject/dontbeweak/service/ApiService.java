@@ -6,8 +6,8 @@ import com.finalproject.dontbeweak.repository.ApiRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +26,12 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ApiService {
 
     private final ApiRepository apiRepository;
 
     //공공API 데이터 DB 저장
+    @Transactional
     public String parsing() throws IOException, NullPointerException {
         StringBuilder result = null;
 
@@ -59,21 +59,23 @@ public class ApiService {
             urlConnection.disconnect();
 
             try {
-                JSONObject Object;
+               org.json.simple.JSONObject Object;
                 //json 객체 생성
                 JSONParser jsonParser = new JSONParser();
                 //json 파싱 객체 생성
-                JSONObject jsonObject = (JSONObject) jsonParser.parse(result.toString());
+                org.json.simple.JSONObject jsonObject = (org.json.simple.JSONObject) jsonParser.parse(result.toString());
 
                 //데이터 분해
-                JSONObject parseResponse = (JSONObject) jsonObject.get("body");
+                org.json.simple.JSONObject parseResponse = (org.json.simple.JSONObject) jsonObject.get("body");
                 JSONArray array = (JSONArray) parseResponse.get("items");
-                for (int i = 0; i < array.size(); i++) {
-                    Object = (JSONObject) array.get(i);
+                for (java.lang.Object o : array) {
+                    Object = (JSONObject) o;
+
                     String entrps = (String) Object.get("ENTRPS");
                     if (entrps == null) entrps = "";
                     String srv_use = (String) Object.get("SRV_USE");
                     if (srv_use == null) srv_use = "";
+
                     String product = (String) Object.get("PRDUCT");
 
                     if (!product.equals("null")) {
@@ -96,7 +98,6 @@ public class ApiService {
     }
 
     // 모든 영양제 목록 조회
-    @Transactional
     public Page<ApiResponseDto> getApi(Pageable pageNo) {
         Page<Api> api = apiRepository.findAll(pageNo);
         return apiResponseDto(api);
